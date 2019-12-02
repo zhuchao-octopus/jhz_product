@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>
+            阳光成单系统
+        </title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <script type="text/javascript"  src='./js/jquery.min.js'></script>
+         <script type="text/javascript" src="./js/cookie_util.js"></script>
+        <script type="text/javascript"  src='./js/self.js'></script>
+<!--         <link rel="stylesheet" href="./css/font.css">-->
+        <link rel="stylesheet" href="./lib/layui/css/layui.css">
+        <link rel="stylesheet" href="./css/x-admin.css" media="all">
+        <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.css" media="all">
+        <link rel="stylesheet" href="./lib/bootstrap/js/bootstrap.min.js" media="all">
+    </head>
+    <body>
+    <style type="text/css">
+	legend { display: block; width:100px; border-bottom:0px; font-family: "Microsoft YaHei","Helvetica Neue";}
+	legend a{ color:#666;} legend a:hover{ text-decoration:none;}
+	.layui-table{ font-family: "Microsoft YaHei","Helvetica Neue";}
+	</style>
+        <div class="x-body">
+            <blockquote class="layui-elem-quote">
+                  当前时间:<span class="f-14"></span>
+            </blockquote>
+          <div class="row">
+        
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <section class="panel">
+                    <div class="symbol bgcolor-blue"> <i class="fa fa-address-card"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="录入版设备总数"><i class="iconfont " data-icon=""></i>
+                            <h1 id="inputBoxNumber">10</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="录入版设备总数"> <i class="iconfont " data-icon=""></i><span>录入版设备总数</span></a>
+                    </div>
+                </section>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <section class="panel">
+                    <div class="symbol bgcolor-blue"> <i class="fa fa-address-card"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="当天在线设备总数"> <i class="iconfont " data-icon=""></i>
+                            <h1 id="inputOnline">10</h1>
+                        </a>
+
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="当天在线设备总数"> <i class="iconfont " data-icon=""></i><span>当天在线设备总数</span></a>
+
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <section class="panel">
+                    <div class="symbol bgcolor-blue"> <i class="fa fa-bar-chart"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="在线总时长"> <i class="iconfont " data-icon=""></i>
+                            <h1 id="inputTime">10</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="在线总时长"> <i class="iconfont " data-icon=""></i><span>在线总时长</span></a>
+                    </div>
+                </section>
+            </div>
+        
+           <div class="col-xs-4 col-sm-4 col-md-4">
+                <section class="panel">
+                    <div class="symbol bgcolor-yellow-green"> <i class="fa fa-bar-chart"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="自由版设备总数> <i class="iconfont " data-icon=""></i>
+                            <h1 id="freeBoxNumber">10</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="自由版设备总数"> <i class="iconfont " data-icon=""></i><span>自由版设备总数</span></a>
+                    </div>
+                </section>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <section class="panel">
+                    <div class="symbol bgcolor-yellow-green"> <i class="fa fa-cubes"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="当天在线设备总数"> <i class="iconfont " data-icon=""></i>
+                            <h1 id="freeOnline">10</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="当天在线设备总数"> <i class="iconfont " data-icon=""></i><span>当天在线设备总数</span></a>
+                    </div>
+                </section>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <section class="panel">
+                    <div class="symbol bgcolor-yellow-green"> <i class="fa fa-cubes"></i>
+                    </div>
+                    <div class="value tab-menu" bind="1">
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="在线总时长"> <i class="iconfont " data-icon=""></i>
+                            <h1 id="freeTime">10</h1>
+                        </a>
+                        <a href="javascript:;" data-url="user-info.html" data-parent="true" data-title="在线总时长"> <i class="iconfont " data-icon=""></i><span>在线总时长</span></a>
+                    </div>
+                </section>
+            </div>
+            </div>
+         </div>
+          <fieldset class="layui-elem-field layui-field-title site-title">
+              <legend><a name="default">信息查询</a></legend>
+           </fieldset>
+           <div style="margin-left: 400px"  class="count">
+           <form class="layui-form" action=""  >
+                 <div class="layui-form-item">
+			         <div class="layui-inline">
+			                  <label class="layui-form-label">时间</label>
+			                  <div class="layui-input-inline">
+			                      <input type="text" class="layui-input" id="creatime" placeholder=" 时间">
+			                  </div>
+			          </div>
+			       
+			      
+			          <div class="layui-inline">
+			                   <label class="layui-form-label">区域</label>
+			                   <div class="layui-input-inline">
+			                       <select name="creditStatus"  id="areaSelect">
+			                           <option value="">请选择</option>
+			                           <option value="0">无违约记录</option>
+			                           <option value="1">2个月内违约少于90天</option>
+			                           <option value="2">2个月内违约大于90天</option>
+			                           <option value="3">严重违约</option>
+			                       </select>
+			                   </div>
+			          </div>
+			          <div class="layui-inline">
+							<button class="layui-btn" lay-submit="" lay-filter="search"
+								data-type='search'>
+								<i class="layui-icon">&#xe615;</i>
+							</button>
+						</div>
+                    </div>
+            </form>
+            <table class="layui-table"  id="count-table"  lay-filter='count-filter' ></table>
+            </div>
+            <fieldset class="layui-elem-field layui-field-title site-title">
+              <legend><a name="default">信息统计</a></legend>
+            </fieldset>
+             
+        <!--相关统计-->
+        <div class="row">
+        <div class="col-sm-6">
+         <section class="panel">
+                    <div class="panel-heading">区域统计</div>
+                    <div class="panel-body">
+                        <div class="echarts" id="areaOption" style="height:300px; height:350px"></div>
+                    </div>
+                </section>
+        </div>
+       <!--  <div class="col-sm-6">
+         <section class="panel">
+                    <div class="panel-heading">一周统计</div>
+                    <div class="panel-body">
+                        <div class="echarts" id="main" style="height:300px; height:350px"></div>
+                    </div>
+                </section>
+        </div> -->
+        <div class="col-sm-6">
+         <section class="panel">
+                    <div class="panel-heading">年度在线时长统计</div>
+                    <div class="panel-body">
+                        <div class="echarts" id="years" style="height:300px; height:350px"></div>
+                    </div>
+                </section>
+        </div>
+        <!-- <div class="col-sm-6">
+         <section class="panel">
+                    <div class="panel-heading">产品统计</div>
+                    <div class="panel-body">
+                        <div class="echarts" id="product" style="height:300px; height:350px"></div>
+                    </div>
+                </section>
+        </div> -->
+        </div>
+        
+        <script src="./lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript"  src="./js/xadmin.js"></script>
+      
+        <script type="text/javascript">
+	        var date=new Date();
+	        $(".x-body .f-14").text(date.toLocaleDateString());
+	        
+	        $.ajax({
+	        	type:"get",
+	        	async:false,
+	            url:"count/deviceCount.do",
+	            data:{"cy_brand_id":cy_brand_id},
+	            dataType:"json",
+	            success:function(result){
+	            	if(result.status==0){
+	            		$("#inputBoxNumber").text(result.data.inputBoxNumber);
+	            		$("#freeBoxNumber").text(result.data.freeBoxNumber);
+	            		$("#inputOnline").text(result.data.inputOnline);
+	            		$("#freeOnline").text(result.data.freeOnline);
+	            		$("#inputTime").text(result.data.inputTime);
+	            		$("#freeTime").text(result.data.freeTime);
+	            	/* 	layer.msg(result.msg); */
+	            	}else{
+	            /* 		layer.msg(result.msg); */
+	            	}
+	            },
+	            error:function(){
+	            	layer.msg("error");
+	            }
+	        });
+	        
+	       var areaSelect=loadRegion(cy_brand_id);
+	        console.log(areaSelect);
+	        $("#areaSelect").empty().append(areaSelect); 
+	        layui.use('laydate', function(){
+	        	  var laydate = layui.laydate;
+	        	  //执行一个laydate实例
+	        	  laydate.render({
+	        	    elem: '#creatime' //指定元素
+	        	    ,range: "~"
+	        	  });
+	       });
+	        
+	        layui.use('table',function(){
+	        	var  table=layui.table;
+	        	table.render({
+	       		 elem: '#count-table'
+	    		 ,width:900
+	    		/*  ,url:'/jhz_mtvCms/user/loadTvCodes.do?brandId='+cy_brand_id //数据接口 */
+	    		  ,url: '/jhz_mtvCms/count/deviceFind.do' 
+	    		 ,where:{
+	    		    	"cy_brand_id":cy_brand_id,
+	    		    }
+    		    ,page: false
+    		    ,cols: [[ 
+    		      ,{type: 'checkbox', fixed: 'left'}         
+    		      ,{field: 'freeBoxNumber', title: '在线设备总数(台)', width:450, sort: true}
+    		      ,{field: 'freeTime', title: '在线总时长(小时)', width:450,sort:true}
+    		     /*  , {field: 'pname', title: '产品名', width:150, sort: true}
+        	      ,{field: 'modelType', title: '型号', width:150}
+        	      ,{field: 'customerName', title: '客户',width:100}
+        	      ,{field: 'sn', title: 'SN', width:150} 
+        	      ,{field: 'mac', title: 'MAC', width: 150}
+        	      ,{field: 'codeIp', title: 'IP', width: 150}
+        	      ,{field: 'region', title: '设备所在地', width: 100}
+        	      ,{field: '', title: '数据分析', width: 100,templet:"#macAnalyse"}
+        	      ,{field: 'statusString', title: '状态', width: 150, sort: true,templet:"#statusDemo"}
+        	      ,{field: 'details', title: '备注', width: 150, sort: true}
+        	      ,{field: 'manufactureDate', title: '时间', width: 150, sort: true}
+        	      ,{fileld:"",title:"操作",width:200, align:'center', templet:"#barDemo"}
+ */
+    		    ]]
+	    		   /*  ,done:function(){
+	    		    	if(!contains('logo_cz',per_arr)){
+	    			    	  $("#logo-button").css("display","none");
+	    			    	  $(".layui-table .permission").css("display","none");
+	    			      }
+	    		    }*/
+	    		  ,id:"count-table-demo"
+	        	});
+	        	
+	        	var active={
+	        			search:function(){
+	          	    	  
+	         	    	   var region=$("#areaSelect").val().trim();
+	         	    	   //var cid=$("#custSelection").val();
+	         	    	   var findTime=$("#creatime").val();
+	         	    	
+	         	    	   //执行重载
+	     	   	    	      table.reload('count-table-demo', {
+	     	   	    	        page: {
+	     	   	    	          curr: 1 //重新从第 1 页开始
+	     	   	    	        }
+	     	   	    	        ,where: {
+	     	   	    	        	//"brandId":cy_brand_id,  
+	                                 "region":region,
+	                                 "findTime":findTime,
+	     	   	    	        }
+	     	   	    	      });
+	         	       }
+	        	};
+	        	
+	        	 $('.count .layui-btn').on('click', function () {
+	        		
+	                 var type = $(this).data('type');
+	                 active[type] ? active[type].call(this) : '';
+	             });
+	        	
+	        	
+	        	
+	        });
+	        
+	        
+        </script>
+        
+        <!-- <script src="./js/index.js"></script> -->
+        <script src="./js/echarts.min.js"></script>
+       <!-- <script src="./js/echart.js"></script> -->
+        <script type="text/javascript">
+       
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['车贷','房贷','信用贷']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['周一','周二','周三','周四','周五','周六','周日']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'车贷',
+                    type:'line',
+                    stack: '总量',
+                    data:[120, 132, 101, 134, 90, 230, 210]
+                },
+                {
+                    name:'房贷',
+                    type:'line',
+                    stack: '总量',
+                    data:[220, 182, 191, 234, 290, 330, 310]
+                },
+                {
+                    name:'信用贷',
+                    type:'line',
+                    stack: '总量',
+                    data:[150, 232, 201, 154, 190, 330, 410]
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    <script type="text/javascript">
+        // 指定图表的配置项和数据
+       var myChart = echarts.init(document.getElementById('areaOption'));
+
+        // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '地区设备统计',
+           /*  subtext: '纯属虚构', */
+            x: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['广州', '佛山', '东莞', '中山', '深圳']
+        },
+        series: [{
+            name: '地区会员数量',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: [
+                { value: 6335, name: '广州' },
+                { value: 4310, name: '佛山' },
+                { value: 2310, name: '东莞' },
+                { value: 3310, name: '中山' },
+                { value: 9310, name: '深圳' }
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+   // myChart.showLoading(); 
+    var names=[];    //类别数组（实际用来盛放X轴坐标值）
+    var nums=[];    //销量数组（实际用来盛放Y坐标值）
+    
+    $.ajax({
+    type : "post",
+    async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+    url :"count/deviceRegion.do",    //请求发送到TestServlet处
+    data : {"cy_brand_id":707},
+    dataType : "json",        //返回数据形式为json
+    success : function(result) {
+        //请求成功时执行该函数内容，result即为服务器返回的json对象
+        if (result) {
+        	  console.log(result);
+        	  var regions=result.data;
+               for(var i=0;i<regions.length;i++){       
+                  names.push(regions[i]);    //挨个取出类别并填入类别数组
+                }
+               for(var i=0;i<result.length;i++){       
+                   nums.push(result[i].num);    //挨个取出销量并填入销量数组
+                 }
+               myChart.hideLoading();    //隐藏加载动画
+               myChart.setOption({        //加载数据图表
+                   xAxis: {
+                       data: names
+                   },
+                   series: [{
+                       // 根据名字对应到相应的系列
+                       name: '销量',
+                       data: nums
+                   }]
+               });
+               
+        }
+    
+   },
+    error : function(errorMsg) {
+        //请求失败时执行该函数
+    alert("图表请求数据失败!");
+   // myChart.hideLoading();
+    }
+})
+    
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('years'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+            text: '在线时长统计(小时)',
+            /* subtext: '纯属虚构', */
+            x: 'center'
+        },
+        color: ['#3398DB'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: [{
+            name: '活跃度',
+            type: 'bar',
+            barWidth: '60%',
+            data: [10, 52, 200, 334, 550, 330, 220, 200, 334, 390, 330, 220]
+        }]
+    };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('product'));
+
+        // 指定图表的配置项和数据
+        var option = {
+             title: {
+                text: '产品订单比例',
+                subtext: '纯属虚构',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['车贷', '房贷']
+            },
+            series: [{
+                name: '访问来源',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: [
+                    { value: 1335, name: '车贷' },
+                    { value: 310, name: '房贷' }
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+            
+        </div>
+        <div class="layui-footer footer footer-demo">
+            <div class="layui-main">
+                <p>
+                    <a href="/">
+                        Copyright ©2017 17sucai.com All Rights Reserved.
+                    </a>
+                </p>
+                
+            </div>
+        </div>
+        
+    </body>
+</html>

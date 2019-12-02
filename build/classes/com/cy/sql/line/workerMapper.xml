@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cy.dao.line.ProductWorkerDao">
+
+	<select id="findWorker" parameterType="com.cy.domain.line.ProductWorker"
+		resultMap="workerResult">
+		select
+		p.*,w.lineCode,w.sid,w.sjob,w.locationCode,w.locationState
+		from
+		cy_workLocation w RIGHT JOIN cy_productWorker p on
+		w.workerCode=p.workerCode
+		<where>
+			<trim suffixOverrides=",">
+				<if test="workerCode!=null and workerCode!=''">
+					p.workerCode=#{workerCode}
+				</if>
+				<if test="lineCode!=null and lineCode!=''">
+					and w.lineCode=#{lineCode}
+				</if>
+				<if test="stateTwo!=null">
+					and p.stateTwo=#{stateTwo}
+				</if>
+				<if test="workerName!=null and workerName!=''">
+					and p.workerName=#{workerName}
+				</if>
+			</trim>
+		</where>
+		order by p.wid desc limit #{pageSize}, #{limit}
+
+	</select> 
+
+	<resultMap type="com.cy.domain.line.ProductWorker" id="workerResult">
+		<id property="wid" column="wid" />
+		<result property="workerCode" column="workerCode" />
+		<result property="workerName" column="workerName" />
+		<result property="workerPrice" column="workerPrice" />
+		<result property="workPost" column="workPost" />
+		<result property="workerOvertimePay" column="workerOvertimePay" />
+		<result property="workerWeekenPay" column="workerWeekenPay" />
+		<result property="workerHolidayPay" column="workerHolidayPay" />
+		<result property="estate" column="estate" />
+		<result property="abi" column="abi" />
+		<result property="tel" column="tel" />
+		<result property="stateTwo" column="stateTwo" />
+		<result property="fromValue" column="fromValue" />
+		<result property="hiredate" column="hiredate" />
+		<association property="location" javaType="com.cy.domain.line.WorkLocation">
+			<id property="sid" column="sid" />
+			<result property="sjob" column="sjob" />
+			<result property="locationCode" column="locationCode" />
+			<result property="locationState" column="locationState" />
+			<!-- <association property="line" javaType="com.cy.domain.line.WorkLine"> 
+				<id property="lid" column="lid"/> <result property="lineCode" column="lineCode"/> 
+				</association> -->
+		</association>
+	</resultMap>
+
+
+
+	<!-- 特殊问题 -->
+	<select id="findWorkerByCode" parameterType="string"
+		resultType="com.cy.domain.line.ProductWorker">
+		select * from cy_productWorker where
+		workerCode=#{workerCode}
+	</select>
+
+
+
+
+	<insert id="addFinger" parameterType="com.cy.domain.line.ProductWorker">
+		insert into
+		cy_productWorker
+		(
+		workerCode,
+		workerName,
+		workerPrice,
+		workPost,
+		fingerCode,
+		workerOvertimePay,
+		workerWeekenPay,
+		workerHolidayPay,
+		estate,
+		tel,
+		abi,
+		stateTwo,
+		fromValue,
+		workerPhoto,
+		hiredate
+		)
+		value(
+		#{workerCode},
+		#{workerName},
+		#{workerPrice},
+		#{workPost},
+		#{fingerCode},
+		#{workerOvertimePay},
+		#{workerWeekenPay},
+		#{workerHolidayPay},
+		#{estate},
+		#{tel},
+		#{abi},
+		#{stateTwo},
+		#{fromValue},
+		#{workerPhoto},
+		#{hiredate}
+		)
+
+	</insert>
+	<insert id="addCheckRes" parameterType="com.cy.domain.line.CheckRes">
+		insert into
+		cy_checkResource
+		(
+		workerCode,
+		workName,
+		checkDate,
+		beforeNoonUp,
+		beforeNoonDown,
+		afterNoonUp,
+		afterNoonDown,
+		overWorkUp,
+		overWorkDown,
+		writetime,
+		bufferTime,
+		workTime,
+		overWorkTime,
+		allWorkTime
+		)
+		value(
+		#{workerCode},
+		#{workName},
+		#{checkDate},
+		#{beforeNoonUp},
+		#{beforeNoonDown},
+		#{afterNoonUp},
+		#{afterNoonDown},
+		#{overWorkUp},
+		#{overWorkDown},
+		#{writetime},
+		#{bufferTime},
+		#{workTime},
+		#{overWorkTime},
+		#{allWorkTime}
+		)
+
+	</insert>
+	<!-- 删除对应考勤信息 -->
+	<delete id="delCheckRes" parameterType="com.cy.domain.line.CheckRes">
+		delete from cy_checkResource
+		where rid=#{rid};
+	</delete>
+	<insert id="addMoreWorker" parameterType="com.cy.domain.line.ProductWorker">
+		insert into cy_productWorker
+		(
+		workerCode,
+		workerName,
+		workerPrice,
+		workPost,
+		fingerCode,
+		workerOvertimePay,
+		workerWeekenPay,
+		workerHolidayPay,
+		estate,
+		tel,
+		abi,
+		stateTwo,
+		fromValue,
+		hiredate
+		)
+		values
+		<foreach collection="list" item="item" separator="," index="">
+			(
+			#{item.workerCode},
+			#{item.workerName},
+			#{item.workerPrice},
+			#{item.workPost},
+			#{item.fingerCode},
+			#{item.workerOvertimePay},
+			#{item.workerWeekenPay},
+			#{item.workerHolidayPay},
+			#{item.estate},
+			#{item.tel},
+			#{item.abi},
+			#{item.stateTwo},
+			#{item.fromValue},
+			#{item.hiredate}
+			)
+		</foreach>
+	</insert>
+
+
+
+
+	<insert id="addWorker" parameterType="com.cy.domain.line.ProductWorker">
+		insert into
+		cy_productWorker
+		(
+		workerCode,
+		workerName,
+		workerPrice,
+		fingerCode,
+		estate,
+		stateTwo,
+		fromValue
+		)
+		values(
+		#{workerCode},
+		#{workerName},
+		#{workerPrice},
+		#{fingerCode},
+		#{estate},
+		#{stateTwo},
+		#{fromValue}
+		)
+	</insert>
+
+
+	<!-- 删除员工 -->
+	<delete id="deleteWorker" parameterType="com.cy.domain.line.ProductWorker">
+		delete from
+		cy_productWorker where wid = #{wid}
+	</delete>
+
+	<update id="updateWorker" parameterType="com.cy.domain.line.ProductWorker">
+		update cy_productWorker set
+		<trim suffixOverrides=",">
+			<if test="workerName!=null">
+				workerName=#{workerName},
+			</if>
+			<if test="workerPrice!=''">
+				workerPrice=#{workerPrice},
+			</if>
+			<if test="workerOvertimePay!=''">
+				workerOvertimePay=#{workerOvertimePay},
+			</if>
+			<if test="workerWeekenPay!=''">
+				workerWeekenPay=#{workerWeekenPay},
+			</if>
+			<if test="workerHolidayPay!=''">
+				workerHolidayPay=#{workerHolidayPay},
+			</if>
+			<if test="abi!=null">
+				abi=#{abi},
+			</if>
+			<if test="tel!=null">
+				tel=#{tel},
+			</if>
+			<if test="estate!=null">
+				estate=#{estate},
+			</if>
+			<if test="workPost!=null">
+				workPost=#{workPost},
+			</if>
+			<if test="stateTwo!=null">
+				stateTwo=#{stateTwo},
+			</if>
+			<if test="fromValue!=null">
+				fromValue=#{fromValue},
+			</if>
+			<if test="shiftType != null">
+			    shiftType=#{shiftType},
+			</if>
+			<if test="workerPhoto!=null">
+			    workerPhoto=#{workerPhoto},
+			</if>
+			<if test="hiredate!=null">
+				hiredate=#{hiredate},
+			</if>
+		</trim>
+		where wid = #{wid}
+	</update>
+
+	<select id="findCheckByWid" parameterType="com.cy.domain.line.ProductWorker"
+		resultMap="hourResult">
+		select m.*,w.workerName,w.wid,w.workerCode from
+		cy_checkModel m join
+		cy_productWorker w on m.wid=w.wid where
+		w.wid=#{wid}
+	</select>
+
+	<resultMap type="com.cy.domain.check.CheckModel" id="hourResult">
+		<id property="modelId" column="modelId" />
+		<result property="upTime1" column="upTime1" />
+		<result property="downTime1" column="downTime1" />
+		<result property="upTime2" column="upTime2" />
+		<result property="downTime2" column="downTime2" />
+		<result property="upTime3" column="upTime3" />
+		<result property="downTime3" column="downTime3" />
+		<result property="upTime4" column="upTime4" />
+		<result property="downTime4" column="downTime4" />
+		<result property="upTime5" column="upTime5" />
+		<result property="downTime5" column="downTime5" />
+		<result property="upTime6" column="upTime6" />
+		<result property="downTime6" column="downTime6" />
+		<result property="upTime7" column="upTime7" />
+		<result property="downTime7" column="downTime7" />
+		<result property="upTime8" column="upTime8" />
+		<result property="downTime8" column="downTime8" />
+		<result property="upTime9" column="upTime9" />
+		<result property="downTime9" column="downTime9" />
+		<result property="upTime10" column="upTime10" />
+		<result property="downTime10" column="downTime10" />
+		<result property="writeTime" column="writeTime" />
+		<association property="worker" javaType="com.cy.domain.line.ProductWorker">
+			<id property="wid" column="wid" />
+			<result property="workerCode" column="workerCode" />
+			<result property="workerName" column="workerName" />
+		</association>
+	</resultMap>
+
+
+	<!-- 根據人員wid查詢人員 -->
+	<select id="findWorkerById" parameterType="com.cy.domain.line.ProductWorker"
+		resultType="com.cy.domain.line.ProductWorker">
+		select * from cy_productWorker where wid=#{wid}
+	</select>
+	<select id="findbdWorker" resultType="com.cy.domain.line.ProductWorker"  parameterType="com.cy.domain.line.ProductWorker">
+     select * from cy_productWorker where lineCode="" or lineCode is null limit #{pageSize},#{limit} 
+    </select>
+    
+    <select id="findbdWorkerCount"  resultType="int"  parameterType="com.cy.domain.line.ProductWorker">
+     select count(*) from cy_productWorker where lineCode="" or lineCode is null
+    </select>
+    
+   <select id="findAllWorkerByDemo" resultType="com.cy.domain.line.ProductWorker" parameterType="com.cy.domain.line.ProductWorker">
+      select * from cy_productWorker
+      <where>
+        
+			<trim suffixOverrides=",">
+				<if test="workerCode!=null and workerCode!=''">
+					workerCode=#{workerCode}
+				</if>
+				<if test="lineCode!=null and lineCode!=''">
+					and lineCode=#{lineCode}
+				</if>
+				<if test="stateTwo!=null">
+					and stateTwo=#{stateTwo}
+				</if>
+				<if test="workerName!=null and workerName!=''">
+					and workerName=#{workerName}
+				</if>
+				<if test="shiftType != null and shiftType!=''">
+				    and shiftType=#{shiftType}
+				</if>
+			</trim>
+		</where>
+		order by wid desc limit #{pageSize}, #{limit}
+    </select>
+    
+    <select id="findAllWorkerByDemoCount" resultType="int" parameterType="com.cy.domain.line.ProductWorker">
+      select count(*) from cy_productWorker
+      <where>
+        
+			<trim suffixOverrides=",">
+				<if test="workerCode!=null and workerCode!=''">
+					workerCode=#{workerCode}
+				</if>
+				<if test="lineCode!=null and lineCode!=''">
+					and lineCode=#{lineCode}
+				</if>
+				<if test="stateTwo!=null">
+					and stateTwo=#{stateTwo}
+				</if>
+				<if test="workerName!=null and workerName!=''">
+					and workerName=#{workerName}
+				</if>
+				<if test="shiftType != null and shiftType!=''">
+				    and shiftType=#{shiftType}
+				</if>
+			</trim>
+		</where>
+		order by wid desc 
+    </select>
+    
+    
+    
+    
+	<select id="findCountWorker" resultType="com.cy.domain.line.ProductWorker"
+		parameterType="com.cy.domain.line.ProductWorker">
+		select
+		p.*,w.lineCode,w.sid,w.sjob,w.locationCode,w.locationState
+		from
+		cy_workLocation w RIGHT JOIN cy_productWorker p on
+		w.workerCode=p.workerCode
+		<where>
+			<trim suffixOverrides=",">
+				<if test="workerCode!=null and workerCode!=''">
+					p.workerCode=#{workerCode}
+				</if>
+				<if test="lineCode!=null and lineCode!=''">
+					and w.lineCode=#{lineCode}
+				</if>
+				<if test="stateTwo!=null and stateTwo!=''">
+					and p.stateTwo=#{stateTwo}
+				</if>
+				<if test="workerName!=null and workerName!=''">
+					and p.workerName=#{workerName}
+				</if>
+			</trim>
+		</where>
+		order by p.wid desc
+	</select>
+
+	<delete id="deleteBatchWorker" parameterType="String">
+		delete from
+		cy_productWorker where wid=#{string}
+	</delete>
+
+	<select id="loadAllRole" parameterType="com.cy.domain.line.JhzRole"
+		resultType="com.cy.domain.line.JhzRole">
+		select * from jhz_role limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="countAllRole" resultType="int">
+		select count(*) from
+		jhz_role
+	</select>
+
+	<insert id="insertRole" parameterType="com.cy.domain.line.JhzRole">
+		insert into
+		jhz_role(roleName,permissionStr,introduce,uid)
+		values(#{roleName},#{permissionStr},#{introduce},#{uid})
+	</insert>
+	<select id="checkResource" resultType="com.cy.domain.line.CheckRes">
+		select * from cy_checkResource
+	</select>
+	<select id="loadWorkStationMark" resultType="com.cy.domain.line.WorkStationMark" parameterType="com.cy.domain.line.WorkStationMark" >
+		select * from cy_workStationMark
+		<where>
+			<trim suffixOverrides=",">
+				<if test="sn1!=null and sn1!=''">
+					sn1=#{sn1}
+				</if>
+				<if test="porder!=null and porder!=''">
+					and porder=#{porder}
+				</if>
+				<if test="lineCode!=null and lineCode!=''">
+					and lineCode=#{lineCode}
+				</if>
+			</trim>
+		</where>
+		limit #{pageSize}, #{limit}
+	</select>
+	<select id="countLoadWorkStationMark" resultType="int" parameterType="com.cy.domain.line.WorkStationMark" >
+		select count(*) from cy_workStationMark
+		<where>
+			<trim suffixOverrides=",">
+				<if test="sn1!=null and sn1!=''">
+					sn1=#{sn1}
+				</if>
+				<if test="porder!=null and porder!=''">
+					and porder=#{porder}
+				</if>
+				<if test="lineCode!=null and lineCode!=''">
+					and lineCode=#{lineCode}
+				</if>
+			</trim>
+		</where>
+
+	</select>
+	<select id="findWorkerByWorkerCode" parameterType="String" resultType="int">
+	select count(*) from cy_productWorker where workerCode=#{workerCode}
+	</select>
+</mapper>

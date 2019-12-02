@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.line.WorkStationMarkDao">
+    <!-- 查询出当前产线的工艺 -->
+    <select id="findEscateByCode" parameterType="com.cy.domain.line.WorkLine" resultType="com.cy.domain.line.WorkLine">
+      select * from cy_workLine where lineCode=#{lineCode}
+    </select>
+    
+    <!-- 查询出所有的看板 -->
+    <select id="findDashBoardByCode" parameterType="com.cy.domain.line.WorkLine" resultType="com.cy.domain.line.DashBoard">
+      select *  from cy_dashBoard where lid=(select lid from cy_workLine where lineCode=#{lineCode})
+    </select>
+     
+     
+    <!-- 计算组装投入 -->
+    <select id="findZuInputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line1=#{lineCode} and mark1 is not null
+        and time1 is not null and substr(time1,1,10)=#{nowDate} and SUBSTR(time1 FROM 12  FOR 8)&gt;=#{start}
+        and SUBSTR(time1 FROM 12  FOR 8)&lt;=#{end}
+    </select>
+    
+    <!-- 计算组装累计投入 -->
+    <select id="findLeijiZuInputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line1=#{lineCode} and mark1 is not null
+        and time1 is not null
+    </select>
+    
+    <!-- 计算组装产出 -->
+    <select id="findZuOutputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line1=#{lineCode} and mark4 is not null
+        and time4 is not null and substr(time4,1,10)=#{nowDate} and SUBSTR(time4 FROM 12  FOR 8)&gt;=#{start}
+        and SUBSTR(time4 FROM 12  FOR 8) &lt;= #{end}
+    </select>
+    
+    <!-- 计算组装累计产出 -->
+    <select id="findLeijiZuOutputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line1=#{lineCode} and mark4 is not null
+        and time4 is not null
+    </select>
+    
+     <!-- 计算包装产出 -->
+    <select id="findBaoOutputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line2=#{lineCode} and mark6 is not null
+        and time6 is not null and substr(time6,1,10)=#{nowDate} and SUBSTR(time6 FROM 12  FOR 8)&gt;=#{start}
+        and SUBSTR(time6 FROM 12  FOR 8)&lt;=#{end}
+    </select>
+    
+     <!-- 计算累计包装产出 -->
+    <select id="findLeijiBaoOutputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line2=#{lineCode} and mark6 is not null
+        and time6 is not null
+    </select>
+    
+    <!-- 计算组包投入 -->
+    <select id="findZuBaoInputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line2=#{lineCode} and mark1 is not null
+        and time1 is not null and substr(time1,1,10)=#{nowDate} and SUBSTR(time1 FROM 12  FOR 8)&gt;=#{start}
+        and SUBSTR(time1 FROM 12  FOR 8)&lt;=#{end}
+    </select>
+    
+     <!-- 计算累计组包投入 -->
+    <select id="findLeijiZuBaoInputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line2=#{lineCode} and mark1 is not null
+        and time1 is not null 
+    </select>
+    
+    <!-- 计算组包产出 -->
+    <select id="findZuBaoOutputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line2=#{lineCode} and mark6 is not null
+        and time6 is not null and substr(time6,1,10)=#{nowDate} and SUBSTR(time6 FROM 12  FOR 8)&gt;=#{start}
+        and SUBSTR(time6 FROM 12  FOR 8)&lt;=#{end}
+    </select>
+    
+    <!-- 计算累计组包产出 -->
+    <select id="findLeijiZuBaoOutputByCode" parameterType="map" resultType="Integer">
+        select count(*) from cy_workStationMark
+        where line2=#{lineCode} and mark6 is not null
+        and time6 is not null
+    </select>
+    
+ </mapper>

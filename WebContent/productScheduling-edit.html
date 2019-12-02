@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<!-- <script type="text/javascript" src="./js/self.js"></script> -->
+<script type="text/javascript" src="./lib/layui/layui.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="x-body">
+		<form class="layui-form">
+
+
+
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">编号</label>
+					<div class="layui-input-inline">
+						<input type="tel" name="snumber" 
+							autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">产品名</label>
+					<div class="layui-input-block">
+						<select name="ppid" lay-filter="aihao" id="pname">
+							<option value=""></option>
+							<option value="0">写作</option>
+							<option value="1" selected="">阅读</option>
+							<option value="2">游戏</option>
+							<option value="3">音乐</option>
+							<option value="4">旅行</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">条码名</label>
+					<div class="layui-input-inline">
+						<input type="text" name="codeName" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">条码总长度</label>
+					<div class="layui-input-inline">
+						<input type="text" name="codeLength" 
+							autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">工艺</label>
+					<div class="layui-input-block">
+						<select name="pclass" lay-filter="aihao" id="pclass">
+							<option value="">请选择工艺</option>
+							<option value="SMT">SMT</option>
+							<option value="DIP">DIP</option>
+							<option value="组包">组包</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">加工费</label>
+					<div class="layui-input-inline">
+						<input type="text" name="pcost"  autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">流水号长度</label>
+					<div class="layui-input-inline">
+						<input type="text" name="serialLength"  autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">流水号进制</label>
+					<div class="layui-input-block">
+						<select name="serialSystem" lay-filter="aihao"  id="serialSystem">
+							<option value="">请选择进制</option>
+							<option value="10">10进制</option>
+							<option value="11">10进制一位校验码</option>
+							<option value="16">16进制</option>
+							<option value="34">34进制</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-inline">
+					<label class="layui-form-label">关键字位1</label>
+					<div class="layui-input-inline">
+						<input type="number" name="keyLocatlOne" 
+							autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">关键字符1</label>
+					<div class="layui-input-inline">
+						<input type="text" name="keyCharOne" 
+							autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">关键字位2</label>
+					<div class="layui-input-inline">
+						<input type="number" name="keyLocatlTwo" 
+							autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">关键字符2</label>
+					<div class="layui-input-inline">
+						<input type="text" name="keyCharTwo" 
+							autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="layui-form-item">
+				<label for="layui-btn" class="layui-form-label"> </label>
+				<button class="layui-btn" lay-filter="add" lay-submit="">
+					确定
+				</button>
+			</div>
+		</form>
+	</div>
+	<script>
+	var productOption = loadProductOption();
+	console.log(productOption);
+	$("#pname").empty().append("<option value=''>请选择产品</option>" + productOption);
+	var productScheduling=JSON.parse(localStorage.getItem("productScheduling"));
+    
+    $("input[name='snumber']").val(productScheduling.snumber);
+    $("input[name='codeName']").val(productScheduling.codeName);
+    $("input[name='codeLength']").val(productScheduling.codeLength);
+    $("input[name='pcost']").val(productScheduling.pcost);
+    $("input[name='serialLength']").val(productScheduling.serialLength);
+    $("input[name='keyLocatlOne']").val(productScheduling.keyLocatlOne);
+    $("input[name='keyCharOne']").val(productScheduling.keyCharOne);
+    $("input[name='keyLocatlTwo']").val(productScheduling.keyLocatlTwo);
+    $("input[name='keyCharTwo']").val(productScheduling.keyCharTwo);
+    
+    $("#pname option").each(function(){
+    	console.log($(this).val());
+    	console.log(productScheduling.c_pid);
+    	if($(this).val()==productScheduling.c_pid){
+    		$(this).prop("selected",true);
+    	}
+    });
+    $("#pclass option").each(function(){
+    	console.log($(this).val());
+    	console.log(productScheduling.pclass);
+    	if($(this).val()==productScheduling.pclass){
+    		$(this).prop("selected",true);
+    	}
+    });
+    $("#serialSystem option").each(function(){
+    	console.log($(this).val());
+    	if($(this).val()==productScheduling.serialSystem){
+    		$(this).prop("selected",true);
+    	}
+    });
+
+		
+		/* var json={
+				snumber: 2222
+				codeName: dfgdf
+				codeLength: 12
+				ppid: 61
+				serialLength: 12
+				serialSystem: 2
+				keyLocatlOne: 1
+				keyLocatlTwo: 2
+				keyCharOne: a
+				keyCharTwo: b
+				pclass: sdsf
+				pcost: 45
+		} */
+		layui.use([ 'form', 'layer' ], function() {
+			$ = layui.jquery;
+			var form = layui.form, layer = layui.layer;
+
+			/*  //自定义验证规则
+			 form.verify({
+			  cy_wxxAdmin_accounts: function(value){
+			     if(value.length < 1){
+			       return '登录名不能为空';
+			     }
+			   },
+			   cy_wxxAdmin_adminName: function(value){
+			       if(value.length < 1){
+			         return '姓名不能为空';
+			       }
+			     }
+			   ,L_pass: function(value){
+			   	if(value.length<1){
+			   	return "密码不能为空";
+			   	}
+			   }
+			   ,repass: function(value){
+			       if($('#cy_wxxAdmin_password').val()!=$('#L_repass').val()){
+			           return '两次密码不一致';
+			       }
+			   }
+			 }); */
+
+			//监听提交
+			form.on('submit(add)', function(data) {
+/* 				var pname = data.field.pname;
+				var pweight = data.field.pweight;
+				var perror = data.field.perror;
+				var bweight = data.field.bweight;
+				var berror = data.field.berror; */
+				var paramDemo = data.field;
+				paramDemo["pid"]=productScheduling.pid;
+				$.ajax({
+					type : "post",
+					url : "list/editProductScheduling.do",
+					/* 	async: false, */
+					data : paramDemo,
+					dataType : "json",
+					success : function(res) {
+						if (res.state == 1) {
+							layer.alert("编辑成功", {
+								icon : 6
+							}, function() {
+								// 获得frame索引
+								var index = parent.layer
+										.getFrameIndex(window.name);
+								//关闭当前frame
+								parent.layer.close(index);
+							});
+							return false;
+						} else {
+							layer.alert(res.msg);
+						}
+
+					},
+					error : function(res) {
+						layer.msg("error");
+					}
+				});
+				return false;
+
+			});
+
+		});
+	</script>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+</body>
+
+</html>

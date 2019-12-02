@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cy.dao.list.ShipmentDao">
+	<select id="getShipmentList" parameterType="com.cy.domain.list.Shipment" resultType="com.cy.domain.list.Shipment">
+		SELECT p.`pid`,p.pnCode,p.`sn1`,p.`sn2`,p.`sn3`,p.`sn4`,p.`sn5`,p.`sn6`,p.`sn7`,p.`pcode`,p.`color`,p.`process`,p.`porder`,p.`data1`,p.`data2`,p.mark,p.`weight1`,p.`weight2`,p.`creatime`,p.`cid`,p.`hardwareVersion`,p.`softwareVersion`,p.`licenseTag`,p.`mainboardModel`,p.`region`,p.`projectNumber`,p.`batch`,p.`shipmentBatch`,p.`deliverTime`,p.modelCode, d.pname, c.clientName AS clientName FROM cy_shipment p 
+		LEFT JOIN  cy_productDetails d ON p.pcode=d.pid
+		LEFT JOIN  clientList c ON c.id=p.cid
+	<where>
+		<if test="time !=null and time !=''">creatime between #{beginTime} and #{endTime}</if>
+		<if test="deliver !=null and deliver !=''">and deliverTime between #{deliverStartime} and #{deliverEndtime}</if>
+		<if test="color !=null and color !=''">and color=#{color}</if>
+		<if test="porder !=null and porder !=''">and porder=#{porder}</if>
+		<if test="sn1 !=null and sn1 !=''">and sn1=#{sn1}</if>
+		<if test="pcode !=null and pcode !=''">and pcode=#{pcode}</if>
+		<if test="modelCode !=null and modelCode !=''">and cp.`cy_model`=#{modelCode}</if>
+		<if test="batch !=null and batch !=''">and batch=#{batch}</if>
+		<if test="projectNumber !=null and projectNumber !=''">and projectNumber=#{projectNumber}</if>
+		<if test="licenseTag !=null and licenseTag !=''">and licenseTag=#{licenseTag}</if>
+		<if test="region !=null and region !=''">and region=#{region}</if>
+		<if test="cid !=null and cid !=''">and cid=#{cid}</if>
+		 <if test="deliverTime != null and deliverTime != ''">deliverTime = #{deliverTime}</if>
+		</where>
+		limit #{pageSize},#{limit} 
+	</select>
+
+
+	<select id="count" resultType="int" parameterType="com.cy.domain.list.Shipment" >
+	    select count(*) from cy_shipment
+		<where>
+		<if test="time !=null and time !=''">and creatime between #{beginTime} and #{endTime}</if>
+		<if test="deliverTime !=null and deliverTime !=''">and deliverTime between #{deliverStartime} and #{deliverEndtime}</if>
+		<if test="color !=null and color !=''">and color=#{color}</if>
+		<if test="porder !=null and porder !=''">and porder=#{porder}</if>
+		<if test="sn1 !=null and sn1 !=''">and sn1=#{sn1}</if>
+		<if test="pcode !=null and pcode !=''">and pcode=#{pcode}</if>
+		<if test="modelCode !=null and modelCode !=''">and modelCode=#{modelCode}</if>
+		<if test="batch !=null and batch !=''">and batch=#{batch}</if>
+		<if test="projectNumber !=null and projectNumber !=''">and projectNumber=#{projectNumber}</if>
+		<if test="licenseTag !=null and licenseTag !=''">and licenseTag=#{licenseTag}</if>
+		<if test="region !=null and region !=''">and region=#{region}</if>
+		<if test="cid !=null and cid !=''">and cid=#{cid}</if>
+		</where>
+	</select>
+	
+<select id="getShipment"  resultType="com.cy.domain.list.Shipment">
+		select * from cy_shipment where sn1 = #{sn1}
+	</select>
+	<select id="getShipmentBySn1" parameterType="string" resultType="com.cy.domain.list.Shipment">
+	    select * from cy_shipment where sn1 = #{sn1}
+	</select>
+<insert id="insertShipment" parameterType="com.cy.domain.list.Shipment">
+	insert into
+		cy_shipment
+		(
+		modelCode,
+		pnCode,
+		sn1,
+		sn2,
+		sn3,
+		sn4,
+		sn5,
+		sn6,
+		sn7,
+		pcode,
+		color,
+		process,
+		porder,
+		data1,
+		data2,
+		mark,
+		weight1,
+		weight2,
+		creatime,
+		cid,
+		hardwareVersion,
+		softwareVersion,
+		licenseTag,
+		mainboardModel,
+		region,
+		projectNumber,
+		batch,
+		shipmentBatch,
+		deliverTime
+		)
+		values(
+		#{modelCode},
+		#{pnCode},
+		#{sn1},
+		#{sn2},
+		#{sn3},
+		#{sn4},
+		#{sn5},
+		#{sn6},
+		#{sn7},
+		#{pcode},
+		#{color},
+		#{process},
+		#{porder},
+		#{data1},
+		#{data2},
+		#{mark},
+		#{weight1},
+		#{weight2},
+		#{creatime},
+		#{cid},
+		#{hardwareVersion},
+		#{softwareVersion},
+		#{licenseTag},
+		#{mainboardModel},
+		#{region},
+		#{projectNumber},
+		#{batch},
+		#{shipmentBatch},
+		#{deliverTime}
+		)
+
+	</insert>
+	<insert id="xlsAddShipment"  parameterType="com.cy.domain.list.Shipment" >
+         insert into cy_shipment(
+         modelCode,
+         pnCode,
+         sn1,
+         sn2,
+         sn3,
+         sn4,
+         sn5,
+         sn6,
+         sn7,
+         pcode,
+         color,
+         process,
+         porder,
+         data1,
+         data2,
+         weight1,
+         weight2,
+         creatime,
+         cid,
+         hardwareVersion,
+         softwareVersion,
+         licenseTag,
+         mainboardModel,
+         region,
+         projectNumber,
+         batch,
+         shipmentBatch,
+         deliverTime
+         ) 
+         values
+         <foreach collection="list"  item="item"  separator =","   index="">
+         (
+         #{item.modelCode},
+         #{item.pnCode},
+         #{item.sn1},
+         #{item.sn2},
+         #{item.sn3},
+         #{item.sn4},
+         #{item.sn5},
+         #{item.sn6},
+         #{item.sn7},
+         #{item.pcode},
+         #{item.color},
+         #{item.process},
+         #{item.porder},
+         #{item.data1},
+         #{item.data2},
+         #{item.weight1},
+         #{item.weight2},
+        #{item.creatime},
+         #{item.cid},
+        #{item.hardwareVersion},
+         #{item.softwareVersion},
+        #{item.licenseTag},
+         #{item.mainboardModel},
+         #{item.region},
+         #{item.projectNumber},
+         #{item.batch},
+         #{item.shipmentBatch},
+         #{item.deliverTime}
+         )
+         </foreach>
+     </insert>
+	<update id="updateShipment" parameterType="com.cy.domain.list.Shipment">
+	    update cy_shipment 
+	    <set>
+	        <trim suffixOverrides=",">
+	    <if test="modelCode != null and modelCode != ''">
+	    	modelCode = #{modelCode},
+	    </if>
+	     <if test="pnCode != null and pnCode != ''">
+			pnCode = #{pnCode},
+		</if>
+		 <if test="sn1 != null and sn1 != ''">
+			sn1 = #{sn1},
+		</if>
+		 <if test="sn2 != null and sn2 != ''">
+			sn2 = #{sn2},
+		</if>
+		 <if test="sn3 != null and sn3 != ''">
+			sn3 = #{sn3},
+		</if>
+		 <if test="sn4 != null and sn4 != ''">
+			sn4 = #{sn4},
+		</if>
+		 <if test="sn5 != null and sn5 != ''">
+			sn5 = #{sn5},
+		</if>
+		 <if test="sn6 != null and sn6 != ''">
+			sn6 = #{sn6},
+		</if>
+		 <if test="sn7 != null and sn7 != ''">
+			sn7 = #{sn7},
+		</if>
+		 <if test="pcode != null and pcode != ''">
+			pcode = #{pcode},
+		</if>
+		 <if test="color != null and color != ''">
+			color = #{color},
+		</if>
+		 <if test="process != null and process != ''">
+			process = #{process},
+		</if>
+		 <if test="porder != null and porder != ''">
+			porder = #{porder},
+		</if>
+		 <if test="data1 != null and data1 != ''">
+			data1 = #{data1},
+		</if>
+		 <if test="data2 != null and data2 != ''">
+			data2 = #{data2},
+		</if>
+		 <if test="mark != null and mark != ''">
+			mark = #{mark},
+		</if>
+		 <if test="weight1 != null and weight1 != ''">
+			weight1 = #{weight1},
+		</if>
+		 <if test="weight2 != null and weight2 != ''">
+			weight2 = #{weight2},
+		</if>
+		 <if test="creatime != null and creatime != ''">
+			creatime = #{creatime},
+		</if>
+		 <if test="cid != null and cid != ''">
+			cid = #{cid},
+		</if>
+		 <if test="hardwareVersion != null and hardwareVersion != ''">
+			hardwareVersion = #{hardwareVersion},
+		</if>
+		 <if test="softwareVersion != null and softwareVersion != ''">
+			softwareVersion = #{softwareVersion},
+		</if>
+		 <if test="licenseTag != null and licenseTag != ''">
+			licenseTag = #{licenseTag},
+		</if>
+		 <if test="mainboardModel != null and mainboardModel != ''">
+			mainboardModel = #{mainboardModel},
+		</if>
+		 <if test="region != null and region != ''">
+			region = #{region},
+		</if>
+		 <if test="projectNumber != null and projectNumber != ''">
+			projectNumber = #{projectNumber},
+		</if>
+		 <if test="batch != null and batch != ''">
+			batch = #{batch},
+		</if>
+		 <if test="shipmentBatch != null and shipmentBatch !=null">
+			shipmentBatch = #{shipmentBatch},
+		</if>
+		 <if test="deliverTime != null and deliverTime !=''">
+			deliverTime = #{deliverTime}
+		</if>
+		</trim>
+		</set>
+		where pid = #{pid}
+	</update>
+
+	<delete id="deleteShipment" parameterType="java.lang.Integer">
+	    delete from cy_shipment where pid = #{id}
+	</delete>
+
+
+
+
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cy.dao.soft.VersionDao">
+     <!-- 扫码系统的升级接口 -->
+     <select id="loadMaxSoftByName"  parameterType="com.cy.domain.soft.SoftVersion"  resultType="com.cy.domain.soft.SoftVersion">
+         select  *  from softVersion  where soft_version in (select max(soft_version) from softVersion where soft_name=#{soft_name}) 
+     </select>
+     
+    <!-- 加载所有的升级软件 -->
+    <select id="loadSoftWare"  parameterType="com.cy.domain.soft.SoftVersion"  resultType="com.cy.domain.soft.SoftVersion">
+        select *  from  softVersion 
+        <where>
+            <if test="soft_name!=null and soft_name!=''">
+                  where soft_name=#{soft_name}
+            </if>
+        </where>
+        limit #{pageSize},#{limit}
+    </select>
+    
+    
+    <select id="loadSoftWareCount"  parameterType="com.cy.domain.soft.SoftVersion"  resultType="int">
+        select count(*)  from  softVersion 
+        <where>
+            <if test="soft_name!=null and soft_name!=''">
+                  where soft_name=#{soft_name}
+            </if>
+        </where>
+    </select>
+    
+    <insert id="addSoftware"  parameterType="com.cy.domain.soft.SoftVersion" >
+        insert softVersion 
+        (soft_name,
+         soft_version,
+         soft_description,
+         soft_url
+         )values(
+         #{soft_name},
+         #{soft_version},
+         #{soft_description},
+         #{soft_url}
+         )
+    </insert>
+    
+    <delete id="deleteVersion"  parameterType="com.cy.domain.soft.SoftVersion"> 
+       delete from softVersion where soft_id=#{soft_id}
+    </delete>
+    
+    <update id="editVersion" parameterType="com.cy.domain.soft.SoftVersion">
+       update softVersion
+       <set>
+           <trim suffixOverrides=",">
+              <if test="soft_name!=null and soft_name!=''">
+                   soft_name=#{soft_name},
+              </if>
+              <if test="soft_version!=null">
+                  soft_version=#{soft_version},
+              </if>
+              <if test="soft_description!=null  and soft_description!=''"  >
+                  soft_description=#{soft_description},
+              </if>
+              <if test="soft_url!=null  and soft_url!=''"  >
+                  soft_url=#{soft_url}
+              </if>
+           </trim>
+       </set>
+       where soft_id=#{soft_id}
+    </update>
+    
+    
+    
+    
+</mapper>

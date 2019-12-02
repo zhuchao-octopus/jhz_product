@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cy.dao.list.MainboardDao">
+
+		<resultMap id="mainb" type="com.cy.domain.list.Mainboard">
+		<result property="id" column="id" />
+		<result property="pname" column="pname" />
+		<result property="pid" column="pid" />
+		<result property="specifications" column="specifications" />
+		<result property="price" column="price" />
+		<result property="explains" column="explains" />
+		<result property="model" column="model" />
+		<result property="page" column="page" />
+		<result property="pageSize" column="pageSize" />
+		<result property="limit" column="limit" />
+	</resultMap>
+	
+
+	<select id="selectMainboardListAll" resultMap="mainb" parameterType="com.cy.domain.list.Mainboard" >
+		SELECT m.*,p.pname FROM mainboardList m LEFT JOIN cy_productDetails p ON p.pid=m.pid limit #{pageSize},#{limit}
+	</select>
+	<select id="count" parameterType="com.cy.domain.list.Mainboard" resultType="int">
+		select count(*) from mainboardList
+	</select>
+	
+	<delete id="MainboardDelAll" parameterType="com.cy.domain.list.Mainboard">
+		delete from mainboardList where id=#{id}
+	</delete>
+	
+	<insert id="insertMainboardAll"  parameterType="com.cy.domain.list.Mainboard">
+		INSERT INTO mainboardList(`pid`,`specifications`,`price`,`explains`,`model`) VALUES (#{pid},#{specifications},#{price},#{explains},#{model})
+	</insert>
+	
+	<update id="updateMainboardAll" parameterType="com.cy.domain.list.Mainboard">
+		 update mainboardList set `pid`=#{pid},`specifications`=#{specifications},`price`=#{price},`explains`=#{explains},`model`=#{model} where `id`=#{id}
+	</update>
+
+</mapper>

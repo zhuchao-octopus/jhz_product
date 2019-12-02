@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<script type="text/javascript" src="./js/self.js"></script>
+<script type="text/javascript" src="./lib/layui/layui.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="x-body">
+		<form class="layui-form">
+			<div class="layui-form-item">
+				<label for="phone" class="layui-form-label"> 软件名 </label>
+				<div class="layui-input-inline">
+					<input type="text" id="soft_name" name="soft_name" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="advLink" class="layui-form-label"> 版本号 </label>
+				<div class="layui-input-inline">
+					<input type="number" id="soft_version" name="soft_version" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_advertisement_price" class="layui-form-label">
+					软件说明 </label>
+				<div class="layui-input-inline">
+					<textarea class="layui-textarea" name='soft_description' id='soft_description'></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_advertisement_price" class="layui-form-label">
+					上传 </label>
+				<button type="button" class="layui-btn" id="uploading">上传软件</button>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_advertisement_price" class="layui-form-label">
+					软件URL: </label>
+				<div class="layui-input-inline">
+					<input type="text" id="soft_url" name="soft_url" autocomplete="off"
+						class="layui-input"  disabled="disabled">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="L_repass" class="layui-form-label"> </label>
+				<button class="layui-btn" lay-filter="add" lay-submit="">
+					上传</button>
+			</div>
+		</form>
+	</div>
+	<script>
+	    var software=JSON.parse(localStorage.getItem("software"));
+	    $("#soft_name").val(software.soft_name);
+	    $("#soft_version").val(software.soft_version);
+	    $("#soft_description").val(software.soft_description);
+	    $("#soft_url").val(software.soft_url);
+	
+		layui.use([ 'form', 'layer','upload' ], function() {
+			$ = layui.jquery;
+			var form = layui.form,
+			upload=layui.upload,
+			layer = layui.layer;
+			//监听提交
+			var indexLoading=null;
+			upload.render({
+				elem : "#uploading",
+				url : "file/upLoad.do",
+				accept : "file",
+				/* exts : "xlsx", */
+			/* 	auto : false, */
+				/* bindAction : "#submit1", */
+			   data:{"folderName":"jhzVersion"},
+			   before : function() {
+					
+					indexLoading=layer.load('上传中..........');
+				},
+				done : function(res, index, upload) {
+					
+					console.log(res);
+					if (res.code == 0) {
+						layer.close(indexLoading);
+						var soft_url=res.data;
+						$("#soft_url").val(soft_url);
+						return false;
+					} else {
+						layer.alert(res.msg);
+					}
+				}
+			});
+
+			
+			form.on('submit(add)', function(data) {
+				var param = data.field;
+				param['soft_id']=software.soft_id;
+				$.ajax({
+					type : "get",
+					url : "version/editVersion.do",
+					data : param,
+					dataType : "json",
+					success : function(res) {
+						if (res.code == 0) {
+							layer.alert(res.msg, {icon : 6}, function() {
+								// 获得frame索引
+								var index = parent.layer.getFrameIndex(window.name);
+								//关闭当前frame
+								parent.layer.close(index);
+								//layer.close(layer.index);
+								layer.closeAll('iframe');
+							});
+
+						} else {
+							layer.alert(res.msg);
+						}
+					},
+					error : function() {
+						layer.alert("error");
+					}
+				});
+
+				return false;
+			});
+
+		});
+	</script>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+</body>
+
+</html>

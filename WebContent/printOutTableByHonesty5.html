@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style>
+table {
+	border: 0;
+	margin: 0;
+	border-collapse: collapse;
+}
+
+table td {
+	padding: 0;
+}
+
+tr, td {
+	border: 1px solid #000000;
+	/*             width: 400px; */
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+	font-size: 8px
+}
+
+#goods {
+	margin-left: 300px;
+	border-bottom-width: 0px;
+}
+
+#cust {
+	
+}
+</style>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.PrintArea.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
+<script type="text/javascript" src="js/self.js"></script>
+<script language="javascript" charset="GB2312"></script>
+<script type="text/javascript">
+	$(function() {
+		
+	
+		var printArr0=JSON.parse(localStorage.getItem("printArr5"));
+		var newArr=printArr0.filter(function(item){
+			return item.state !=="1"; 
+		});
+		var idArr=new Array();
+		for(var i=0;i<newArr.length;i++){
+			idArr.push(newArr[i].id);
+		}
+		var ids=idArr.join(",");
+		
+		var url = window.location.search;
+		var keyValue = new Map();
+		if (url.indexOf("?") != -1) {
+			var str = url.substr(1);
+			console.log(str);
+			var tableTitle =decodeURIComponent(str.split("=")[1].split("&")[0]);
+			console.log(tableTitle);//表头
+			
+			var flowNumber=str.split("&")[1].split("=")[1];
+			console.log(flowNumber);//流水号
+			var custName=decodeURIComponent(str.split("&")[2].split("=")[1]);
+			console.log(custName);//客户名
+			var custNumber=str.split("&")[3].split("=")[1];
+  			console.log(custNumber);	 //客户号
+  			var date=new Date();
+  			var localDate=date.toLocaleDateString();
+            $("#cust").text(custName);
+	        $("#title").text(tableTitle);
+		    $("#goods").text(custNumber+localDate.split("/")[0]+localDate.split("/")[1]+localDate.split("/")[2]+flowNumber);
+		    var arr=[];
+		    $.ajax({
+				type : "get",
+				url : "tv/loadHistoryWarByIds.do",
+				data : {
+					"ids" : ids,
+					"clientNo":custNumber
+				},
+				dataType : "json",
+				success : function(res) {
+					var arr = [];
+					if (res.state == 1) {
+						for (var i = 0; i<res.data.length; i++) {
+
+							var list = "<tr>";
+							list += "<td>" + res.data[i].orderNumber + "</td>";
+							list += "<td>" + res.data[i].materialName+ "</td>";
+							list += "<td>" + res.data[i].pn + "</td>";
+							if(res.data[i].numbers==null){
+								list+="<td></td>";
+							}else{
+								list+="<td>"+res.data[i].numbers+"</td>";
+							}
+							if(res.data[i].pnumber==null){
+								list += "<td></td>";
+							}else{
+								list += "<td>" + res.data[i].pnumber+ "</td>";
+							}
+							
+							var status;
+							if (res.data[i].state == 0) {
+								status = "出库";
+							} else if (res.data[i].state == 1) {
+								status = "入库";
+							} else {
+								status = "未知";
+							}
+							if(res.data[i].outNumber==null){
+								list += "<td></td>";
+							}else{
+								list += "<td>"+res.data[i].outNumber+"</td>";
+								
+							}
+							
+							if(res.data[i].residue==null){
+								list += "<td></td>";
+							}else{
+								list += "<td>"+res.data[i].residue+"</td>";
+							}
+								
+							list += "<td>"+ res.data[i].mexplain+"</td></tr>";
+							arr.push(list);
+						}
+						arr.push("<tr>" + "<td>经手人</td>"
+								+ "<td colspan='3'>"+loginUser.realName+"</td>"
+								+ "<td>签收人</td>"
+								+ "<td colspan='3'></td>" + +"</tr>");
+						$("#tb").append(arr.join(''));
+
+					} else {
+						alert(res.msg);
+
+					}
+				},
+				error : function() {
+					//alert("错误")
+				}
+			})
+
+			}
+
+		}
+	);
+
+	function printdiv(printpage) {
+		var headstr = "<html><head><title></title></head><body>";
+		var footstr = "</body>";
+		var newstr = document.all.item(printpage).innerHTML;
+		console.log(newstr);
+		var oldstr = document.body.innerHTML;
+		document.body.innerHTML = headstr + newstr + footstr;
+		//document.body.innerHTML=headstr+footstr;
+		window.print(); //调用浏览器打印控件
+		document.body.innerHTML = oldstr;
+		return false;
+	}
+</script>
+</head>
+<body>
+	<div>
+		<input type="button" onClick="printdiv('div_print');" value=" 打印 ">
+	</div>
+	<br>
+
+
+	<div id="div_print">
+		<h1 style="text-align: center"></h1>
+		<table id="tb">
+			<tr>
+				<td colspan="9" id="title"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>客户号</td>
+				<td colspan="3" id="cust"></td>
+				<td>单号</td>
+				<td colspan="4" id="goods"></td>
+			</tr>
+			<tr>
+
+
+				<td style="width: 200px">订单号</td>
+				<td style="width: 200px">物料名称</td>
+				<td style="width: 200px">料号</td>
+				<td style="width: 100px">批量</td>
+				<td style="width: 100px">数量</td>
+				<td style="width: 100px">累计数量</td>
+				<td style="width: 100px">余数</td>
+				<td style="width: 700px">备注</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>

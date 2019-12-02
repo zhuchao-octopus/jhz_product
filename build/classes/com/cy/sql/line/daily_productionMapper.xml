@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cy.dao.line.daily_production_listDao">
+
+	<resultMap id="dpl"
+		type="com.cy.domain.line.daily_production_list">
+		<result property="id" column="id" />
+		<result property="lid" column="lid" />
+		<result property="lineCode" column="lineCode" />
+		<result property="pid" column="pid" />
+		<result property="pname" column="pname" />
+		<result property="orderNumber" column="orderNumber" />
+		<result property="explain" column="explain" />
+		<result property="targetProduction" column="targetProduction" />
+		<result property="actualProduction" column="actualProduction" />
+		<result property="time" column="time" />
+		<result property="yield" column="yield" />
+		<result property="cumulativeOutput" column="cumulativeOutput" />
+		<result property="abnormal" column="abnormal" />
+		<result property="page" column="page" />
+		<result property="pageSize" column="pageSize" />
+		<result property="limit" column="limit" />
+	</resultMap>
+
+
+	<select id="loadAllDaily" resultMap="dpl" parameterType="com.cy.domain.line.daily_production_list">
+		SELECT w.lineCode,p.pname,d.orderNumber,d.explain,d.targetProduction,d.actualProduction,d.time,d.yield,d.cumulativeOutput,d.abnormal,d.lid,d.pid,d.impositionDate,d.id
+		FROM daily_production_list d LEFT JOIN cy_workLine w ON d.lid= w.lid
+		LEFT JOIN cy_productDetails p ON d.pid=p.pid ORDER BY d.time DESC
+	</select>
+
+   <!-- 新增生产线 -->
+    <insert id="addDailyProduction" parameterType="com.cy.domain.line.daily_production_list">
+        insert into daily_production_list(lid,pid,orderNumber,targetProduction,actualProduction,time,yield,cumulativeOutput,abnormal,`explain`,`impositionDate`)
+        values(#{lid},#{pid},#{orderNumber},#{targetProduction},#{actualProduction},#{time},#{yield},#{cumulativeOutput},#{abnormal},#{explain},#{impositionDate})
+    </insert>
+    
+    <!-- 删除 -->
+    <delete id="delDailyProduction" parameterType="com.cy.domain.line.daily_production_list">
+    	DELETE FROM daily_production_list WHERE id=#{id}
+    </delete>
+    
+    <select id="CountLine" resultType="int">
+          select count(*) from daily_production_list
+      </select>
+    
+    <update id="updateDailyProduction" parameterType="com.cy.domain.line.daily_production_list">
+    	UPDATE daily_production_list SET lid=#{lid},pid=#{pid},orderNumber=#{orderNumber},targetProduction=#{targetProduction},actualProduction=#{actualProduction},time=#{time},yield=#{yield},cumulativeOutput=#{cumulativeOutput},abnormal=#{abnormal},`explain`=#{explain},impositionDate=#{impositionDate}
+        WHERE id=#{id}
+    </update>
+
+</mapper>

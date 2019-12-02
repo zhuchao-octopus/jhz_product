@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="../css/font.css">
+<link rel="stylesheet" href="../css/xadmin.css">
+<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+<script type="text/javascript" src="/jhz_product/js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/cookie_util.js"></script>
+<script type="text/javascript" src="../js/self.js"></script>
+<script type="text/javascript" src="/jhz_product/js/xadmin.js"></script>
+<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+<script src="../lib/layui/layui.js" charset="utf-8" type="text/javascript"></script>
+
+</head>
+
+<body>
+	<div>
+		<ul class="layui-nav"  style="text-align: right">
+			
+				
+				<li class="layui-nav-item">
+				<a class="layui-btn layui-btn-small"
+						style="line-height: 1.6em; margin-top: 3px; float: right"
+						href="javascript:window.location.reload()" title="刷新"> <i
+						class="layui-icon" style="line-height: 30px">&#xe666;</i>
+			    </a>
+			    </li>
+		</ul>
+
+	</div>
+	<div class="x-body">
+		
+		<form class="layui-form"  onsubmit="return false;">
+		<div class="layui-row" style="text-align: center">
+		      <div class="layui-inline">
+                  <input type="text" id="jhz_tasksName" name="jhz_tasksName" autocomplete="off" class="layui-input"  placeholder="请输入项目名">
+              </div>
+              <!-- <div class="layui-inline">
+                  <input type="text" id="jhz_projectName" name="jhz_projectName" autocomplete="off" class="layui-input"  placeholder="请输入项目名">
+              </div>
+              <div class="layui-inline">
+                  <input type="text" id="jhz_respoName" name="jhz_respoName" autocomplete="off" class="layui-input"  placeholder="请输入负责人">
+              </div>
+              <div class="layui-inline">
+                  <input type="text" id="jhz_startName" name="jhz_startName" autocomplete="off" class="layui-input"  placeholder="请输入发布人">
+              </div>
+              <div class="layui-inline">
+                  <select id="jhz_state"  name="jhz_state" class="valid"  placeholder="请选择状态">
+                  <option value=""></option>
+                  <option value="0">进行中</option>
+                  <option value="1">已完成</option>
+                  </select>
+              </div> -->
+			<div class="layui-inline">
+				<button class="layui-btn"  lay-filter="search"
+					data-type='search'>
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+		</div>
+
+       </form>
+
+
+		<!-- <xblock id="mac-button">
+
+		<button class="layui-btn"
+			onclick="x_admin_show('添加','./tasksData-add.html',600,600)">
+			<i class="layui-icon">&#xe61f;</i>添加
+		</button>
+		</xblock> -->
+
+
+		<table id="demo" lay-filter="demo" class="mac-table"></table>
+
+	</div>
+	<script type="text/html" id="barDemo">
+     	<button  class='layui-btn layui-btn-sm layui-btn-normal' lay-event='complete'><i class='layui-icon'>&#xe600;</i>提交</button>
+		
+    </script>
+	<script type="text/html" id="statusDemo"></script>
+	<script>
+	
+	var realName=loginUser.realName;
+	var url=window.location.search.substring(1)
+    console.log(url);
+    var jhz_submission=url.split("=")[1];
+    if(!window.localStorage){
+		    layer.msg("浏览器不支持localstorage");
+		   
+		}else{
+			var storage=window.localStorage;
+			storage.setItem("jhz_submission",jhz_submission);
+		}
+    layui.use('form', function(){
+    	  var form = layui.form;
+    	  form.render();
+    });
+    layui.use('table', function(){
+    	  var table = layui.table;
+    	  
+    	
+    	  table.render({
+    	    elem: '#demo'
+    	    ,height: 470
+    	    //,width:1500
+    	    ,cellMinWidth: 80
+    	    ,url: getContextPath()+'/board/loadTasks.do?jhz_peple='+realName //数据接口
+    	    ,where:{jhz_respoName:loginUser.realName,jhz_submission:jhz_submission}
+    	    ,page: true //开启分页
+    	    ,cols: [[ //表头
+    	      {type: 'checkbox'}    
+    	      ,{field: 'jhz_tasksName', title: '任务名', width:90, sort: true}
+    	      ,{field: 'jhz_tasksDescribe', title: '任务说明', width:100, sort: true}
+    	      ,{field: 'jhz_tasksTime', title: '完成时间', width:90, sort: true}
+    	      //,{field: '', title: '所属项目', width:90,sort: true}
+    	      ,{field: 'jhz_tasksIntegral', title: '任务积分', width:90,sort: true} 
+    	      //,{field: 'jhz_innovate', title: '技术创新', width: 90}
+    	      ,{field: 'jhz_peple', title: '负责人', width:90, sort: true}
+    	      //,{field: 'jhz_efficiency', title: '效评', width:90}  
+   	     	,{field:'',title:"操作",width:180, align:'center', templet:"#barDemo"}
+    	    ]]
+    	    ,id:"projectId"
+    	    ,done:function(){
+    	       
+    	        if(!contains('bomb_edit',per_arr)){
+    	        	$("#mac-button").css("display","none");
+
+    	        	//console.log($(".layui-table"));
+    	        	$(".layui-table .permission").css("display","none");
+    	        }
+    	    	//$(".layui-table .permission").css("display","none");
+    	    }
+    	  });
+    	  var  active = {
+  	            getId:function (data) {//获取选中行的主键
+  	                var idArr = [];
+  	                for(var i=0; i<data.length; i++){
+  	                    console.log(data[i].id)
+  	                    idArr.push(data[i].id)
+  	                }
+  	                console.log(idArr);
+  	                return idArr;
+  	            }
+  	        	,moreDelete:function(){ //批量删除
+  	            var checkStatus = table.checkStatus("demoId")
+	                ,data = checkStatus.data;
+	    		    console.log(data);
+	                var arr=active.getId(data);
+	                if(arr.length==0){
+	                	layer.msg('未选中任何数据');
+	                	return;
+	                }
+	                var idstring=arr.join(",");
+              	layer.confirm('确定要删除吗？', {
+              	  btn: ['确定','取消'] //按钮
+              	}, function(){
+              		layer.msg('确定', {icon: 1});
+              		$.ajax({
+                    	  type:"get",
+                    	  url:"/jhz_mtvCms/user/deleteMacById.do",
+                    	  data:{"idstring":idstring},
+                    	  dataType:"json",
+                    	  success:function(result){
+                    		  if(result.status==1){
+                                  layer.msg(result.msg,{icon:1,time:1000});
+                                  window.location.reload();
+                    		  }else{
+                    			  layer.msg(result.msg,{icon:1,time:1000});
+                    		  }
+                    	  },
+                    	  error:function(){
+                    		  layer.msg("error:请检查代码",{icon:1,time:1000});
+                    	  }
+                      })
+		                	 
+		                 
+              	}, function(){
+              		layer.msg('取消', {icon: 2});
+              	   
+              	});
+	            }  
+  	       ,search:function(){
+  	    	  
+  	    	  /*  var jhz_projectNumber=$("#jhz_projectNumber").val().trim();
+  	    	 var jhz_projectName=$("#jhz_projectName").val().trim();
+  	    	var jhz_respoName=$("#jhz_respoName").val().trim();
+  	    	var jhz_state=$("#jhz_state").val().trim();
+  	    	var jhz_startName=$("#jhz_startName").val().trim(); */
+  	    	  // var storeState=$("#storeState option:selected").val();
+  	    	   
+  	    	   //执行重载
+	   	    	      table.reload('projectId', {
+	   	    	        page: {
+	   	    	          curr: 1 //重新从第 1 页开始
+	   	    	        }
+	   	    	        ,where: {
+	   	    	        	/* "jhz_projectNumber":jhz_projectNumber,
+	   	    	        	"jhz_projectName":jhz_projectName,
+	   	    	        	"jhz_respoName":jhz_respoName,
+	   	    	        	"jhz_state":jhz_state,
+	   	    	        	"jhz_startName":jhz_startName */
+                          //"storeState":storeState
+	   	    	        }
+	   	    	      });
+  	       }
+  	        };
+    	  
+    	  $('.x-body .layui-btn').on('click', function () {
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+    	  table.on('tool(demo)',
+					function(obj) {
+						var data = obj.data; //获得当前行数据
+						console.log("当前行的数据为:" + data);
+						var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+						var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+						if (layEvent === 'abandon') { //删除
+							layer.confirm('确定放弃任务吗！', function(index) {
+								$.ajax({
+									type : "get",
+									url : getContextPath()+'/board/111.do',
+									data : {
+										"tid" : data.tid
+										//"jhz_state" : 1,
+										//"jhz_respoName":loginUser.realName
+									},
+									dataType : "json",
+									success : function(result) {
+										if (result.state == 0) {
+											layer.msg("成功!");
+											obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+											layer.close(index);
+										} else {
+											layer.msg(result.msg);
+										}
+									},
+									error : function(result) {
+										layer.msg("error")
+									}
+								})
+
+							});
+						} else if (layEvent === 'complete') { //编辑
+							layer.confirm('确定提交任务吗！', function(index) {
+								$.ajax({
+									type : "get",
+									url : getContextPath()+'/board/updateTasks.do',
+									data : {
+										"tid" : data.tid,
+										"jhz_submission" : 1,
+										"jhz_submissionName":loginUser.realName
+									},
+									dataType : "json",
+									success : function(result) {
+										if (result.state == 0) {
+											layer.msg("成功!");
+											obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+											layer.close(index);
+										} else {
+											layer.msg(result.msg);
+										}
+									},
+									error : function(result) {
+										layer.msg("error")
+									}
+								})
+
+							});
+						}
+						
+					});
+    	  
+    	});
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+      /*用户-删除*/
+      function member_del(obj,id){
+    	  console.log(id);
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $.ajax({
+            	  type:"get",
+            	  url:"tv/deleteBomById.do",
+            	  data:{"id":id},
+            	  dataType:"json",
+            	  success:function(result){
+            		  if(result.state==0){
+            			  $(obj).parents("tr").remove();
+                          layer.msg(result.msg,{icon:1,time:1000});
+            		  }else{
+            			  layer.msg(result.msg,{icon:1,time:1000});
+            		  }
+            	  },
+            	  error:function(){
+            		  layer.msg("error:请检查代码",{icon:1,time:1000});
+            	  }
+              })
+              
+             
+          });
+      }
+      
+      
+    </script>
+	<script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+</body>
+
+</html>

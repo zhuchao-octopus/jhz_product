@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+   <!--  <script type="text/javascript" src="./lib/layui/layui.all.js"></script> -->
+     <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src="./js/tableSelect.js"></script>
+    
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <div class="layui-tab-item layui-show">
+				 <form class="layui-form" > 
+					<div class="layui-form-item">
+					
+						<div class="layui-inline">
+							<label class="layui-form-label">产品名</label>
+							<div class="layui-input-inline">
+								<select name="pcode"   class="layui-input"  id="pid"  >
+								</select>
+							</div> 
+							
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">订单批次</label>
+							<div class="layui-input-inline">
+								<select name="porder"  id="porder"  lay-search>
+									<option value="">请选择订单批次</option>
+									<option value="0">已停用</option>
+									<option value="1">已启用</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">产品类型(YPRO)</label>
+							<div class="layui-input-inline">
+								<input type="text" name="modelCode"  id="modelType" autocomplete="off" class="layui-input">
+								<input type="text" name="modelID"  id="modelID" autocomplete="off" class="layui-input" style="display:none">
+							</div>
+						</div>
+						
+					</div>
+					
+					<div class="layui-form-item">
+						
+						<div class="layui-inline">
+							<label class="layui-form-label">物料号</label>
+							<div class="layui-input-inline">
+								<select name="pnCode"  id="pnCode"  lay-search>
+										<option value="">请选择物料号</option>
+										<option value="0">已停用</option>
+										<option value="1">已启用</option>
+							    </select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">生产批次(PN)</label>
+							<div class="layui-input-inline"> 
+								<input type="tel" name="batch"  id="batch"autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">计划单号</label>
+							<div class="layui-input-inline"> 
+								<input type="tel" name="projectNumber"  id="projectNumber"autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						
+						<div class="layui-inline">
+							<label class="layui-form-label">硬件版本</label>
+							<div class="layui-input-inline">
+								<input type="text" name="hardwareVersion"  id="hardwareVersion" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">软件版本</label>
+							<div class="layui-input-inline"> 
+								<input type="tel" name="softwareVersion"  id="softwareVersion"autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">主板号</label>
+							<div class="layui-input-inline"> 
+								<input type="tel" name="mainboardModel"  id="mainboardModel"autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						
+						<div class="layui-inline">
+							<label class="layui-form-label">地区</label>
+							<div class="layui-input-inline">
+								<input type="text" name="region"  id="region" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">牌照方</label>
+							<div class="layui-input-inline"> 
+								<input type="tel" name="licenseTag"  id="licenseTag"autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">客户</label>
+							<div class="layui-input-inline"> 
+								<select name="cid"  id="cid" >
+								
+								</select>
+							</div>
+						</div>
+					</div>
+						<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">出货批次</label>
+							<div class="layui-input-inline">
+								<input type="text" name="shipmentBatch" autocomplete="off"
+									class="layui-input" id="shipmentBatch">
+							</div>
+						</div>
+							<div class="layui-inline">
+					      <label class="layui-form-label">出货日期</label>
+					      <div class="layui-input-inline">
+					        <input type="text" class="layui-input" name="deliverTime" id="deliverTime" placeholder="yyyy-MM-dd">
+					      </div>
+					    </div>
+					</div>
+					<div class="layui-form-item">
+						
+						<div class="layui-inline">
+							<label class="layui-form-label">SN(SN1)</label>
+							<div class="layui-input-inline">
+								<input type="text" name="sn1"   id="sn1"autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">广电号(SN2)</label>
+							<div class="layui-input-inline">
+									<input type="text" name="sn2"   id="sn2" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">RJ MAC地址(SN3)</label>
+					<div class="layui-input-inline">
+								<input type="text" name="sn3"   id="sn3"autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">STBID(SN4)</label>
+					<div class="layui-input-inline">
+								<input type="text" name="sn4"   id="sn4" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">WIFI Mac(SN5)</label>
+					<div class="layui-input-inline">
+								<input type="text" name="sn5"   id="sn5"autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">箱号(SN6)</label>
+					<div class="layui-input-inline">
+								<input type="text" name="sn6"   id="sn6" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+
+				<div class="layui-inline">
+					<label class="layui-form-label">YSTSN号(SN7)</label>
+					<div class="layui-input-inline">
+								<input type="text" name="sn7"   id="sn7" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">SN8</label>
+					<div class="layui-input-inline">
+								<input type="text" name="sn8"   id="sn8" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				
+				<div class="layui-inline">
+					<label class="layui-form-label">VN(DATA1)</label>
+					<div class="layui-input-inline">
+								<input type="text" name="data1"   id="data1" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">TN(DATA2)</label>
+					<div class="layui-input-inline">
+								<input type="text" name="data2"   id="data2" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn"  lay-filter="demo2"  id="submit1" lay-submit="">确定</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+		</div>
+	</div>
+    <script>
+         var  barcode=JSON.parse(localStorage.getItem("barcode"));
+         var productOption=loadProductOption();
+         var porderOption=findOptionData("porder");
+         var pnOption=findOptionData("pn");
+ 		$("#porder").empty().append("<option value=''>请选择订单批次</option>"+porderOption);
+         $("#pid").empty().append("<option value=''>--请选择产品--</option>"+productOption);
+         $("#cid").empty().append("<option value=''>--请选择客户--</option>"+loadAllCust());
+         $("#pnCode").empty().append("<option value=''>--请选择物料号--</option>"+pnOption);
+         $("#pid option").each(function(){
+        	 console.log(barcode.pcode);
+        	 if($(this).val()==barcode.pcode){
+        		 $(this).prop("selected",true);
+        	 }
+         });
+         $("#porder option").each(function(){
+        	 console.log(barcode.porder);
+        	 if($(this).val()==barcode.porder){
+        		 $(this).prop("selected",true);
+        	 }
+         });
+         $("#pnCode option").each(function(){
+        	 if($(this).val()==barcode.pnCode){
+        		 $(this).prop("selected",true);
+        	 }
+         });
+         $("#modelType").val(barcode.modelCode);
+         $("#color").val(barcode.color);
+        /*  $("#porder").val(barcode.porder); */
+         $("#hardwareVersion").val(barcode.hardwareVersion);
+         $("#modelID").val(barcode.modelID);
+         $("#softwareVersion").val(barcode.softwareVersion);
+         $("#licenseTag").val(barcode.licenseTag);
+         $("#mainboardModel").val(barcode.mainboardModel);
+         $("#region").val(barcode.region);
+         $("#projectNumber").val(barcode.projectNumber);
+         $("#batch").val(barcode.batch);
+         $("#sn1").val(barcode.sn1);
+         $("#sn2").val(barcode.sn2);
+         $("#sn3").val(barcode.sn3);
+         $("#sn4").val(barcode.sn4);
+         $("#sn5").val(barcode.sn5);
+         $("#sn6").val(barcode.sn6);
+         $("#sn7").val(barcode.sn7);
+         $("#sn8").val(barcode.sn8);
+         $("#data1").val(barcode.data1);
+         $("#data2").val(barcode.data2);
+         $("#shipmentBatch").val(barcode.shipmentBatch);
+         $("#deliverTime").val(barcode.deliverTime);
+         $("#cid option").each(function(){
+        	 if($(this).val()==barcode.cid){
+        		 $(this).prop("selected",true);
+        	 }
+         });
+   
+         
+         layui.use('laydate', function(){
+			  var laydate = layui.laydate;
+			  //常规用法
+			  laydate.render({
+			    elem: '#deliverTime'
+			  });
+		})
+         
+         
+      	   
+      	 layui.use("form",function(){
+      		$ = layui.jquery;
+      		 var form=layui.form,
+      		 layer = layui.layer;
+          //监听提交
+          form.on('submit(demo2)', function(data){
+            var param=data.field;
+            param['pid']=barcode.pid;
+            $.ajax({
+            	type:"post",
+            	url:"shipment/updateShipment.do",
+            	dataType:"json",
+            	data:param,
+            	success:function(result){
+            		if(result.state==0){
+            			layer.alert("修改成功", {
+							icon : 6
+						}, function() {
+							 layer.close(layer.index);
+							 //window.location.reload();
+							 window.parent.location.reload();
+							// 获得frame索引
+							/* var index = parent.layer
+									.getFrameIndex(window.name);
+							//关闭当前frame
+							parent.layer.close(layer.index); */
+						});
+						return false;
+            		}else{
+            			layer.msg(result.msg);
+            		}
+            		 
+            	},
+            	error:function(){
+            		layer.msg("errror");
+            	}
+            });
+           
+            return false;
+          });
+      	 })       
+
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

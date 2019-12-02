@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<!-- <script type="text/javascript" src="./js/self.js"></script> -->
+<script type="text/javascript" src="./lib/layui/layui.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="x-body">
+		<form class="layui-form">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">工作站编号</label>
+					<div class="layui-input-inline">
+						<input type="tel" name="wsNumber" autocomplete="off"
+							class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">功能</label>
+					<div class="layui-input-inline">
+					
+							
+						<input type="tel" name="wsFunction" autocomplete="off"
+							class="layui-input">
+				
+					
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">产品名</label>
+					<div class="layui-input-inline">
+						<select name="pid"  id="pname" lay-filter="search_type">
+							<option value=""></option>
+							<option value="0">写作</option>
+							<option value="1" selected="">阅读</option>
+							<option value="2">游戏</option>
+							<option value="3">音乐</option>
+							<option value="4">旅行</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">装箱数</label>
+					<div class="layui-input-inline">
+						<input type="text" name="boxNumCount" autocomplete="off"
+							class="layui-input">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">操作码1</label>
+					<div class="layui-input-inline">
+						<select name="sn1" lay-filter="aihao" id="code1">
+							
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">操作码2</label>
+					<div class="layui-input-inline">
+						<select name="sn2" lay-filter="aihao" id="code2">
+						
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">操作码3</label>
+					<div class="layui-input-inline">
+						<select name="sn3" lay-filter="aihao" id="code3">
+							
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">操作码4</label>
+					<div class="layui-input-inline">
+						<select name="sn4" lay-filter="aihao" id="code4">
+							
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">操作码5</label>
+					<div class="layui-input-inline">
+						<select name="sn5" lay-filter="aihao" id="code5">
+							
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">操作码6</label>
+					<div class="layui-input-inline">
+						<select name="sn6" lay-filter="aihao" id="code6">
+							
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">操作码7</label>
+					<div class="layui-input-inline">
+						<select name="sn7" lay-filter="aihao" id="code7">
+							
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">操作码8</label>
+					<div class="layui-input-inline">
+						<select name="sn8" lay-filter="aihao" id="code8">
+						
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">DATA1</label>
+					<div class="layui-input-inline">
+						<select name="data1" lay-filter="aihao" id="code9">
+							
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">DATA2</label>
+					<div class="layui-input-inline">
+						<select name="data2" lay-filter="aihao" id="code10">
+							
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<!-- <div class="layui-inline">
+					<label class="layui-form-label">允许过站？</label>
+					<div class="layui-input-inline">
+						<select name="missStation" lay-filter="aihao"  id="missStation">
+							<option value="1">不可</option>
+							<option value="0">可以</option>
+						</select>
+					</div>
+				</div> -->
+				<div class="layui-inline">
+					<label class="layui-form-label">称重</label>
+					<div class="layui-input-inline">
+						<select name="pclass" lay-filter="aihao">
+							<option></option>
+							<option value="0">机重</option>
+							<option value="1">箱重</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="layui-btn" class="layui-form-label"> </label>
+				<button class="layui-btn" lay-filter="add" lay-submit="">确定</button>
+			</div>
+		</form>
+	</div>
+	<script>
+	    var  workStation=JSON.parse(localStorage.getItem("workStation"));
+	    var pid=workStation.pid;
+	    var missStation=workStation.missStation;
+	    var mid=workStation.mid;
+	    console.log(pid);
+		var productOption = loadProductOption();
+		console.log(productOption);
+		$("input[name='wsNumber']").val(workStation.wsNumber);
+		$("input[name='wsFunction']").val(workStation.wsFunction);
+		$("input[name='boxNumCount']").val(workStation.boxNumCount);
+		$("#pname").empty().append("<option value=''>请选择产品名</option>" + productOption);
+        $("#pname option").each(function(){
+        	if($(this).val()==pid){
+        		$(this).prop("selected",true);
+        	}
+        });
+        $("select[name='missStation'] option").each(function(){
+        	if($(this).text()==missStation){
+        		$(this).prop("selected",true);
+        	}
+        });
+        var codeNameByPname = selectCodeNameByPname(pid);
+        for (var i = 1; i <= 10; i++) {
+			$("#code" + i).empty().append(	"<option value=''>请选择操作码</option>"+ codeNameByPname);
+		}
+      
+		$("#code1 option").each(function(){
+			if($(this).val()==workStation.sn1){
+				$(this).prop("selected",true);
+			}
+		});
+		$("#code2 option").each(function(){
+			if($(this).val()==workStation.sn2){
+				$(this).prop("selected",true);
+			}
+		});
+		$("#code3 option").each(function(){
+			if($(this).val()==workStation.sn3){
+				$(this).prop("selected",true);
+			}
+		});
+		$("#code4 option").each(function(){
+			if($(this).val()==workStation.sn4){
+				$(this).prop("selected",true);
+			}
+		});
+		$("#code5 option").each(function(){
+			if($(this).val()==workStation.sn5){
+				$(this).prop("selected",true);
+			}
+		});
+		$("#code6 option").each(function(){
+			if($(this).val()==workStation.sn6){
+				$(this).prop("selected",true);
+			}
+		});
+		$("#code7 option").each(function(){
+			if($(this).val()==workStation.sn7){
+				$(this).prop("selected",true);
+			}
+		});
+		/* $("#code8 option").each(function(){
+			if($(this).val()==workStation.sn8){
+				$(this).prop("selected",true);
+			}
+		}); */
+		$("#code9 option").each(function(){
+			if($(this).val()==workStation.data1){
+				$(this).prop("selected",true);
+			}
+		});
+		$("#code10 option").each(function(){
+			if($(this).val()==workStation.data2){
+				$(this).prop("selected",true);
+			}
+		});
+		$("#missStation option").each(function(){
+			if($(this).val()==workStation.missStation){
+				$(this).prop("selected",true);
+			}
+		})
+		
+	
+		
+        
+        
+		layui.use([ 'form', 'layer' ], function() {
+			$ = layui.jquery;
+			var form = layui.form, layer = layui.layer;
+            
+			form.on("select(search_type)", function(data) {
+				var pid = data.value;
+				console.log(data.value == "");
+				if (pid == undefined || pid == "" || pid == null) {
+					layer.msg("产品不能为空!");
+					//$("#market_class_id").empty();
+					form.render('select');
+					return false;
+				}
+				var codeNameByPname = selectCodeNameByPname(pid);
+				for (var i = 1; i <= 10; i++) {
+					$("#code" + i).empty().append("<option value=''>请选择操作码</option>"+ codeNameByPname);
+					form.render('select');
+				}
+
+			})
+
+			//监听提交
+			form.on('submit(add)', function(data) {
+				var param =data.field;
+				param["pname"]=$("#pname option:selected").text();
+				param["mid"]=mid;
+				$.ajax({
+					type : "post",
+					url:"list/updateWSS.do",
+					/* 	async: false, */
+					data:param,
+					dataType : "json",
+					success : function(res) {
+						if (res.state == 0) {
+							layer.alert("编辑成功", {
+								icon : 6
+							}, function() {
+								// 获得frame索引
+								var index = parent.layer
+										.getFrameIndex(window.name);
+								//关闭当前frame
+								parent.layer.close(index);
+							});
+							return false;
+						} else {
+							layer.alert(res.msg);
+						}
+
+					},
+					error : function(res) {
+						layer.msg("error");
+					}
+				});
+				return false;
+
+			});
+
+		});
+	</script>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+</body>
+
+</html>

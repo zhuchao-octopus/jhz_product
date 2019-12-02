@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">权限管理</a>
+        <a href="">角色表</a>
+        <!-- <a><cite>导航元素</cite></a> -->
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+    </div>
+    <div class="x-body">
+      <div class="layui-row">
+       <!--  <form class="layui-form layui-col-md12 x-so">
+          <input class="layui-input" placeholder="开始日" name="start" id="start">
+          <input class="layui-input" placeholder="截止日" name="end" id="end">
+          <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form> -->
+      </div>
+      <xblock id="admin-button">
+        
+        <button class="layui-btn" onclick="x_admin_show('添加用户','./treeDemo.html')"><i class="layui-icon"></i>添加</button>
+
+      </xblock>
+  
+        <table id="role-table" lay-filter="role-filter" class="mac-table"></table>
+
+    </div>
+     <script type="text/html"  id="barDemo">
+
+                <button class="layui-btn layui-btn-sm permission" lay-event='update'><i class="layui-icon">&#xe642;</i>编辑</button>
+
+                <button class="layui-btn layui-btn-sm layui-btn-danger permission" lay-event='delete'><i class="layui-icon">&#xe640;</i>删除</button>
+
+
+      
+    </script>
+    
+    <script>
+      layui.use(['laydate','layer'], function(){
+        var laydate = layui.laydate,
+        layer=layui.layer;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+      
+      layui.use('table', function(){
+    	  var table = layui.table;
+    	  table.render({
+    	    elem: '#role-table'
+    	    ,height: 470
+    	    ,cellMinWidth: 80
+    	    ,url: 'worker/loadAllRole.do'//数据接口
+    	    ,page: true //开启分页
+    	    ,cols: [[ //表头
+
+    	      {type: 'checkbox', fixed: 'left'}    
+    	      /* ,{field: 'wid', title: 'ID', width:100, sort: true}        */
+    	      ,{field: 'kid', title: 'ID', width:150, sort: true}
+    	      ,{field: 'roleName', title: '角色名',width:100}
+    	      ,{field: 'introduce', title: '描述', width:700} 
+    	      ,{fileld:"",title:"操作",width:200, align:'center', templet:"#barDemo"}
+    	    ]]
+    	    ,id:"demoId"
+    	    ,done:function(){
+    	       
+    	       if(!contains('jsb_edit',per_arr)){
+    	        	$("#admin-button").css("display","none");
+
+    	        	//console.log($(".layui-table"));
+    	        	$(".permission").css("display","none");
+    	        } 
+    	    	//$(".layui-table .permission").css("display","none");
+    	    }
+    	  });
+    	  
+   	    //监听行工具事件
+       	  table.on('tool(role-filter)', function(obj){
+       	   var data = obj.data;
+       	   var role=JSON.stringify(data)
+   		    if(!window.localStorage){
+   			    layer.msg("浏览器不支持localstorage");
+   			    return false;
+   			}else{
+   				var storage=window.localStorage;
+   				storage.setItem("role",role);
+   			}
+       	   if(obj.event === 'update'){
+                  x_admin_show("角色编辑", "tree-edit.html", 900,700);
+       	    }else if(obj.event==='delete'){
+       	    	  var kid=data.kid;
+       	    	  console.log(kid);
+       	    	  $.ajax({
+       	    		  type:"get",
+       	    		  url:"user/deleteRole.do",
+       	    		  data:{"kid":kid},
+       	    		  dataType:"json",
+       	    		  success:function(res){
+       	    			if(res.state==1){
+       	    				//layer.msg(res.msg);
+		    	    		obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+		    	    		layer.msg('已删除!',{icon:1,time:1000});
+		    			    
+		    	    	}else{
+		    	    		layer.msg(res.msg);
+		    	    	}
+       	    		  },
+       	    		  error:function(res){
+       	    			  layer.msg("error");
+       	    		  }
+       	    		  
+       	    	  });
+       	    }
+       	  });    
+    	      
+    	      
+    	      
+    	  var  active = {
+    			  getId:function (data) {//获取选中行的主键
+    	                var idArr = [];
+    	                for(var i=0; i<data.length; i++){
+    	                    console.log(data[i].wid)
+    	                    idArr.push(data[i].wid)
+    	                }
+    	                console.log(idArr);
+    	                return idArr;
+    	            }
+    	        ,moreDelete:function(){ //批量删除
+    	            var checkStatus = table.checkStatus("demoId")
+	                ,data = checkStatus.data;
+	    		    console.log(data);
+	                var arr=active.getId(data);
+	                if(arr.length==0){
+	                	layer.msg('未选中任何数据');
+	                	return;
+	                }
+	                var idstring=arr.join(",");
+                	layer.confirm('确定要删除吗？', {
+                	  btn: ['确定','取消'] //按钮
+                	}, function(){
+                		layer.msg('确定', {icon: 1});
+                		$.ajax({
+                      	  type:"get",
+                      	  url:"worker/deleteWorkerByIds.do",
+                      	  data:{"workerStr":idstring},
+                      	  dataType:"json",
+                      	  success:function(result){
+                      		  if(result.state==0){
+                                    layer.msg(result.msg,{icon:1,time:1000});
+                                    window.location.reload();
+                      		  }else{
+                      			  layer.msg(result.msg,{icon:1,time:1000});
+                      		  }
+                      	  },
+                      	  error:function(){
+                      		  layer.msg("error:请检查代码",{icon:1,time:1000});
+                      	  }
+                        })
+  		                	 
+  		                 
+                	}, function(){
+                		layer.msg('取消', {icon: 2});
+                	   
+                	});
+	            }  
+    	       ,search:function(){
+    	    	   var workerName=$("input[name='workerName']").val();
+    	    	   var workerCode=$("input[name='workerCode']").val();
+    	    	   var lineCode=$("#lineCode option:selected").val();
+    	    	   var stateTwo=$("#stateTwo option:selected").val();
+    	    	   //执行重载
+	   	    	      table.reload('demoId', {
+	   	    	        page: {
+	   	    	          curr: 1 //重新从第 1 页开始
+	   	    	        }
+	   	    	        ,where: {
+	   	    	        	"workerName":workerName,  
+                            "workerCode":workerCode,
+                            "lineCode":lineCode,
+                            "stateTwo":stateTwo,
+	   	    	        }
+	   	    	      });
+    	       }
+    	        };    
+    	      
+    	  $('.x-body .layui-btn').on('click', function () {
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+    	  
+    	});
+      
+
+       /*用户-停用*/
+      function member_stop(obj,id){
+          layer.confirm('确认要停用吗？',function(index){
+
+              if($(obj).attr('title')=='启用'){
+
+                //发异步把用户状态进行更改
+                $(obj).attr('title','停用')
+                $(obj).find('i').html('&#xe62f;');
+
+                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+                layer.msg('已停用!',{icon: 5,time:1000});
+
+              }else{
+                $(obj).attr('title','启用')
+                $(obj).find('i').html('&#xe601;');
+
+                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+                layer.msg('已启用!',{icon: 5,time:1000});
+              }
+              
+          });
+      }
+
+      /*用户-删除*/
+      function member_del(obj,id){
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $(obj).parents("tr").remove();
+              layer.msg('已删除!',{icon:1,time:1000});
+          });
+      }
+
+
+
+      function delAll (argument) {
+
+        var data = tableCheck.getData();
+  
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+      }
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

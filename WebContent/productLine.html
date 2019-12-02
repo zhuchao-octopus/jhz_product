@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<script type="text/javascript" src="./js/self.js"></script>
+<script type="text/javascript" src="./lib/layui/layui.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="x-nav">
+		<span class="layui-breadcrumb"> <a href="">部门管理</a> <a href="">产线表</a>
+			
+		</span> <a class="layui-btn layui-btn-small"
+			style="line-height: 1.6em; margin-top: 3px; float: right"
+			href="javascript:location.replace(location.href);" title="刷新"> <i
+			class="layui-icon" style="line-height: 30px">&#xe669;</i></a>
+	</div>
+	<div class="x-body">
+		<!-- <div class="layui-row" style="text-align: center">
+			<div class="layui-inline">
+				<input type="text" name="mac" placeholder="时间段" autocomplete="off" class="layui-input"  id="start">
+			</div>
+			<div class="layui-inline">
+				<select name="platform" id="statusSelection">
+					<option value="">请选择产品名</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+			<div class="layui-inline">
+				<input class="layui-input" placeholder="请输入订单号"  autocomplete="off"/>
+			</div>
+			<div class="layui-inline">
+				<input class="layui-input" placeholder="请输入SN1"  autocomplete="off"/>
+			</div>
+			<div class="layui-inline">
+				<button class="layui-btn" lay-submit="" lay-filter="search"
+					data-type='search'>
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+		</div> -->
+
+
+
+
+
+		<!-- <xblock id="admin-button"> </xblock> -->
+		<table class="layui-table" id="barcode-table" lay-filter="barcode-table"></table>
+
+
+
+	</div>
+	<script type="text/html" id="toolbarDemo">     
+        <button class="layui-btn permission" onclick="x_admin_show('产线录入','./line_add.html',700,700)"><i class="layui-icon"></i>录入</button>
+      
+    </script>
+
+	<script type="text/html" id="barDemo">
+         <button  class='layui-btn layui-btn-sm permission' lay-event='update'><i class='layui-icon'>&#xe642;</i>编辑</button>
+		 <button  class="layui-btn  layui-btn-sm  permission" lay-event="workerDetails"><i class="layui-icon">&#xe60f;</i><span>产线绑定员工</span></button>
+         <button  class='layui-btn layui-btn-sm layui-btn-danger permission' lay-event='delete'><i class='layui-icon'>&#xe640;</i>删除</button>
+    </script>
+
+
+	<script>
+		layui.use('laydate', function() {
+			var laydate = layui.laydate;
+
+			//执行一个laydate实例
+			laydate.render({
+				elem : '#start' //指定元素
+				,
+				range : "~"
+
+			});
+
+			//执行一个laydate实例
+			laydate.render({
+				elem : '#end' //指定元素
+			});
+		});
+
+		layui.use([ "table", "layer" ], function() {
+			$ = layui.jquery;
+			var table = layui.table, layer = layui.layer;
+			table.render({
+				elem : '#barcode-table',
+				height : 700,
+				url : 'line/loadlines.do',
+				page:true,
+				cols : [ [ //表头z
+				{
+					type : 'checkbox'
+				}, {
+					field : 'lineCode',
+					title : '产线编码',
+					width : 150,
+					sort : true
+				}, {
+					field : 'pname',
+					title : '产品名',
+					width : 200,
+					sort : true,
+					templet:function(d){
+						if(d.product!=null &&d.product.pname!=null ){
+							return "<span>"+d.product.pname+"</span>";
+						}else{
+							return "<span></span>";
+						}
+					      
+					}
+				},
+				{
+					field : 'rentApport',
+					title : '厂租分摊',
+					width : 100,
+					sort : true
+				},
+				
+				{
+					field : 'scstate',
+					title : '工艺',
+					width : 100,
+					sort : true
+				},
+				{
+					field : 'number',
+					title : '人数',
+					width : 150,
+					sort : true
+				},
+				/* {
+					field : 'countValue',
+					title : '有效工位',
+					width : 150,
+					sort : true
+				},
+				{
+					field : 'checkNum',
+					title : '上线人数',
+					width : 150,
+					sort : true
+				}, {
+					field : 'checkNum',
+					title : '下线人数',
+					width : 150,
+					sort : true,
+					templete:function(d){
+						return "<span>"+(d.countValue-d.checkNum)+"</span>"
+					}
+				},  */{
+					fileld : "",
+					title : "操作",
+					width : 300,
+					align : 'center',
+					toolbar : "#barDemo"
+				}] ],
+				toolbar : '#toolbarDemo',
+				defaultToolbar : ['exports' ],
+				done : function() {
+					if(!contains("cxb_edit",per_arr)){
+					 /* $("#admin-button").css("display","none"); */
+					 $(".permission").css("display","none");
+					} 
+				}
+			});
+
+			table.on('tool(barcode-table)',
+					function(obj) {
+						var data = obj.data; //获得当前行数据
+						console.log("当前行的数据为:" + data);
+						var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+						var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+						if (layEvent === 'delete') { //删除
+							layer.confirm('真的删除行么', function(index) {
+								$.ajax({
+									type : "get",
+									url : 'line/deleteLine.do',
+									data : {
+										"lid" : data.lid
+									},
+									dataType : "json",
+									success : function(result) {
+										if (result.state == 1) {
+											layer.msg("删除成功!");
+											obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+											layer.close(index);
+										} else {
+											layer.msg(result.msg);
+										}
+									},
+									error : function(result) {
+										layer.msg("error")
+									}
+								})
+
+							});
+						} else if (layEvent === 'update') { //编辑
+							var line = JSON.stringify(data)
+							if (!window.localStorage) {
+								layer.msg("浏览器不支持localstorage");
+								return false;
+							} else {
+								var storage = window.localStorage;
+								storage.setItem("line",line);
+							}
+							x_admin_show("产线编辑","./line_edit.html", 700, 700);
+							obj.update({
+								username : '123',
+								title : 'xxx'
+							});
+						} else if(layEvent==="workerDetails"){
+							var line = JSON.stringify(data)
+						    if (!window.localStorage) {
+								layer.msg("浏览器不支持localstorage");
+								return false;
+							} else {
+								var storage = window.localStorage;
+								storage.setItem("lineDemo",line);
+							}
+							x_admin_show("人员绑定查看","./worker_line_details.html", 900, 700);
+						}
+					});
+		});
+		 table.on('tool(demo)', function(obj){
+	    	    var data = obj.data;
+	    	    if(obj.event === 'bomdetails'){
+	    	      /*  var pncode=JSON.stringify(data)
+	       		   if(!window.localStorage){
+	       			    layer.msg("浏览器不支持localstorage");
+	       			    return false;
+	       			}else{
+	       				var storage=window.localStorage;
+	       				storage.setItem("pncode",pncode);
+	       			} */
+	   		        x_admin_show("员工列表", "./bom-details-list.html?bid="+data.id, 1200, 700);
+	    	    }
+	    	  });
+		/*用户-停用*/
+		function member_stop(obj, id) {
+			layer.confirm('确认要停用吗？', function(index) {
+
+				if ($(obj).attr('title') == '启用') {
+
+					//发异步把用户状态进行更改
+					$(obj).attr('title', '停用')
+					$(obj).find('i').html('&#xe62f;');
+
+					$(obj).parents("tr").find(".td-status").find('span')
+							.addClass('layui-btn-disabled').html('已停用');
+					layer.msg('已停用!', {
+						icon : 5,
+						time : 1000
+					});
+
+				} else {
+					$(obj).attr('title', '启用')
+					$(obj).find('i').html('&#xe601;');
+
+					$(obj).parents("tr").find(".td-status").find('span')
+							.removeClass('layui-btn-disabled').html('已启用');
+					layer.msg('已启用!', {
+						icon : 5,
+						time : 1000
+					});
+				}
+
+			});
+		}
+
+		/*用户-删除*/
+		function member_del(obj, id) {
+			layer.confirm('确认要删除吗？', function(index) {
+				//发异步删除数据
+				$(obj).parents("tr").remove();
+				layer.msg('已删除!', {
+					icon : 1,
+					time : 1000
+				});
+			});
+		}
+
+		function delAll(argument) {
+
+			var data = tableCheck.getData();
+
+			layer.confirm('确认要删除吗？' + data, function(index) {
+				//捉到所有被选中的，发异步进行删除
+				layer.msg('删除成功', {
+					icon : 1
+				});
+				$(".layui-form-checked").not('.header').parents('tr').remove();
+			});
+		}
+	</script>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+</body>
+
+</html>

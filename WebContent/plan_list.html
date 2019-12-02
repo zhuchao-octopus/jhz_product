@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<script type="text/javascript" src="./js/self.js"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+<script src="./lib/layui/layui.js" charset="utf-8" type="text/javascript"></script>
+
+</head>
+
+<body>
+	<div>
+		<span class="layui-breadcrumb"> <a href="">计划管理</a> <a href="">排单表</a>
+			<!--<a>
+          <cite>导航元素</cite></a>-->
+		</span>
+		
+		<ul class="layui-nav"  style="text-align: right">
+			
+				
+				<li class="layui-nav-item">
+				<a class="layui-btn layui-btn-small"
+						style="line-height: 1.6em; margin-top: 3px; float: right"
+						href="javascript:window.location.reload()" title="刷新"> <i
+						class="layui-icon" style="line-height: 30px">&#xe666;</i>
+			    </a>
+			    </li>
+		</ul>
+
+	</div>
+	<div class="x-body">
+		
+		<form class="layui-form"  onsubmit="return false;">
+		<div class="layui-row" style="text-align: center">
+		      <div class="layui-inline">
+                  <input type="text" id="jhz_planCode" name="jhz_planCode" autocomplete="off" class="layui-input"  placeholder="请输入排单编号">
+              </div>
+			<div class="layui-inline">
+				<button class="layui-btn"  lay-filter="search"
+					data-type='search'>
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+		</div>
+
+       </form>
+
+
+		<xblock id="mac-button">
+
+		<button class="layui-btn"
+			onclick="x_admin_show('添加','./plan_add.html',600,600)">
+			<i class="layui-icon">&#xe61f;</i>添加
+		</button>
+		</xblock>
+
+
+		<table id="demo" lay-filter="demo" class="mac-table"></table>
+
+	</div>
+	<script type="text/html" id="macAnalyse">
+
+         <button class='layui-btn layui-btn-sm' onclick='x_admin_show("MAC数据统计","./mac-analyse.html?mac={{d.mac}}&cid={{d.cid}}&typeWay={{d.typeWay}}",900,700)'>查看</button>
+    </script>
+
+	<script type="text/html" id="barDemo">
+     <button  class='layui-btn layui-btn-sm permission' lay-event='update'><i class='layui-icon'>&#xe642;</i>编辑</button>
+     <button  class='layui-btn layui-btn-sm layui-btn-danger permission' lay-event='delete'><i class='layui-icon'>&#xe640;</i>删除</button>
+    </script>
+	<script type="text/html" id="statusDemo"></script>
+	<script>
+    layui.use('form', function(){
+    	  var form = layui.form;
+    	  form.render();
+    });
+    layui.use('table', function(){
+    	  var table = layui.table;
+    	  
+    	
+    	  table.render({
+    	    elem: '#demo'
+    	    ,height: 470
+    	    ,cellMinWidth: 80
+    	    ,url: 'board/loadPlanOrder.do' //数据接口
+    	    
+    	    ,page: true //开启分页
+    	    ,cols: [[ //表头
+    	      {type: 'checkbox'}    
+    	       //,{field: 'rid', title: 'ID', width:100, sort: true}        
+    	      ,{field: 'jhz_planCode', title: '排单编号', width:100, sort: true}
+    	      ,{field: 'batch', title: '生产批次', width:100, sort: true}
+    	      ,{field: 'materialName', title: '品名', width: 100, sort: true}
+    	      ,{field: 'pn', title: '料号',width:100, sort: true}
+    	     ,{field: 'orderNumber', title: '订单号',width:100, sort: true}
+    	     ,{field: 'lineCode', title: '产线',width:100, sort: true}
+    	     ,{field: 'jhz_jhNumber', title: '计划产量', width:100, sort: true}
+    	     ,{field: 'completeNumber', title: '完成数量', width:100, sort: true}
+   	     	,{field: 'notCompleteNumber', title: '未完成数', width:100, sort: true}
+   	     	,{field: 'jhz_number', title: '计划人数', width:100, sort: true}
+   	      	,{field: 'jhz_jhtime', title: '计划工时', width: 100}
+   	   		,{field: 'stuat', title: '是否完成', width:100,templet:function(d){
+     	    	  if(d.stuat=="1"){
+       	    		  return "已完成";
+       	    	  }else{
+       	    		  return "未完成";
+       	    	  }
+       	      }}
+    	      ,{field: 'jhz_time', title: '排单时间', width:100}  
+    	      ,{field:'',title:"操作",width:200, align:'center', templet:"#barDemo"}
+
+    	    ]]
+    	    ,id:"demoId"
+    	    ,done:function(){
+    	       
+    	        if(!contains('bomb_edit',per_arr)){
+    	        	$("#mac-button").css("display","none");
+
+    	        	//console.log($(".layui-table"));
+    	        	$(".layui-table .permission").css("display","none");
+    	        }
+    	    	//$(".layui-table .permission").css("display","none");
+    	    }
+    	  });
+    	  var  active = {
+  	            getId:function (data) {//获取选中行的主键
+  	                var idArr = [];
+  	                for(var i=0; i<data.length; i++){
+  	                    console.log(data[i].id)
+  	                    idArr.push(data[i].id)
+  	                }
+  	                console.log(idArr);
+  	                return idArr;
+  	            }
+  	        	,moreDelete:function(){ //批量删除
+  	            var checkStatus = table.checkStatus("demoId")
+	                ,data = checkStatus.data;
+	    		    console.log(data);
+	                var arr=active.getId(data);
+	                if(arr.length==0){
+	                	layer.msg('未选中任何数据');
+	                	return;
+	                }
+	                var idstring=arr.join(",");
+              	layer.confirm('确定要删除吗？', {
+              	  btn: ['确定','取消'] //按钮
+              	}, function(){
+              		layer.msg('确定', {icon: 1});
+              		$.ajax({
+                    	  type:"get",
+                    	  url:"/jhz_mtvCms/user/deleteMacById.do",
+                    	  data:{"idstring":idstring},
+                    	  dataType:"json",
+                    	  success:function(result){
+                    		  if(result.status==1){
+                                  layer.msg(result.msg,{icon:1,time:1000});
+                                  window.location.reload();
+                    		  }else{
+                    			  layer.msg(result.msg,{icon:1,time:1000});
+                    		  }
+                    	  },
+                    	  error:function(){
+                    		  layer.msg("error:请检查代码",{icon:1,time:1000});
+                    	  }
+                      })
+		                	 
+		                 
+              	}, function(){
+              		layer.msg('取消', {icon: 2});
+              	   
+              	});
+	            }  
+  	       ,search:function(){
+  	    	  
+  	    	   var jhz_planCode=$("#jhz_planCode").val().trim();
+  	    	  // var storeState=$("#storeState option:selected").val();
+  	    	   
+  	    	   //执行重载
+	   	    	      table.reload('demoId', {
+	   	    	        page: {
+	   	    	          curr: 1 //重新从第 1 页开始
+	   	    	        }
+	   	    	        ,where: {
+	   	    	        	"jhz_planCode":jhz_planCode
+                          //"storeState":storeState
+	   	    	        }
+	   	    	      });
+  	       }
+  	        };
+    	  
+    	  $('.x-body .layui-btn').on('click', function () {
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+    	  table.on('tool(demo)',
+					function(obj) {
+						var data = obj.data; //获得当前行数据
+						console.log("当前行的数据为:" + data);
+						var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+						var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+						if (layEvent === 'delete') { //删除
+							layer.confirm('真的删除行么', function(index) {
+								$.ajax({
+									type : "get",
+									url : 'board/deletePlanOrder.do',
+									data : {
+										"id" : data.id,
+										"stuat" : data.stuat
+									},
+									dataType : "json",
+									success : function(result) {
+										if (result.state == 0) {
+											layer.msg("删除成功!");
+											obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+											layer.close(index);
+										} else {
+											layer.msg(result.msg);
+										}
+									},
+									error : function(result) {
+										layer.msg("error")
+									}
+								})
+
+							});
+						} else if (layEvent === 'update') { //编辑
+							var plan = JSON.stringify(data)
+							
+							if (!window.localStorage) {
+								layer.msg("浏览器不支持localstorage");
+								return false;
+							} else {
+								var storage = window.localStorage;
+								storage.setItem("plan",plan);
+							}
+							x_admin_show("条码编辑","./plan_edit.html", 600, 500);
+							obj.update({
+								username : '123',
+								title : 'xxx'
+							});
+						}
+					});
+    	  
+    	});
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+      /*用户-删除*/
+      function member_del(obj,id){
+    	  console.log(id);
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $.ajax({
+            	  type:"get",
+            	  url:"tv/deleteBomById.do",
+            	  data:{"id":id},
+            	  dataType:"json",
+            	  success:function(result){
+            		  if(result.state==0){
+            			  $(obj).parents("tr").remove();
+                          layer.msg(result.msg,{icon:1,time:1000});
+            		  }else{
+            			  layer.msg(result.msg,{icon:1,time:1000});
+            		  }
+            	  },
+            	  error:function(){
+            		  layer.msg("error:请检查代码",{icon:1,time:1000});
+            	  }
+              })
+              
+             
+          });
+      }
+
+
+
+      
+    </script>
+	<script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+</body>
+
+</html>

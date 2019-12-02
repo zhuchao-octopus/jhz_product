@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.check.CheckResourceDao">
+	<select id="getCheckByCodeAndDate" parameterType="String" resultType="com.cy.domain.check.CheckView">
+	    SELECT f.*, a.afterNoonUp,a.`afterNoonDown`,a.`aupImg`,a.`adownImg`,o.`overWorkUp`,o.`overWorkDown`,o.`oupImg`,o.`odownImg`
+		 FROM cy_checkForenoon f
+		 LEFT JOIN cy_checkAfternoon a ON a.workerCode = f.workerCode
+		 LEFT JOIN cy_checkOvertime o ON o.workerCode = f.workerCode
+		 WHERE f.workerCode = #{workerCode} AND f.`checkDate` BETWEEN  #{attendanceStartDate} AND #{attendanceEndDate} 
+		 AND a.`checkDate`=f.`checkDate` AND o.`checkDate`=f.`checkDate`
+	</select>
+     
+ </mapper>
+ 
+
+ 

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+ <script type="text/javascript" src="./js/self.js"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+<script src="./lib/layui/layui.js" charset="utf-8" type="text/javascript"></script>
+</head>
+
+<body>
+	<div>
+		
+		<ul class="layui-nav"  style="text-align: right">
+				<li class="layui-nav-item">
+				<a class="layui-btn layui-btn-small"
+						style="line-height: 1.6em; margin-top: 3px; float: right"
+						href="javascript:window.location.reload()" title="刷新"> <i
+						class="layui-icon" style="line-height: 30px">&#xe666;</i>
+			    </a>
+			    </li>
+		</ul>
+
+	</div>
+	<div class="x-body">
+	  
+	
+		<div class="layui-row" style="text-align: center">
+		  <form class="layui-form layui-col-md12 x-so"  onsubmit="return false;">
+			<div class="layui-inline">
+				<input type="text" name="workerName" placeholder="请输入员工姓名"
+					autocomplete="off" class="layui-input" id="mac">
+			</div>
+			<div class="layui-inline">
+				<input type="text" name="workerCode" placeholder="请输入员工工号"
+					autocomplete="off" class="layui-input" id="mac">
+			</div>
+
+
+			<div class="layui-inline">
+				<button class="layui-btn" lay-submit="" lay-filter="search"
+					data-type='search'>
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+			  </form>
+		</div>
+		<table id="demo" lay-filter="demo" class="mac-table"></table>
+
+
+	</div>
+<script type="text/html" id="barDemo">
+        <button title="选中"  href="javascript:;" class="layui-btn  layui-btn-sm   permission" lay-event='edit'>
+                <i class="layui-icon">&#xe640;</i><span>选中</span>
+        </button>
+     
+    </script>
+	
+	<script>
+    var url=window.location.search;
+    var str=url.substr(url.indexOf("?")+1);
+    var stateTwo=str.split("&")[0].split("=")[1];
+    var lineCode=decodeURI(str.split("&")[1].split("=")[1]);
+    layui.use('form', function(){
+    	  var form = layui.form;
+    	  form.render();
+    });
+    layui.use('table', function(){
+    	  var table = layui.table;
+    	  table.render({
+    	    elem: '#demo'
+    	    ,height: 470
+    	    ,cellMinWidth: 80
+    	    ,url: 'worker/loadNewWorker.do'//数据接口
+    	    ,where:{
+    	    	"stateTwo":stateTwo,
+    	    	"lineCode":lineCode
+    	    }
+    	    ,page: true //开启分页
+    	    ,cols: [[ //表头
+    	      ,{field: 'workerName', title: '姓名', width:80}
+    	      ,{field: 'workerCode', title: '工号', width: 100}
+    	      ,{field: 'lineCode', title: '产线', width: 80}
+    	      ,{field: 'workPost', title: '职务', width: 100}
+    	      ,{fileld:"",title:"操作",width:100, align:'center', templet:"#barDemo"}
+    	    ]]
+    	    ,id:"demoId"
+    	    ,done:function(){
+    	       
+    	    }
+    	  });
+    	  
+    	  
+   	    //监听行工具事件
+       	  table.on('tool(demo)', function(obj){
+       	   var data = obj.data;
+       	   var worker=JSON.stringify(data)
+   		   
+     
+       	 if(obj.event === 'edit'){
+       		 
+       		 layer.alert("工号:"+data.workerCode+":"+data.workerName+"已被选中!", { icon: 1, closeBtn: 0 }, function (index) { 
+       			var index = parent.layer.getFrameIndex(window.name);
+       			parent.GetValue(data.workerName+"("+data.workerCode+")");
+       			parent.layer.close(index);
+       		});
+  	      }
+        });    
+    	      
+    	      
+    	      
+    	  var  active = {
+    			  getId:function (data) {//获取选中行的主键
+    	                var idArr = [];
+    	                for(var i=0; i<data.length; i++){
+    	                    console.log(data[i].wid)
+    	                    idArr.push(data[i].wid)
+    	                }
+    	                console.log(idArr);
+    	                return idArr;
+    	            }
+    	        ,moreDelete:function(){ //批量删除
+    	            var checkStatus = table.checkStatus("demoId")
+	                ,data = checkStatus.data;
+	    		    console.log(data);
+	                var arr=active.getId(data);
+	                if(arr.length==0){
+	                	layer.msg('未选中任何数据');
+	                	return;
+	                }
+	                var idstring=arr.join(",");
+                	layer.confirm('确定要删除吗？', {
+                	  btn: ['确定','取消'] //按钮
+                	}, function(){
+                		layer.msg('确定', {icon: 1});
+                		$.ajax({
+                      	  type:"get",
+                      	  url:"worker/deleteWorkerByIds.do",
+                      	  data:{"workerStr":idstring},
+                      	  dataType:"json",
+                      	  success:function(result){
+                      		  if(result.state==0){
+                                    layer.msg(result.msg,{icon:1,time:1000});
+                                    window.location.reload();
+                      		  }else{
+                      			  layer.msg(result.msg,{icon:1,time:1000});
+                      		  }
+                      	  },
+                      	  error:function(){
+                      		  layer.msg("error:请检查代码",{icon:1,time:1000});
+                      	  }
+                        })
+  		                	 
+  		                 
+                	}, function(){
+                		layer.msg('取消', {icon: 2});
+                	   
+                	});
+	            }  
+    	       ,search:function(){
+    	    	   var workerName=$("input[name='workerName']").val();
+    	    	   var workerCode=$("input[name='workerCode']").val();
+    	    	   var lineCode=$("#lineCode option:selected").val();
+    	    	   var stateTwo=$("#stateTwo option:selected").val();
+    	    	   //执行重载
+	   	    	      table.reload('demoId', {
+	   	    	        page: {
+	   	    	          curr: 1 //重新从第 1 页开始
+	   	    	        }
+	   	    	        ,where: {
+	   	    	        	"workerName":workerName,  
+                            "workerCode":workerCode,
+                            "lineCode":lineCode,
+                            "stateTwo":stateTwo,
+	   	    	        }
+	   	    	      });
+    	       }
+    	        };    
+    	      
+    	  $('.x-body .layui-btn').on('click', function () {
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+    	  
+    	});
+       
+
+   
+ 
+      function member_stop(obj,id){
+         
+
+              if($(obj).attr('title')=='启用'){
+
+                //发异步把用户状态进行更改
+                $.ajax({
+	          		 type:"get",
+	          		 url:"/jhz_mtvCms/user/switchStatus.do",
+	          		 data:{"idstring":id,"status":1},
+	          		 dataType:"json",
+	          		 success:function(result){
+	          			 if(result.status==1){
+	          				 
+	                         $(obj).attr('title','停用')
+	                         $(obj).addClass("layui-btn-primary");
+	                         $(obj).find('i').css("color","black").html('&#x1007;');
+	                         $(obj).find("span").html("<span>停用</span>");
+	                         $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+	                         layer.msg('已启用!',{icon: 6,time:1000});
+	          			 }else{
+	          			    layer.msg(result.msg);
+	          			 }
+	          		 },
+	          		 error:function(){
+	          			 layer.msg("errror");
+	          		 }
+	  		   })
+                
+               
+
+              }else{
+            	  $.ajax({
+ 	          		 type:"get",
+ 	          		 url:"/jhz_mtvCms/user/switchStatus.do",
+ 	          		 data:{"idstring":id,"status":0},
+ 	          		 dataType:"json",
+ 	          		 success:function(result){
+ 	          			 if(result.status==1){
+ 	          				 
+ 	          			   $(obj).attr('title','启用');
+ 	          			   $(obj).removeClass("layui-btn-primary");
+ 	                       $(obj).find('i').css('color','blue').html('&#x1005;');
+ 	          				
+                           $(obj).find("span").html("<span>启用</span>");
+ 	                       $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+ 	                       layer.msg('已停用!',{icon: 5,time:1000});
+ 	          			 }else{
+ 	          			    layer.msg(result.msg);
+ 	          			 }
+ 	          		 },
+ 	          		 error:function(){
+ 	          			 layer.msg("errror");
+ 	          		 }
+ 	  		   }) 
+            	  
+            	  
+                
+              }
+              
+         
+      }
+
+      /*用户-删除*/
+      function member_del(obj,id){
+    	  console.log(id);
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $.ajax({
+            	  type:"get",
+            	  url:"worker/deleteWorker.do",
+            	  data:{"wid":id},
+            	  dataType:"json",
+            	  success:function(result){
+            		  if(result.state==1){
+            			  $(obj).parents("tr").remove();
+                          layer.msg(result.msg,{icon:1,time:1000});
+            		  }else{
+            			  layer.msg(result.msg,{icon:1,time:1000});
+            		  }
+            	  },
+            	  error:function(){
+            		  layer.msg("error:请检查代码",{icon:1,time:1000});
+            	  }
+              })
+              
+             
+          });
+      }
+
+      function closeCurrentPage() {
+
+    	  var index = parent.layer.getFrameIndex(window.name);
+    	  parent.layer.close(index);
+    	}
+      
+    </script>
+	<script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+</body>
+
+</html>

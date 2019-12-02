@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+  <div class="x-body">
+        <form class="layui-form">
+        <div class="layui-form-item">
+              <label class="layui-form-label">产品名 </label>
+              <div class="layui-input-inline">
+                  <select id="pid" name="pid"  lay-search>
+                  </select>
+              </div>
+            
+          </div>
+          <div class="layui-form-item">
+              <label  class="layui-form-label">主板型号</label>
+              <div class="layui-input-inline">
+                  <input type="text" id="model"  name="model" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <!-- <div class="layui-form-item">
+              <label for="phone" class="layui-form-label">
+                  <span class="x-red"></span>请选择说明文件
+              </label>
+             <div class="layui-upload">
+				  <button type="button" class="layui-btn"   id="uploadApp"><i class="layui-icon">&#xe67c;</i>上传文件</button>
+		  	</div>		 
+          </div> -->
+          <!-- <div class="layui-form-item"  style="display: none"  id="url">
+              <label for="syy_app_download" class="layui-form-label">
+                  <span class="x-red"></span>说明地址
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="cy_explain" name="cy_explain"  autocomplete="off" class="layui-input" disabled="disabled">
+              </div>
+          </div> -->
+          <div class="layui-form-item">
+              <label  class="layui-form-label">报价</label>
+              <div class="layui-input-inline">
+                  <input type="text"  name="price"  autocomplete="off" class="layui-input" id='price' lay-verify='number'>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label  class="layui-form-label">说明</label>
+              <div class="layui-input-inline">
+                  <input type="text"  name="explains"  autocomplete="off" class="layui-input" id='explains'>
+              </div>
+          </div>
+         <!--  <div class="layui-form-item">
+              <label  class="layui-form-label">备注 </label>
+              <div class="layui-input-inline">
+                  <input type="text"  name="cy_modelRemarks"  autocomplete="off" class="layui-input" id='cy_modelRemarks'>
+              </div>
+          </div> -->
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add"  lay-submit="" >
+                  提交
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+    var productOption=loadProductOption();
+    $("#pid").empty().append("<option value=''>--请选择产品名--</option>"+productOption);
+    layui.use(['form','layer','upload'], function(){
+        $ = layui.jquery;
+      var form = layui.form
+      ,layer = layui.layer
+      ,upload=layui.upload;
+      
+     
+      upload.render({
+    	  elem:"#uploadApp"
+    	  ,url:'file/upLoad.do'
+    	  ,data:{
+    		  "folderName":"upFile"
+    	  }
+    	  ,accept:"file"
+    	  
+    	  ,exts:"pdf|jpg|docx|png"
+    	  ,auto:true
+    	  //,data:{"folderName":"syyApp"}
+    	  ,before:function(obj){
+    		  layer.load();
+    	  }
+    	  ,done:function(res,index,upload){
+    		  layer.closeAll('loading');
+    		  $("#url").css("display","block");
+    		  $("#cy_explain").val(res.data);
+    	  }
+      });
+   /*  layui.use(['upload','form', 'layedit', 'laydate'], function(){
+    	   var upload = layui.upload;
+    	   var $ = layui.jquery;  //为了方便, 在这里引入了jquery
+    	   var uploadInst = upload.render({
+    			    elem: '#uploadMutil', //绑定元素,这个是html中上传控件的id
+    			    url: 'file/upLoad.do', //上传接口url
+    			    exts: 'jpg|pdf',  //此处可以限制上传文件的类型, 用|分隔
+    			    multiple:true,
+    			    bindAction: '#bindAction',  //此处是上传文件时携带的一些参数, 可以使用常数或变量, 如果使用动态值, 需要layui 2.2.6 及以上,详见官方问答NG
+    			    auto: false,
+    			    before: function(obj){
+    			    	layer.load(); //上传前loading
+    			    },
+    			    field:"file", //默认文件域是file,也可以自己定义,这个和后台struts中获取文件名有关
+    			    allDone: function(obj){  //全部提交完后回调
+    			   		layer.closeAll('loading'); //在完成全部提交后关闭loading
+    			   	 	//在所有文件提交完后可以在这里处理一些事务
+    			   	 
+    			    },
+    			    done: function(res){  //每个文件提交一次触发一次。
+    			      $("#url").css("display","show");
+    			      $("#fileUrl").val(res.fileUrl);
+    			    },
+    			    error: function(){
+    			      //请求异常回调
+    			      //layer.closeAll('loading'); //关闭loading
+    			    }
+    			  });
+    			  
+    			}); */
+		
+   
+    //监听提交
+      form.on('submit(add)', function(data) {
+			var param =data.field;
+			param["pname"]=$("#pid option:selected").text();
+			$.ajax({
+				type : "post",
+				url : "mainboard/add.do",
+				async: true,
+				data:param,
+				dataType : "json",
+				success : function(res) {
+					if (res.state == 0) {
+						layer.alert("新增成功", {
+							icon : 6
+						}, function() {
+							 layer.close(layer.index);
+							 //window.location.reload();
+							 window.parent.location.reload();
+							// 获得frame索引
+							/* var index = parent.layer
+									.getFrameIndex(window.name);
+							//关闭当前frame
+							parent.layer.close(layer.index); */
+						});
+						return false;
+					} else {
+						layer.alert(res.msg);
+					}
+
+				},
+				error : function(res) {
+					layer.msg("error");
+				}
+			});
+			return false;
+
+		});
+    
+    
+  });  
+   
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

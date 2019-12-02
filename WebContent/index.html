@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ERP</title>
+	<meta name="renderer" content="webkit">	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">	
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">	
+	<meta name="apple-mobile-web-app-capable" content="yes">	
+	<meta name="format-detection" content="telephone=no">	
+	<!-- load css -->
+	<link rel="stylesheet" type="text/css" href="common/layui/css/layui.css" media="all">
+	<link rel="stylesheet" type="text/css" href="common/global.css" media="all">
+	<link rel="stylesheet" type="text/css" href="css/adminstyle.css" media="all">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/self.js"></script>
+	<script type="text/javascript" src="js/xadmin.js"></script>
+	<script type="text/javascript">
+	    window.onload=function(){
+	    	
+	    	if(!contains('DepManagement',per_arr)){//人事管理
+	    		$("#nav>li:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('JiaGouTable',per_arr)){//架构表
+	    		$("#nav>li:eq(1) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('YuanGongTable',per_arr)){//员工表
+	    		$("#nav>li:eq(1) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('LunBanTable',per_arr)){//架构表
+	    		$("#nav>li:eq(1) dd:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('KaoQinTable',per_arr)){//员工表
+	    		$("#nav>li:eq(1) dd:eq(3)").css("display","none");
+	    	}
+	    	
+	    	if(!contains('ShengChanGuanLi',per_arr)){//生产管理
+	    		$("#nav>li:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('ChanXianTable',per_arr)){//产线表
+	    		$("#nav>li:eq(2) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('GongWeiTable',per_arr)){//工位表
+	    		$("#nav>li:eq(2) dd:eq(1)").css("display","none");
+	    	} 
+	    	if(!contains('MoBanTable',per_arr)){//模板表
+	    		$("#nav>li:eq(2) dd:eq(2)").css("display","none");
+	    	}
+	    	
+	    	if(!contains('GongNengTable',per_arr)){//功能表
+	    		$("#nav>li:eq(2) dd:eq(3)").css("display","none");
+	    	}
+	    	if(!contains('ShengChanTable',per_arr)){//生产表
+	    		$("#nav>li:eq(2) dd:eq(4)").css("display","none");
+	    	}
+	    	if(!contains('CeShiTable',per_arr)){//测试表
+	    		$("#nav>li:eq(2) dd:eq(5)").css("display","none");
+	    	}
+	    	if(!contains('LaoHuaTable',per_arr)){//老化表
+	    		$("#nav>li:eq(2) dd:eq(6)").css("display","none");
+	    	}
+	    	if(!contains('WeiXiuTable',per_arr)){//维修表
+	    		$("#nav>li:eq(2) dd:eq(7)").css("display","none");
+	    	}
+	    	if(!contains('TouRuTable',per_arr)){//投入表
+	    		$("#nav>li:eq(2) dd:eq(8)").css("display","none");
+	    	}
+	    	if(!contains('KanBanTable',per_arr)){//看板表
+	    		$("#nav>li:eq(2) dd:eq(9)").css("display","none");
+	    	}
+	    	
+	    	if(!contains('CaiWuGuanLi',per_arr)){ //财务管理
+	    		$("#nav>li:eq(3)").css("display","none");
+	    	}
+	    	if(!contains('XiaoShiTable',per_arr)){//小时表
+	    		$("#nav>li:eq(3) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('YueXinTable',per_arr)){//月薪表
+	    		$("#nav>li:eq(3) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('GongSiTable',per_arr)){//公司表
+	    		$("#nav>li:eq(3) dd:eq(2)").css("display","none");
+	    	}
+	    	
+	    	if(!contains('XiangMuGuanLi',per_arr)){ //项目管理
+	    		$("#nav>li:eq(4)").css("display","none");
+	    	}
+	    	if(!contains('XiangMuTable',per_arr)){//项目表
+	    		$("#nav>li:eq(4) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('RenWuTable',per_arr)){//任务表/工作台
+	    		$("#nav>li:eq(4) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('JiFengTable',per_arr)){//积分表
+	    		$("#nav>li:eq(4) dd:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('XiangMuZu',per_arr)){//项目组
+	    		$("#nav>li:eq(4) dd:eq(3)").css("display","none");
+	    	}
+	    	if(!contains('ZuYuanTable',per_arr)){//组员表
+	    		$("#nav>li:eq(4) dd:eq(4)").css("display","none");
+	    	}
+	    	
+	    	
+	    	if(!contains('CangKuGuanLi',per_arr)){//仓库管理
+	    		$("#nav>li:eq(5)").css("display","none");
+	    	}
+	    	if(!contains('DianZiCangTable',per_arr)){//电子仓
+	    		$("#nav>li:eq(5) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('JieGouCangTable',per_arr)){//结构仓
+	    		$("#nav>li:eq(5) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('ChengPingCangTable',per_arr)){//成品仓
+	    		$("#nav>li:eq(5) dd:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('BanKaCangTable',per_arr)){//板卡仓
+	    		$("#nav>li:eq(5) dd:eq(3)").css("display","none");
+	    	}
+	    	if(!contains('GuiZhongCangTable',per_arr)){//贵重仓
+	    		$("#nav>li:eq(5) dd:eq(4)").css("display","none");
+	    	}
+	    	if(!contains('FuLiaoCangTable',per_arr)){//辅料仓
+	    		$("#nav>li:eq(5) dd:eq(5)").css("display","none");
+	    	}
+	    	if(!contains('ZanFangCangTable',per_arr)){//暂放仓
+	    		$("#nav>li:eq(5) dd:eq(6)").css("display","none");
+	    	}
+	    	if(!contains('RuanJianCangTable',per_arr)){//软件仓
+	    		$("#nav>li:eq(5) dd:eq(7)").css("display","none");
+	    	}
+	    	
+	    	
+	    	
+	    	
+	    	if(!contains('CaiGouGuanLi',per_arr)){//采购管理
+	    		$("#nav>li:eq(6)").css("display","none");
+	    	}
+	    	if(!contains('JiaGeTable',per_arr)){//价格表
+	    		$("#nav>li:eq(6) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('JieDanTable',per_arr)){//结单表
+	    		$("#nav>li:eq(6) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('CaiGouTable',per_arr)){//采购表
+	    		$("#nav>li:eq(6) dd:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('ChengBenTable',per_arr)){//成本表
+	    		$("#nav>li:eq(6) dd:eq(3)").css("display","none");
+	    	}
+	    	if(!contains('ChangShangTable',per_arr)){//厂商表
+	    		$("#nav>li:eq(6) dd:eq(4)").css("display","none");
+	    	}
+	    	if(!contains('YaoQiuTable',per_arr)){//要求表
+	    		$("#nav>li:eq(6) dd:eq(5)").css("display","none");
+	    	}
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	if(!contains('JiHuaGuanLi',per_arr)){//计划管理
+	    		$("#nav>li:eq(7)").css("display","none");
+	    	}
+	    	if(!contains('DingDanTable',per_arr)){//订单表
+	    		$("#nav>li:eq(7) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('QiaoLiaoTable',per_arr)){//欠料表
+	    		$("#nav>li:eq(7) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('JieDanTable',per_arr)){//结单表
+	    		$("#nav>li:eq(7) dd:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('PieDanTable',per_arr)){//排单表
+	    		$("#nav>li:eq(7) dd:eq(2)").css("display","none");
+	    	}
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	if(!contains('GongChengGuanLi',per_arr)){//工程管理
+	    		$("#nav>li:eq(8)").css("display","none");
+	    	}
+	    	if(!contains('ChanPinTable',per_arr)){//产品表
+	    		$("#nav>li:eq(8) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('GuiZeBiaoTable',per_arr)){//规则表
+	    		$("#nav>li:eq(8) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('GongZuoZhanTable',per_arr)){//工作站
+	    		$("#nav>li:eq(8) dd:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('TiaoMaTable',per_arr)){//条码表
+	    		$("#nav>li:eq(8) dd:eq(3)").css("display","none");
+	    	}
+	    	if(!contains('LiaoHaoTable',per_arr)){//料号表
+	    		$("#nav>li:eq(8) dd:eq(4)").css("display","none");
+	    	}
+	    	if(!contains('BOMTable',per_arr)){//BOM表
+	    		$("#nav>li:eq(8) dd:eq(5)").css("display","none");
+	    	}
+	    	if(!contains('BianMaTable',per_arr)){//编码表
+	    		$("#nav>li:eq(8) dd:eq(6)").css("display","none");
+	    	}
+	    	
+	    	
+	    	
+	    	if(!contains('PingZhiGuanLi',per_arr)){//品质管理
+	    		$("#nav>li:eq(9)").css("display","none");
+	    	}
+	    	if(!contains('IQCTable',per_arr)){//IQC
+	    		$("#nav>li:eq(9) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('IPQCTable',per_arr)){//IPQC
+	    		$("#nav>li:eq(9) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('OQCTable',per_arr)){//OQC
+	    		$("#nav>li:eq(9) dd:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('QATable',per_arr)){//QA
+	    		$("#nav>li:eq(9) dd:eq(3)").css("display","none");
+	    	}
+	    	
+	    	
+	    	
+	    	
+	    	if(!contains('XiaoShouGuanLi',per_arr)){//销售管理
+	    		$("#nav>li:eq(10)").css("display","none");
+	    	}
+	    	if(!contains('BaoJiaTable',per_arr)){//报价表
+	    		$("#nav>li:eq(10) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('KeHuTable',per_arr)){//客户表
+	    		$("#nav>li:eq(10) dd:eq(1)").css("display","none");
+	    	}
+	    	
+	    	
+	    	if(!contains('YongHuGuanLi',per_arr)){//用户管理
+	    		$("#nav>li:eq(11)").css("display","none");
+	    	}
+	    	if(!contains('YongHuTable',per_arr)){//用户表
+	    		$("#nav>li:eq(11) dd:eq(0)").css("display","none");
+	    	}
+	    	
+	    	
+	    	if(!contains('QuanXianGuanLi',per_arr)){//权限管理
+	    		$("#nav>li:eq(12)").css("display","none");
+	    	}
+	    	if(!contains('JueSeTable',per_arr)){//
+	    		$("#nav>li:eq(12) dd:eq(0)").css("display","none");
+	    	}
+	    	
+	    	
+	    	
+	    	if(!contains('SheBeiGuanLi',per_arr)){//设备管理
+	    		$("#nav>li:eq(13)").css("display","none");
+	    	}
+	    	if(!contains('SheBeiTable',per_arr)){//设备表
+	    		$("#nav>li:eq(13) dd:eq(0)").css("display","none");
+	    	}
+	    	
+	    	
+	    	if(!contains('XiTongSheZhi',per_arr)){//系统设置
+	    		$("#nav>li:eq(14)").css("display","none");
+	    	}
+	    	if(!contains('SoftWareTable',per_arr)){//软件表
+	    		$("#nav>li:eq(14) dd:eq(0)").css("display","none");
+	    	}
+	    	if(!contains('DuoZhanDianGuanLi',per_arr)){//多站点管理
+	    		$("#nav>li:eq(14) dd:eq(1)").css("display","none");
+	    	}
+	    	if(!contains('AnQuanSheZhi',per_arr)){//安全设置
+	    		$("#nav>li:eq(14) dd:eq(2)").css("display","none");
+	    	}
+	    	if(!contains('DuanXinJieKouSheZhi',per_arr)){//短信接口设置
+	    		$("#nav>li:eq(14) dd:eq(3)").css("display","none");
+	    	}
+	    	if(!contains('XiTongRiZhiGuanLi',per_arr)){//系统日志管理
+	    		$("#nav>li:eq(14) dd:eq(4)").css("display","none");
+	    	}
+	    	if(!contains('SQLOrderGongJu',per_arr)){//SQL命令行工具
+	    		$("#nav>li:eq(14) dd:eq(5)").css("display","none");
+	    	}
+	    	if(!contains('FangCaiJiGuanLi',per_arr)){//防采集管理
+	    		$("#nav>li:eq(14) dd:eq(6)").css("display","none");
+	    	}
+
+	    }
+	</script>
+	
+	
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" id="layui_layout">
+	<!-- 顶部区域 -->
+	<div class="layui-header header header-demo">
+		<div class="layui-main">
+		    <!-- logo区域 -->
+			<div class="admin-logo-box">
+				<a class="logo" href="http://www.kuxuebao.net" title="logo">生产管理系统</a>
+				<div class="larry-side-menu">
+					<i class="fa fa-bars" aria-hidden="true"></i>
+				</div>
+				
+			</div>
+            <!-- 顶级菜单区域 -->
+            <!-- <div class="layui-larry-menu">
+                 <ul class="layui-nav clearfix">
+                       <li class="layui-nav-item layui-this">
+                 	   	   <a href="javascirpt:;"><i class="iconfont icon-wangzhanguanli"></i>内容管理</a>
+                 	   </li>
+                 	   <li class="layui-nav-item">
+                 	   	   <a href="javascirpt:;"><i class="iconfont icon-weixin3"></i>微信公众</a>
+                 	   </li>
+                 	   <li class="layui-nav-item">
+                 	   	   <a href="javascirpt:;"><i class="iconfont icon-ht_expand"></i>扩展模块</a>
+                 	   </li>
+                 </ul>
+            </div> -->
+            <!-- 右侧导航 -->
+            <ul class="layui-nav larry-header-item">
+                    <li class="layui-nav-item">
+            			 <button  class='layui-btn layui-btn-sm'  onclick="javascripts:window.location.reload();"><i class='layui-icon'>&#xe669;</i>刷新</button>
+            		</li>
+            		<li class="layui-nav-item">
+            			 欢迎您:<span id="loginRealName" style="color:#2299ee"></span>
+            		</li>
+            		
+            		<!-- <li class="layui-nav-item first">
+						<a href="javascript:;">			
+							<cite>默认站点</cite>
+							<span class="layui-nav-more"></span>
+						</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="">站点1</a>
+							</dd>
+							<dd>
+								<a href="">站点2</a>
+							</dd>
+							
+						</dl>
+					</li> -->
+					<!-- <li class="layui-nav-item">
+						<a href="javascript:;" id="lock">
+                        <i class="iconfont icon-diannao1"></i>
+						锁屏</a>
+					</li> -->
+					<li class="layui-nav-item">
+						<a onclick="loginOut()">
+                        <i class="iconfont icon-exit"  ></i>
+						退出</a>
+					</li>
+            </ul>
+		</div>
+	</div>
+	<!-- 左侧侧边导航开始 -->
+	<div class="layui-side layui-side-bg layui-larry-side" id="larry-side">
+        <div class="layui-side-scroll" id="larry-nav-side" lay-filter="side">
+		
+		<!-- 左侧菜单 -->
+		<ul class="layui-nav layui-nav-tree"  id="nav">
+			<li class="layui-nav-item layui-this">
+				<a href="javascript:;" data-url="main.html">
+				    <!-- <i class="iconfont icon-home1" data-icon='icon-home1'></i> -->
+					<span>后台首页</span>
+				</a>
+			</li>
+			<li class="layui-nav-item layui-this">
+				<a href="javascript:;" >
+				    <!-- <i class="iconfont icon-home1" data-icon='icon-home1'></i> -->
+					<span>人事管理</span>
+					<em class="layui-nav-more"></em>
+				</a>
+				<dl class="layui-nav-child">
+				   <dd>
+                        <a href="javascript:;" data-url="schema_list.html">
+                            <!-- <i class="iconfont icon-geren1" data-icon='icon-geren1'></i> -->
+                            <span>架构表</span>
+                        </a>
+                    </dd>
+                    
+                    <dd>
+                        <a href="javascript:;" data-url="worker_list.html">
+                           <!--  <i class="iconfont icon-iconfuzhi01" data-icon='icon-iconfuzhi01'></i> -->
+                            <span>员工表</span>
+                        </a>
+                    </dd>
+                    
+                    <dd>
+                        <a href="javascript:;" data-url="shift_list.html">
+                           <!--  <i class="iconfont icon-iconfuzhi01" data-icon='icon-iconfuzhi01'></i> -->
+                            <span>轮班表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="attendanc_list.html">
+                           <!--  <i class="iconfont icon-iconfuzhi01" data-icon='icon-iconfuzhi01'></i> -->
+                            <span>考勤表</span>
+                        </a>
+                    </dd>
+                </dl>
+			</li>
+			<!-- 个人信息 -->
+			<li class="layui-nav-item">
+				<a href="javascript:;">
+					<!-- <i class="iconfont icon-jiaoseguanli" ></i> -->
+					<span>生产管理</span>
+					<em class="layui-nav-more"></em>
+				</a>
+				<dl class="layui-nav-child">
+				    
+				    
+				    <dd>
+                        <a href="javascript:;" data-url="productLine.html">
+                            <!-- <i class="iconfont icon-geren1" data-icon='icon-geren1'></i> -->
+                            <span>产线表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="workLocation_list.html">
+                           <!--  <i class="iconfont icon-iconfuzhi01" data-icon='icon-iconfuzhi01'></i> -->
+                            <span>工位表</span>
+                        </a>
+                    </dd>
+				    <dd>
+                        <a href="javascript:;" data-url="print_model.html">
+                           <!--  <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i> -->
+                            <span>模板表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="personInfo.html">
+                            <!-- <i class="iconfont icon-geren1" data-icon='icon-geren1'></i> -->
+                            <span>功能表</span>
+                        </a>
+                    </dd>
+                   
+                    <dd>
+                        <a href="javascript:;" data-url="manufacture_list.html">
+                           <!--  <i class="iconfont icon-iconfuzhi01" data-icon='icon-iconfuzhi01'></i> -->
+                            <span>生产表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="productTest_list.html">
+                           <!--  <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i> -->
+                            <span>测试表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="myloginfo.html">
+                           <!--  <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i> -->
+                            <span>老化表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="repair_list.html">
+                           <!--  <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i> -->
+                            <span>维修表</span>
+                        </a>
+                    </dd>
+                     <dd>
+                        <a href="javascript:;" data-url="myloginfo.html">
+                           <!--  <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i> -->
+                            <span>投入表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="loadBoard-list.html">
+                           <!--  <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i> -->
+                            <span>看板表</span>
+                        </a>
+                    </dd>
+                     <dd>
+                        <a href="javascript:;" data-url="importantParts-list.html">
+                           <!--  <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i> -->
+                            <span>关键料</span>
+                        </a>
+                    </dd>
+                   <!--  <dd>
+                        <a href="javascript:;" data-url="daily_production_list.html">
+                            <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i>
+                            <span>日报表</span>
+                        </a>
+                    </dd> -->
+                </dl>
+			</li>
+						<!-- 个人信息 -->
+			<li class="layui-nav-item">
+				<a href="javascript:;">
+					<!-- <i class="iconfont icon-jiaoseguanli" ></i> -->
+					<span>财务管理</span>
+					<em class="layui-nav-more"></em>
+				</a>
+				<dl class="layui-nav-child">
+                    <dd>
+                        <a href="javascript:;" data-url="personInfo.html">
+                            <!-- <i class="iconfont icon-geren1" data-icon='icon-geren1'></i> -->
+                            <span>小时表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="changepwd.html">
+                           <!--  <i class="iconfont icon-iconfuzhi01" data-icon='icon-iconfuzhi01'></i> -->
+                            <span>月薪表</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" data-url="conpanyManager-list.html">
+                           <!--  <i class="iconfont icon-piliangicon" data-icon='icon-piliangicon'></i> -->
+                            <span>公司表</span>
+                        </a>
+                    </dd>
+                   
+                </dl>
+			</li>
+			<!-- 项目管理 -->
+			<li class="layui-nav-item">
+					<a href="javascript:;">
+					   <!-- <i class="iconfont icon-jiaoseguanli2" ></i> -->
+					   <span>项目管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					    <dl class="layui-nav-child">
+					    	<dd>
+							   <a href="javascript:;" data-url="projectTasks/project_list.html">
+					              <span>项目表</span>
+					           </a>
+                           </dd>
+                           <dd>
+					    		<a href="javascript:;"  data-url="projectTasks/workbench.html">
+					    		   <span>工作台</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;"  data-url="projectTasks/integral_list.html">
+					    		   <span>积分表</span>
+					    		</a>
+					    	</dd>
+						   <dd>
+							   <a href="javascript:;"  data-url="projectTasks/project_group_list.html">
+								<!--    <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>项目组</span>
+							   </a>
+						   </dd>
+						   <dd>
+						       <a href="javascript:;"  data-url="projectTasks/weBsocket11.html">
+								   <!-- <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>成本表</span>
+							   </a>
+						   </dd>
+					    </dl>
+			    </li>
+
+			<!-- 用户管理 -->
+			<li class="layui-nav-item">
+					<a href="javascript:;">
+					   <!-- <i class="iconfont icon-jiaoseguanli2" ></i> -->
+					   <span>仓库管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					    <dl class="layui-nav-child">
+					    	<dd>
+							   <a href="javascript:;" data-url="electronicWarehouse_list.html">
+					              <span>电子仓</span>
+					           </a>
+                           </dd>
+                           <dd>
+					    		<a href="javascript:;"  data-url='structuremanager-list.html'>
+					    		   <span>结构仓</span>
+					    		</a>
+					    	</dd>
+					   	   <!--  <dd>
+					    		<a href="">
+					    		   <i class="iconfont icon-shengchengbaogao" data-icon='icon-shengchengbaogao'></i>
+					    		   <span>工作站</span>
+					    		</a>
+					    	</dd> -->
+					    	<dd>
+					    		<a href="javascript:;"  data-url="finishedProductsWarehouse.html">
+					    		   <span>成品仓</span>
+					    		</a>
+					    	</dd>
+						   <dd>
+							   <a href="javascript:;"  data-url="boardManager-list.html">
+								<!--    <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>板卡仓</span>
+							   </a>
+						   </dd>
+						   <dd>
+						       <a href="javascript:;"  data-url="preciousManager-list.html">
+								   <!-- <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>贵重仓</span>
+							   </a>
+						   </dd>
+						   <dd>
+							    <a href="javascript:;"  data-url="accessoriesManager-list.html">
+								   <!-- <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>辅料仓</span>
+							   </a>
+						   </dd>
+						   <dd>
+							 <a href="javascript:;"  data-url="temporaryManager-list.html">
+								   <!-- <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>暂放仓</span>
+							   </a>
+						   </dd>
+						   <dd>
+						   
+							 <a href="javascript:;"  data-url="softwareManager-list.html">
+								   <!-- <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>软件仓</span>
+							   </a>
+						   </dd>
+						   <dd>
+						   
+							 <a href="javascript:;"  data-url="rework-list.html">
+								   <!-- <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>返修仓</span>
+							   </a>
+						   </dd>
+					    </dl>
+			    </li>
+			<!-- 内容管理 -->
+			<li class="layui-nav-item">
+					<a href="javascript:;">
+					   <!-- <i class="iconfont icon-wenzhang1" ></i> -->
+					   <span>采购管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					   <dl class="layui-nav-child">
+					   	   <dd>
+					    		<a href="javascript:;" data-url="caigou_price_list.html">
+					    		   <!-- <i class="iconfont icon-lanmuguanli" data-icon='icon-lanmuguanli'></i> -->
+					    		   <span>价格表</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;" data-url="end-merchandiseManager-list.html">
+					    		 
+					    		   <span>结单表</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;" data-url="merchandiseManager-list.html">
+					    		
+					    		   <span>采购表</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;"  data-url="costManager-list.html">
+					    		   <!-- <i class="iconfont icon-word" data-icon='icon-word'></i> -->
+					    		   <span>成本表</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;"   data-url="makerListMananger-list.html">
+					    		 <!-- <i class="iconfont icon-pinglun1" data-icon='icon-pinglun1'></i> -->
+					    		   <span>厂商表</span>
+					    		</a>
+					    	</dd>
+					    	
+					    	<dd>
+					    		<a href="javascript:;"   data-url="requireManager-list.html">
+					    		   <span>要求表</span>
+					    		</a>
+					    	</dd>
+					   </dl>
+			   </li>
+			
+                 <!-- 会员管理 -->
+				<li class="layui-nav-item">
+					<a href="javascript:;">
+					   <!-- <i class="iconfont icon-m-members" ></i> -->
+					   <span>计划管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					<dl class="layui-nav-child">
+                           <dd>
+                           	   <a href="javascript:;" data-url="porder_list.html">
+					              <!-- <i class="iconfont icon-zhuti"  data-icon='icon-zhuti'></i> -->
+					              <span>订单表</span>
+					           </a>
+                           </dd>
+                           <dd>
+                           	   <a href="javascript:;" data-url="shortage_list.html">
+					              <!-- <i class="iconfont icon-zhuti"  data-icon='icon-zhuti'></i> -->
+					              <span>欠料表</span>
+					           </a>
+                           </dd>
+                           <dd>
+                           	   <a href="javascript:;" data-url="endOrder_list.html">
+					              <!-- <i class="iconfont icon-zhuti"  data-icon='icon-zhuti'></i> -->
+					              <span>完结表</span>
+					           </a>
+                           </dd>
+                           <dd>
+                           	   <a href="javascript:;" data-url="plan_list.html">
+					              <!-- <i class="iconfont icon-zhuti"  data-icon='icon-zhuti'></i> -->
+					              <span>排单表</span>
+					           </a>
+                           </dd>
+                    </dl>
+				</li>
+				
+				
+				
+				
+				<li class="layui-nav-item">
+					<a href="javascript:;">
+					  <!--  <i class="iconfont icon-shengchengbaogao" ></i> -->
+					   <span>工程管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					   <dl class="layui-nav-child">
+                           <dd>
+							   <a href="javascript:;" data-url="product_list.html">
+					          <!--     <i class="layui-icon">&#xe678;</i>    -->
+					              <span>产品表</span>
+					           </a>
+                           </dd>
+                           <dd>
+					    		<a href="javascript:;" data-url="productScheduling_list.html">
+					    		 <!--   <i class="iconfont icon-database" data-icon='icon-database'></i> -->
+					    		   <span>规则表</span>
+					    		</a>
+					    	</dd>
+					   	    <dd>
+					    		<a href="javascript:;" data-url="workStation_list.html">
+					    		<!--    <i class="iconfont icon-shengchengbaogao" data-icon='icon-shengchengbaogao'></i> -->
+					    		   <span>工作站</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;" data-url="barcode_list.html">
+					    		 <!--   <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+					    		   <span>条码表</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;" data-url="shipment_list.html">
+					    		 <!--   <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+					    		   <span>出货表</span>
+					    		</a>
+					    	</dd>
+						   <dd>
+							  <a href="javascript:;" data-url="pncode_list.html">
+								<!--    <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>料号表</span>
+							   </a>
+						   </dd>
+						   <dd>
+							   <a href="javascript:;" data-url="bomManager-list.html">
+								   <!-- <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>BOM表</span>
+							   </a>
+						   </dd>
+						   <dd>
+							   <a href="javascript:;" data-url="codeBe_list.html"><!-- 编码表 -->
+								    <!-- <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+								   <span>编码表</span>
+							   </a>
+						   </dd>
+					    	
+					   </dl>
+				</li>
+				
+				<li class="layui-nav-item">
+					<a href="javascript:;">
+					  <!--  <i class="iconfont icon-shengchengbaogao" ></i> -->
+					   <span>品质管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					   <dl class="layui-nav-child">
+                           <dd>
+							   <a href="javascript:;" data-url="">
+					           <!-- <i class="layui-icon">&#xe678;</i>   -->
+					              <span>IQC表</span>
+					           </a>
+                           </dd>
+                           <dd>
+					    		<a href="">
+					    		 <!--   <i class="iconfont icon-database" data-icon='icon-database'></i> -->
+					    		   <span>IPQC表</span>
+					    		</a>
+					    	</dd>
+					   	    <dd>
+					    		<a href="javascript:;" data-url="">
+					    		<!--    <i class="iconfont icon-shengchengbaogao" data-icon='icon-shengchengbaogao'></i> -->
+					    		   <span>OQC表</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="">
+					    		 <!--   <i class="iconfont icon-qingchuhuancun" data-icon='icon-qingchuhuancun'></i> -->
+					    		   <span>QA表</span>
+					    		</a>
+					    	</dd>
+					    	
+					   </dl>
+				</li>
+				
+				
+				<li class="layui-nav-item">
+					<a href="javascript:;">
+					  <!--  <i class="iconfont icon-shengchengbaogao" ></i> -->
+					   <span>销售管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					   <dl class="layui-nav-child">
+                           <dd>
+							   <a href="javascript:;" data-url="reportPrice_list.html">
+					          <!--     <i class="layui-icon">&#xe678;</i>    -->
+					              <span>报价表</span>
+					           </a>
+                           </dd>
+                           <dd>
+					    		<a href="javascript:;" data-url="customer-list.html">
+					    		 <!--   <i class="iconfont icon-database" data-icon='icon-database'></i> -->
+					    		   <span>客户表</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;" data-url="cpModel-list.html">
+					    		 <!--   <i class="iconfont icon-database" data-icon='icon-database'></i> -->
+					    		   <span>型号表</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;" data-url="mainboard_List.html">
+					    		 <!--   <i class="iconfont icon-database" data-icon='icon-database'></i> -->
+					    		   <span>主板表</span>
+					    		</a>
+					    	</dd>
+					   </dl>
+				</li>
+				
+				<li class="layui-nav-item">
+					<a href="javascript:;">
+					  <!--  <i class="iconfont icon-shengchengbaogao" ></i> -->
+					   <span>用户管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					   <dl class="layui-nav-child">
+                           <dd>
+							   <a href="javascript:;" data-url="user_list.html">
+					          <!--     <i class="layui-icon">&#xe678;</i>    -->
+					              <span>用户表</span>
+					           </a>
+                           </dd>
+                        
+					   	  
+					   </dl>
+				</li>
+				
+				
+				<li class="layui-nav-item">
+					<a href="javascript:;">
+					  <!--  <i class="iconfont icon-shengchengbaogao" ></i> -->
+					   <span>权限管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					   <dl class="layui-nav-child">
+                           <dd>
+					    		<a href="javascript:;" data-url="admin-role.html">
+					    		 <!--   <i class="iconfont icon-database" data-icon='icon-database'></i> -->
+					    		   <span>角色表</span>
+					    		</a>
+					    	</dd>
+					   	  
+					   </dl>
+				</li>
+				
+				
+				<li class="layui-nav-item">
+					<a href="javascript:;">
+					  <!--  <i class="iconfont icon-shengchengbaogao" ></i> -->
+					   <span>设备管理</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					   <dl class="layui-nav-child">
+                           <dd>
+					    		<a href="javascript:;" data-url="member-list.html">
+					    		 <!--   <i class="iconfont icon-database" data-icon='icon-database'></i> -->
+					    		   <span>设备表</span>
+					    		</a>
+					    	</dd>
+					   	  
+					   </dl>
+				</li>
+				
+			<!-- 系统设置 -->
+			<li class="layui-nav-item">
+					<a href="javascript:;">
+					  <!--  <i class="iconfont icon-xitong" ></i> -->
+					   <span>系统设置</span>
+					   <em class="layui-nav-more"></em>
+					</a>
+					    <dl class="layui-nav-child">
+					    	<dd>
+					    
+					    		<a href="javascript:;"  data-url="software_list.html">
+					    		    <!-- <i class="iconfont icon-zhandianpeizhi" data-icon='icon-zhandianpeizhi'></i>  -->
+					    		   <span>软件表</span>
+					    		   
+					    		</a>
+					    
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;">
+					    		   <!-- <i class="iconfont icon-zhandianguanli1" data-icon='icon-zhandianguanli1'></i> -->
+					    		   <span>多站点管理</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;">
+					    		   <!-- <i class="iconfont icon-anquanshezhi" data-icon='icon-anquanshezhi'></i> -->
+					    		   <span>安全设置</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;">
+					    		   <!-- <i class="iconfont icon-sms" data-icon='icon-sms'></i> -->
+					    		   <span>短信接口设置</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;">
+					    		   <!-- <i class="iconfont icon-iconfuzhi01" data-icon='icon-iconfuzhi01'></i> -->
+					    		   <span>系统日志管理</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;">
+					    			<!-- <i class='iconfont icon-SQLServershujuku' data-icon='icon-SQLServershujuku'></i> -->
+					    			<span>SQL命令行工具</span>
+					    		</a>
+					    	</dd>
+					    	<dd>
+					    		<a href="javascript:;">
+					    			<!-- <i class='iconfont icon-xinxicaiji' data-icon='icon-xinxicaiji'></i> -->
+					    			<span>防采集管理</span>
+					    		</a>
+					    	</dd>
+					    </dl>
+				</li>
+				<!-- 友链设置 -->
+				<li class="layui-nav-item">
+					<a href="javascript:;"  href="https://www.baidu.com/"  target="_blank">
+					<!--    <i class="iconfont icon-youqinglianjie"  data-icon='icon-youqinglianjie'></i> -->
+					   <span>友情链接</span>
+					</a>
+				</li>
+		</ul>
+	    </div>
+	</div>
+
+	<!-- 左侧侧边导航结束 -->
+	<!-- 右侧主体内容 -->
+	<div class="layui-body" id="larry-body" style="bottom: 0;border-left: solid 2px #2299ee;">
+		<div class="layui-tab layui-tab-card larry-tab-box" id="larry-tab" lay-filter="demo" lay-allowclose="true">
+			<div class="go-left key-press pressKey" id="titleLeft" title="滚动至最右侧"><i class="larry-icon larry-weibiaoti6-copy"></i> </div>
+			<ul class="layui-tab-title">
+				<li class="layui-this" id="admin-home"><i class="iconfont icon-diannao1"></i><em>后台首页</em></li>
+			</ul>
+			<div class="go-right key-press pressKey" id="titleRight" title="滚动至最左侧"><i class="larry-icon larry-right"></i></div> 
+			<!-- <ul class="layui-nav closeBox">
+				  <li class="layui-nav-item">
+				    <a href="javascript:;"><i class="iconfont icon-caozuo"></i> 页面操作</a>
+				    <dl class="layui-nav-child">
+					  <dd><a href="javascript:window.location.reload();" class="refresh refreshThis"><i class="layui-icon">&#x1002;</i> 刷新当前</a></dd>
+				      <dd><a href="javascript:;" class="closePageOther"><i class="iconfont icon-prohibit"></i> 关闭其他</a></dd>
+				      <dd><a href="javascript:;" class="closePageAll"><i class="iconfont icon-guanbi"></i> 关闭全部</a></dd>
+				    </dl>
+				  </li>
+				</ul> -->
+			<div class="layui-tab-content" style="min-height: 150px; ">
+				<div class="layui-tab-item layui-show">
+					<iframe class="larry-iframe" data-id='0' src="main.html"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 底部区域 -->
+	<div class="layui-footer layui-larry-foot" id="larry-footer">
+		<div class="layui-mian">  
+		    <p class="p-admin">
+		    	<span>2018 &copy;</span>
+		    	 深圳市精合智有限公司
+		    </p>
+		</div>
+	</div>
+</div>
+<!-- 加载js文件-->                                                                                                                                                                                           
+	<script type="text/javascript" src="common/layui/layui.js"></script> 
+	<script type="text/javascript" src="js/larry.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+	    $(document).ready(function(){
+	    	var realName=loginUser.realName;
+	    	$("#loginRealName").text(realName);
+	    });
+	</script>
+<!-- 锁屏 -->
+<div class="lock-screen" style="display: none;">
+	<div id="locker" class="lock-wrapper">
+		<div id="time"></div>
+		<div class="lock-box center">
+			<img src="images/userimg.jpg" alt="">
+			<h1>admin</h1>
+			<duv class="form-group col-lg-12">
+				<input type="password" placeholder='锁屏状态，请输入密码解锁' id="lock_password" class="form-control lock-input" autofocus name="lock_password">
+				<button id="unlock" class="btn btn-lock">解锁</button>
+			</duv>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+           
+          <div class="layui-form-item" >
+				    <label class="layui-form-label">模板名</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="templateName"  autocomplete="off" placeholder="请输入模板名" class="layui-input" >
+				    </div>
+          </div>  
+       
+          <div class="layui-form-item">
+              <label for="app_name" class="layui-form-label">
+                  <span class="x-red">*</span>型号
+              </label>
+              <div class="layui-input-inline">
+                  <select id="modelCode" name="modelCode" lay-search>
+                    <option value="shentong">申通物流</option>
+                    <option value="shunfeng">顺丰物流</option>
+                  </select>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="app_name" class="layui-form-label">
+                  <span class="x-red">*</span>料号
+              </label>
+              <div class="layui-input-inline">
+                  <select id="pnCode" name="pnCode" lay-search>
+                    <option value="shentong">申通物流</option>
+                    <option value="shunfeng">顺丰物流</option>
+                  </select>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="uploadeImg" class="layui-form-label">
+                  <span class="x-red">*</span>模板1
+              </label>
+              <div class="layui-upload">
+				  <button type="button" class="layui-btn"  id="uploadeA"><i class="layui-icon">&#xe681;</i>上传模板</button>
+			  </div>
+		  </div> 
+		  
+		   <div class="layui-form-item"  style="display: none" id="modelA">
+				    <label class="layui-form-label">数据回显1</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="model_one"  autocomplete="off" placeholder="请输入标题" class="layui-input" >
+				    </div>
+          </div>  
+		    <div class="layui-form-item" >
+				    <label class="layui-form-label">SN1</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="sn1"  autocomplete="off" placeholder="请输入SN1" class="layui-input"  >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">SN2</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="sn2"  autocomplete="off" placeholder="请输入SN2" class="layui-input"  >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">SN3</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="sn3"  autocomplete="off" placeholder="请输入SN3" class="layui-input"  >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">SN4</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="sn4"  autocomplete="off" placeholder="请输入SN4" class="layui-input"  >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">SN5</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="sn5"  autocomplete="off" placeholder="请输入SN5" class="layui-input" >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">SN6</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="sn6"  autocomplete="off" placeholder="请输入SN6" class="layui-input" >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">SN7</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="sn7"  autocomplete="off" placeholder="请输入SN7" class="layui-input" >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">DATA1</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="data1"  autocomplete="off" placeholder="请输入DATA1" class="layui-input" >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">DATA2</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="data2"  autocomplete="off" placeholder="请输入DATA2" class="layui-input" >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">重量1</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="weight1"  autocomplete="off" placeholder="请输入重量1" class="layui-input"  >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">重量2</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="weight2"  autocomplete="off" placeholder="请输入重量2" class="layui-input"  >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">组合1</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="group1"  autocomplete="off" placeholder="请输入组合1" class="layui-input" >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">组合2</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="group2"  autocomplete="off" placeholder="请输入组合2" class="layui-input" >
+				    </div>
+          </div>  
+            <div class="layui-form-item" >
+				    <label class="layui-form-label">是否显示冒号</label>
+				    <div class="layui-input-inline">
+                  <select id="colonShow" name="colonShow">
+                    <option value="0">YES</option>
+                    <option value="1">NO</option>
+                  </select>
+              </div>
+          </div>  
+		  
+		  
+		  
+		 
+		  
+		   <!-- <div class="layui-form-item">
+              <label for="uploadeImg" class="layui-form-label">
+                  <span class="x-red">*</span>模板2
+              </label>
+              <div class="layui-upload">
+				  <button type="button" class="layui-btn"  id="uploadeB"><i class="layui-icon">&#xe681;</i>上传模板</button>
+				      
+				  </div>
+		  </div>   
+		  
+		  <div class="layui-form-item"  style="display: none" id="modelB">
+				    <label class="layui-form-label">数据回显2</label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="model_two"  autocomplete="off"  class="layui-input"  disabled="disabled">
+				    </div>
+          </div>   -->
+
+          
+           <div class="layui-form-item layui-form-text">
+              <label for="lunchdetails" class="layui-form-label">
+                 说明
+              </label>
+              <div class="layui-input-block">
+                  <textarea placeholder="请输入内容"  id="templateSize" name="templateSize" class="layui-textarea"></textarea>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn"  lay-filter="add"  lay-submit=""  id="addButton">
+                  增加
+              </button>
+              <button  class="layui-btn layui-btn-primary"  onclick='window.location.reload()'>
+                  重置
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+        var str="modelCode";
+	    var dataOption=findOptionData(str);
+	    $("#modelCode").empty().append("<option value=''>--请选择产品类型--</option>"+dataOption);
+	    str='pn';
+	    $("#pnCode").empty().append("<option value=''>--请选择料号--</option>"+findOptionData(str));
+	    /* $.ajax({
+	    	type:"get",
+	    	async:false,
+	    	url:"list/distinctData.do",
+	    	dataType:"json",
+	    	success:function(res){
+	    		if(res.state==0){
+	    			for(var i=0;i<res.data4.length;i++){
+	    				console.log(res.data);
+	    				$("#pnCode").append("<option value='"+res.data4[i]+"'>"+res.data4[i]+"</option>");
+	    			}
+	    		   
+	    		}
+	    		 return false;
+	    	},
+	    	errro:function(res){
+	    		
+	    	}
+	    	
+	    }); */
+	    layui.use(['form','layer','upload'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer
+          ,upload=layui.upload;
+          
+          upload.render({
+        	  elem:"#uploadeA"
+        	  ,url:'file/upLoad.do'
+        	  ,accept:"file"
+        	  ,auto:true
+        	  ,before:function(obj){
+        		  layer.load();
+        	  }
+        	  ,data:{"folderName":"model"}
+        	  ,done:function(res,index,upload){
+        		  layer.closeAll('loading');
+        		  if(res.code==0){
+	        		  $("#modelA").css("display","block");
+	        		  $("#modelA input").val(res.data);
+        		  }else{
+        			  layer.alert(res.msg);
+        		  }
+        		
+        	  }
+          });
+          
+          upload.render({
+        	  elem:"#uploadeB"
+        	  ,url:'file/upLoad.do'
+        	  ,accept:"file"
+        	  ,auto:true
+        	  ,before:function(obj){
+        		  layer.load();
+        	  }
+        	  ,data:{"folderName":"model"}
+        	  ,done:function(res,index,upload){
+        		  layer.closeAll('loading');
+        		  if(res.code==0){
+	        		  $("#modelB").css("display","block");
+	        		  $("#modelB input").val(res.data);
+        		  }else{
+        			  layer.alert(res.msg);
+        		  }
+        		
+        	  }
+          });
+          
+          
+          
+          
+
+          
+          
+         
+          //监听提交
+          form.on('submit(add)', function(data){
+        	
+  
+            var param=data.field;
+            $.ajax({
+               type:"get",
+               url:"list/addModel.do",
+               data:param,
+               dataType:"json",
+               success:function(res){
+            	   if(res.code==0){
+            		   layer.alert(res.msg, {icon: 6},function () {
+                           // 获得frame索引
+                           var index = parent.layer.getFrameIndex(window.name);
+                           //关闭当前frame
+                           parent.layer.close(index);
+                       });
+            		   //parent.layer.close(index);
+            	   }else{
+            		   layer.alert(res.msg);
+            	   }
+               },
+               error:function(){
+            	   layer.alert("error");
+               }
+            }); 
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+ <script type="text/javascript" src="./js/self.js"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+<script src="./lib/layui/layui.js" charset="utf-8" type="text/javascript"></script>
+
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div>
+		<span class="layui-breadcrumb"> <a href="">人事管理</a> <a href="">轮班表</a>
+			<!--<a>
+          <cite>导航元素</cite></a>-->
+		</span>
+		
+		<ul class="layui-nav"  style="text-align: right">
+			
+			<!-- <li class="layui-nav-item"  style="margin-right: 20px"> 
+			   <a href="javascript:void(0)">当前为录入版MAC</a>
+				<dl class="layui-nav-child">
+					<dd>
+						<a href="free-mac.html"  target="_self">切换为自由版MAC</a>
+					</dd>
+				
+				</dl>
+				</li> -->
+				
+				<li class="layui-nav-item">
+				<a class="layui-btn layui-btn-small"
+						style="line-height: 1.6em; margin-top: 3px; float: right"
+						href="javascript:window.location.reload()" title="刷新"> <i
+						class="layui-icon" style="line-height: 30px">&#xe666;</i>
+			    </a>
+			    </li>
+		</ul>
+
+	</div>
+	<div class="x-body">
+	  
+		<!-- <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+          
+          <input class="layui-input" placeholder="时间" name="end" id="end"/>
+	      <select name="city"  lay-verify="required" class="layui-inline">
+	        <option value=""></option>
+	        <option value="0">北京</option>
+	        <option value="1">上海</option>
+	        <option value="2">广州</option>
+	        <option value="3">深圳</option>
+	        <option value="4">杭州</option>
+	      </select>
+          <input type="text" name="username"  placeholder="请输入MAC" autocomplete="off" class="layui-input">
+          <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+      </div> -->
+
+		<!-- <div class="layui-form-item">  -->
+		<div class="layui-row" style="text-align: center">
+		  <form class="layui-form layui-col-md12 x-so"  onsubmit="return false;">
+			<div class="layui-inline">
+			       <select name="shiftType" id="shiftType"  lay-search>
+					
+				</select>
+			</div>
+
+			<div class="layui-inline">
+				<select name="status" id="status"  lay-search>
+					<option value="">请选择状态</option>
+					<option value="1">启用</option>
+					<option value="2">停用</option>
+				</select>
+			</div>
+
+			<div class="layui-inline">
+				<button class="layui-btn" lay-submit="" lay-filter="search"
+					data-type='search'>
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+			  </form>
+		</div>
+     
+
+
+
+		<xblock id="mac-button">
+
+		<button class="layui-btn"
+			onclick="x_admin_show('人员单个添加','./shift_add.html',600,600)">
+			<i class="layui-icon">&#xe61f;</i>单个录入
+		</button>
+		<button class="layui-btn"
+			onclick="x_admin_show('人员批量添加','./workerMore-add.html',600,600)">
+			<i class="layui-icon">&#xe61f;</i>批量添加
+		</button>
+		<button class="layui-btn layui-btn-danger" data-type='moreDelete'>
+			<i class="layui-icon">&#xe640;</i>批量删除
+		</button>
+		
+		</xblock>
+
+
+		<table id="demo" lay-filter="demo" class="mac-table"></table>
+		<div id="pageDemo" class="page">
+		</div>
+
+	</div>
+	<script type="text/html" id="macAnalyse">
+
+         <button class='layui-btn layui-btn-sm' onclick='x_admin_show("MAC数据统计","./mac-analyse.html?mac={{d.mac}}&cid={{d.cid}}&typeWay={{d.typeWay}}",900,700)'>查看</button>
+    </script>
+
+	<script type="text/html" id="barDemo">
+        <button title="编辑"  href="javascript:;" class="layui-btn  layui-btn-sm   permission" lay-event='edit'>
+                <i class="layui-icon">&#xe640;</i><span>编辑</span>
+        </button>
+        <button title="删除" onclick="member_del(this,{{d.id}})" href="javascript:;" class="layui-btn  layui-btn-sm layui-btn-danger  permission">
+                <i class="layui-icon">&#xe640;</i><span>删除</span>
+        </button>
+        
+
+        <!-- 这里同样支持 laytpl 语法，如： -->
+        {{#  if(d.statusString == '已启用'){ }}
+         <button title="停用" onclick="member_stop(this,{{d.wid}})" href="javascript:;" class="layui-btn  layui-btn-sm layui-btn-primary permission">
+                <i class="layui-icon">&#x1007;</i><span>停用</span>
+        </button>
+        {{#  } }}
+        {{#  if(d.statusString == '已停用'){ }}
+         <button title="启用" onclick="member_stop(this,{{d.wid}})" href="javascript:;" class="layui-btn  layui-btn-sm permission">
+                <i class="layui-icon" style="color:blue">&#x1005;</i><span>启用</span>
+        </button>
+        {{#  } }}
+    </script>
+	<script type="text/html" id="statusDemo">
+       
+        {{#  if(d.statusString == '已启用'){ }}
+              <a class="td-status"><span class="layui-btn  layui-btn-sm">已启用</span></a>
+        {{#  } }}
+        {{#  if(d.statusString == '已停用'){ }}
+              <a class="td-status"><span class="layui-btn  layui-btn-sm layui-btn-disabled">已停用</span></a>
+        {{#  } }}
+    </script>
+    
+      <script type="text/html" id="shfit">
+
+         <button class='layui-btn layui-btn-sm' onclick='x_admin_show("轮班详情","./mac-analyse.html?shiftType={{d.shiftType}}",900,700)'>d.shiftType</button>
+    </script>
+	<script>
+    $("#shiftType").append("<option value=''>请选择轮班类型</option>"+loadAllShiftType());
+    
+    
+    layui.use('form', function(){
+    	  var form = layui.form;
+    	  form.render();
+    });
+    layui.use('table', function(){
+    	  var table = layui.table;
+    	  table.render({
+    	    elem: '#demo'
+    	    ,height: 560
+    	    ,cellMinWidth: 80
+    	    ,url: 'getShift.do'//数据接口
+    	    ,page: true //开启分页
+    	    ,cols: [[ //表头
+
+    	      {type: 'checkbox'}    
+    	      ,{field: 'id', title: 'id', width:150, sort: true}
+    	      ,{field: 'checkDate', title: '上午上班时间',width:100}
+    	      ,{field: 'beforeNoonDown', title: '上午下班时间', width:150} 
+    	      ,{field: 'afterNoonUp', title: '下午上班时间', width: 150}
+    	      ,{field: 'afterNoonDown', title: '下午下班时间', width: 150}
+    	      ,{field: 'overWorkUp', title: '加班签到时间', width: 150}
+    	      ,{field: 'overWorkDown', title: '加班签退时间', width: 100}
+    	      ,{field: 'shiftType', title: '轮班类型', width: 100}
+    	      ,{field: 'status', title: '状态', width: 150, sort: true,templet:function(d){
+    	    	  if(d.status==1){
+    	    		  return "<span>启用</span>";
+    	    	  }else{
+    	    		  return "<span>停用</span>"
+    	    	  }
+    	      }}
+    	      ,{fileld:"",title:"操作",width:200, align:'center', templet:"#barDemo"}
+    	    ]]
+    	    ,id:"demoId"
+    	    ,done:function(){
+    	       
+    	         if(!contains('LunBan_edit',per_arr)){
+    	        	$("#mac-button").css("display","none");
+
+    	        
+    	        	$(".permission").css("display","none");
+    	        } 
+    	    	//$(".layui-table .permission").css("display","none");
+    	    }
+    	  });
+    	  
+   	    //监听行工具事件
+       	  table.on('tool(demo)', function(obj){
+       	   var data = obj.data;
+       	   var shift=JSON.stringify(data)
+   		    if(!window.localStorage){
+   			    layer.msg("浏览器不支持localstorage");
+   			    return false;
+   			}else{
+   				var storage=window.localStorage;
+   				storage.setItem("shift",shift);
+   			}
+       	   if(obj.event === 'edit'){
+                  x_admin_show("轮班编辑", "shift_edit.html", 700,700);
+       	    }
+       	  });    
+    	      
+    	      
+    	      
+    	  var  active = {
+    			  getId:function (data) {//获取选中行的主键
+    	                var idArr = [];
+    	                for(var i=0; i<data.length; i++){
+    	                    console.log(data[i].id)
+    	                    idArr.push(data[i].id)
+    	                }
+    	                console.log(idArr);
+    	                return idArr;
+    	            }
+    	        ,moreDelete:function(){ //批量删除
+    	            var checkStatus = table.checkStatus("demoId")
+	                ,data = checkStatus.data;
+	    		    console.log(data);
+	                var arr=active.getId(data);
+	                if(arr.length==0){
+	                	layer.msg('未选中任何数据');
+	                	return;
+	                }
+	                var idstring=arr.join(",");
+                	layer.confirm('确定要删除吗？', {
+                	  btn: ['确定','取消'] //按钮
+                	}, function(){
+                		layer.msg('确定', {icon: 1});
+                		$.ajax({
+                      	  type:"get",
+                      	  url:"deleteBatchShift.do",
+                      	  data:{"strId":idstring},
+                      	  dataType:"json",
+                      	  success:function(result){
+                      		  if(result.state==1){
+                                    layer.msg(result.msg,{icon:1,time:1000});
+                                    window.location.reload();
+                      		  }else{
+                      			  layer.msg(result.msg,{icon:1,time:1000});
+                      		  }
+                      	  },
+                      	  error:function(){
+                      		  layer.msg("error:请检查代码",{icon:1,time:1000});
+                      	  }
+                        })
+  		                	 
+  		                 
+                	}, function(){
+                		layer.msg('取消', {icon: 2});
+                	   
+                	});
+	            }  
+    	       ,search:function(){
+    	    	   var shiftType=$("#shiftType").val();
+    	    	   var status=$("#status").val();
+    	    	   //执行重载
+	   	    	      table.reload('demoId', {
+	   	    	        page: {
+	   	    	          curr: 1 //重新从第 1 页开始
+	   	    	        }
+	   	    	        ,where: {
+                            "shiftType":shiftType,
+                            "status":status
+	   	    	        }
+	   	    	      });
+    	       }
+    	        };    
+    	      
+    	  $('.x-body .layui-btn').on('click', function () {
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+    	  
+    	});
+       
+
+     /*  layui.use('laypage',function(){
+        var laypage=layui.laypage;
+        laypage.render({
+          elem:"pageDemo",
+          count:88,
+          limit:30
+        });
+      }); */
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+
+       /*用户-停用*/
+      function member_stop(obj,id){
+         
+
+              if($(obj).attr('title')=='启用'){
+
+                //发异步把用户状态进行更改
+                $.ajax({
+	          		 type:"get",
+	          		 url:"/jhz_mtvCms/user/switchStatus.do",
+	          		 data:{"idstring":id,"status":1},
+	          		 dataType:"json",
+	          		 success:function(result){
+	          			 if(result.status==1){
+	          				 
+	                         $(obj).attr('title','停用')
+	                         $(obj).addClass("layui-btn-primary");
+	                         $(obj).find('i').css("color","black").html('&#x1007;');
+	                         $(obj).find("span").html("<span>停用</span>");
+	                         $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+	                         layer.msg('已启用!',{icon: 6,time:1000});
+	          			 }else{
+	          			    layer.msg(result.msg);
+	          			 }
+	          		 },
+	          		 error:function(){
+	          			 layer.msg("errror");
+	          		 }
+	  		   })
+                
+               
+
+              }else{
+            	  $.ajax({
+ 	          		 type:"get",
+ 	          		 url:"/jhz_mtvCms/user/switchStatus.do",
+ 	          		 data:{"idstring":id,"status":0},
+ 	          		 dataType:"json",
+ 	          		 success:function(result){
+ 	          			 if(result.status==1){
+ 	          				 
+ 	          			   $(obj).attr('title','启用');
+ 	          			   $(obj).removeClass("layui-btn-primary");
+ 	                       $(obj).find('i').css('color','blue').html('&#x1005;');
+ 	          				
+                           $(obj).find("span").html("<span>启用</span>");
+ 	                       $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+ 	                       layer.msg('已停用!',{icon: 5,time:1000});
+ 	          			 }else{
+ 	          			    layer.msg(result.msg);
+ 	          			 }
+ 	          		 },
+ 	          		 error:function(){
+ 	          			 layer.msg("errror");
+ 	          		 }
+ 	  		   }) 
+            	  
+            	  
+                
+              }
+              
+         
+      }
+
+      /*用户-删除*/
+      function member_del(obj,id){
+    	  console.log(id);
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $.ajax({
+            	  type:"get",
+            	  url:"deleteShift.do",
+            	  data:{"id":id},
+            	  dataType:"json",
+            	  success:function(result){
+            		  if(result.state==1){
+            			  $(obj).parents("tr").remove();
+                          layer.msg(result.msg,{icon:1,time:1000});
+            		  }else{
+            			  layer.msg(result.msg,{icon:1,time:1000});
+            		  }
+            	  },
+            	  error:function(){
+            		  layer.msg("error:请检查代码",{icon:1,time:1000});
+            	  }
+              })
+              
+             
+          });
+      }
+
+
+
+      
+    </script>
+	<script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+</body>
+
+</html>

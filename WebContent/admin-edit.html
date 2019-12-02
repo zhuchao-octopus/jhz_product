@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+<!--     <script type="text/javascript" src="./js/self.js"></script> -->
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+          <div class="layui-form-item">
+              <label for="cy_wxxAdmin_accounts" class="layui-form-label">
+                  <span class="x-red">*</span>登录名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="cy_wxxAdmin_accounts" name="cy_wxxAdmin_accounts" required="" lay-verify="cy_wxxAdmin_accounts"
+                  autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red">*</span>将会成为您唯一的登入名
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="cy_wxxAdmin_adminName" class="layui-form-label">
+                  <span class="x-red">*</span>真实姓名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="cy_wxxAdmin_adminName" name="cy_wxxAdmin_adminName" required="" lay-verify="cy_wxxAdmin_adminName"
+                  autocomplete="off" class="layui-input">
+              </div>
+              <!-- <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red">*</span>
+              </div> -->
+          </div>
+          <div class="layui-form-item">
+              <label for="cy_wxxAdmin_phone" class="layui-form-label">
+                  手机
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="cy_wxxAdmin_phone" name="cy_wxxAdmin_phone" 
+                  autocomplete="off" class="layui-input">
+              </div>
+              
+          </div>
+          <div class="layui-form-item">
+              <label for="cy_wxxAdmin_email" class="layui-form-label">
+                  邮箱
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="cy_wxxAdmin_email" name="cy_wxxAdmin_email"  
+                  autocomplete="off" class="layui-input">
+              </div>
+              
+          </div>
+          
+          <div class="layui-form-item">
+              <label for="cy_wxxAdmin_sex" class="layui-form-label">
+                  <span class="x-red">*</span>性别
+              </label>
+              <div class="layui-input-block">
+			      <input type="radio" value="1" title="男"  name="cy_wxxAdmin_sex">
+			      <input type="radio"  value="0" title="女"  name="cy_wxxAdmin_sex" checked>
+			    </div>
+       <!--        <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red">*</span>
+              </div> -->
+          </div>
+<!--            <div class="layui-form-item">
+              <label for="L_email" class="layui-form-label">
+                  <span class="x-red">*</span>手机
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="L_email" name="email" required="" lay-verify="email"
+                  autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  <span class="x-red">*</span>
+              </div>
+          </div> -->
+          
+          <div class="layui-form-item">
+              <label for="cy_wxxAdmin_password" class="layui-form-label">
+                  <span class="x-red">*</span>密码
+              </label>
+              <div class="layui-input-inline">
+                  <input type="password" id="cy_wxxAdmin_password" name="cy_wxxAdmin_password" required=""  lay-verify="L_pass"
+                  autocomplete="off" class="layui-input">
+              </div>
+              
+          </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+                  <span class="x-red">*</span>确认密码
+              </label>
+              <div class="layui-input-inline">
+                  <input type="password" id="L_repass" name="repass" required="" lay-verify="repass"
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label class="layui-form-label" for="cy_brand_id">
+               <span class="x-red">*</span>品牌商
+              </label>
+             <div class="layui-input-inline">
+			      <select name="cy_brand_id"  lay-verify="required"  id="brandOption"  lay-search>
+			        <option value=""></option>
+			 <!--        <option value="0">北京</option>
+			        <option value="1">上海</option>
+			        <option value="2">广州</option>
+			        <option value="3">深圳</option>
+			        <option value="4">杭州</option> -->
+			      </select>
+           </div>
+          </div>
+          
+  
+          <div class="layui-form-item">
+              <label for="layui-btn" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="">
+                  确定
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+        
+        var admin=JSON.parse(localStorage.getItem("user_level_one"));
+        $("#cy_wxxAdmin_accounts").val(admin.cy_wxxAdmin_accounts);
+        $("#cy_wxxAdmin_adminName").val(admin.cy_wxxAdmin_adminName);
+        $("#cy_wxxAdmin_phone").val(admin.cy_wxxAdmin_phone);
+        $("#cy_wxxAdmin_email").val(admin.cy_wxxAdmin_email);
+       // console.log(console.log($(this).val==admin.cy_wxxAdmin_sex);)
+        $("input[type='radio']").each(function(){
+        	console.log($(this).val()==admin.cy_wxxAdmin_sex);
+        	if($(this).val()==admin.cy_wxxAdmin_sex){
+        		$(this).prop("checked",true);
+        	}
+        });
+        var brandOption=loadBrand();
+        $("#brandOption").empty().append(brandOption);
+        $("#brandOption option").each(function(){
+        	if($(this).val()==admin.cy_brand_id){
+        		$(this).prop("selected",true);
+        	}
+        });
+        
+        
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+        
+          //自定义验证规则
+          form.verify({
+        	  cy_wxxAdmin_accounts: function(value){
+              if(value.length < 1){
+                return '登录名不能为空';
+              }
+            },
+            cy_wxxAdmin_adminName: function(value){
+                if(value.length < 1){
+                  return '姓名不能为空';
+                }
+              }
+          /*   ,L_pass: function(value){
+            	if(value.length<1){
+            	return "密码不能为空";
+            	}
+            }
+            ,repass: function(value){
+                if($('#cy_wxxAdmin_password').val()!=$('#L_repass').val()){
+                    return '两次密码不一致';
+                }
+            } */
+          });
+
+          //监听提交
+          form.on('submit(add)', function(data){
+        	var cy_wxxAdmin_accounts=data.field.cy_wxxAdmin_accounts;
+        	var cy_wxxAdmin_adminName=data.field.cy_wxxAdmin_adminName;
+        	var cy_wxxAdmin_phone=data.field.cy_wxxAdmin_phone;
+        	var cy_wxxAdmin_email=data.field.cy_wxxAdmin_email;
+        	var cy_wxxAdmin_sex=data.field.cy_wxxAdmin_sex;
+        	var cy_wxxAdmin_password=data.field.cy_wxxAdmin_password;
+        	var cy_wxxAdmin_id=admin.cy_wxxAdmin_id;
+        	var param={
+        			"cy_wxxAdmin_accounts":cy_wxxAdmin_accounts,
+        			"cy_wxxAdmin_adminName":cy_wxxAdmin_adminName,
+        			"cy_wxxAdmin_phone":cy_wxxAdmin_phone,
+        			"cy_wxxAdmin_email":cy_wxxAdmin_email,
+        			"cy_wxxAdmin_sex":cy_wxxAdmin_sex,
+        			"cy_brand_id":cy_brand_id,
+        			"cy_wxxAdmin_password":cy_wxxAdmin_password,
+        			"cy_wxxAdmin_id":cy_wxxAdmin_id
+        	}
+            $.ajax({
+            	type:"post",
+            	url:"/jhz_mtvCms/wxxadmin/updateWxxAdmin.do",
+            /* 	async: false, */
+            	data:param,
+            	dataType:"json",
+            	success:function(res){
+            		if(res.status==1){
+            			 layer.alert("修改成功", {icon: 6},function () {
+            	                // 获得frame索引
+            	                var index = parent.layer.getFrameIndex(window.name);
+            	                //关闭当前frame
+            	                parent.layer.close(index);
+            	            });
+            	            return false;
+            		}else{
+            			layer.alert(res.msg);
+            		}
+            		
+            	},
+            	error:function(res){
+            		layer.msg("error");
+            	}
+            });
+        	return false;
+           
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

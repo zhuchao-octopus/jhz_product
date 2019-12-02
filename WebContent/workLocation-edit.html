@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./lib/layui/layui.all.js"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src="./js/tableSelect.js"></script>
+    
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form" onsubmit="return false;">
+          <div class="layui-form-item">
+              <label for="L_email" class="layui-form-label">
+                  工位排序
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text"  name="locationCode" 
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_username" class="layui-form-label">
+                  产线编码
+              </label>
+              <div class="layui-input-inline">
+			      <select name="lineCode" id="lineCode" lay-filter="lineCode">
+			        <option value="">请选择省</option>
+			        <option value="浙江" selected="">浙江省</option>
+			        <option value="你的工号">江西省</option>
+			        <option value="你最喜欢的老师">福建省</option>
+                   </select>
+               </div>
+          </div>
+         <div class="layui-form-item">
+              <label for="L_username" class="layui-form-label">
+                  产品
+              </label>
+              <div class="layui-input-inline">
+			      <select name="pid" id="pid" lay-filter="pid">
+			        <option value="">请选择省</option>
+			        <option value="浙江" selected="">浙江省</option>
+			        <option value="你的工号">江西省</option>
+			        <option value="你最喜欢的老师">福建省</option>
+                   </select>
+               </div>
+          </div>
+          
+          
+          <div class="layui-form-item">
+              <label for="L_username" class="layui-form-label">
+                  人员
+              </label>
+			  <div class="layui-input-inline">
+					<input type="text"   name="workerCode" placeholder="请录入人员" autocomplete="off" class="layui-input"   id="selectWorker">
+					<button class="layui-btn layui-btn-sm"  id="matchWorker">匹配人员</button>
+			  </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_email" class="layui-form-label">
+                  职能
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text"  name="sjob"  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_username" class="layui-form-label">
+                  工作站
+              </label>
+              <div class="layui-input-inline">
+                 <div class="layui-input-inline">
+			        <select name="mid"  id="workStation"  lay-search>
+				        <option value="1">在线</option>
+				        <option value="0">离线</option>
+                   </select>
+                 </div>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_pass" class="layui-form-label">
+                  状态
+              </label>
+              <div class="layui-input-inline">
+			        <select name="locationState"  >
+				        <option value="1">在线</option>
+				        <option value="0">离线</option>
+                   </select>
+               </div>
+              </div>
+              <div class="layui-form-item">
+					<label class="layui-form-label">允许过站？</label>
+					<div class="layui-input-inline">
+						<select name="crossStatus" lay-filter="aihao">
+							<option value="0">不可</option>
+							<option value="1">可以</option>
+						</select>
+					</div>
+		</div>
+          
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn"  lay-filter="add"  lay-submit="">
+                  确定
+              </button>
+          </div>
+          
+      </form>
+    </div>
+<!--     <script src="js/utils.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/selectPageTool.js" type="text/javascript" charset="utf-8"></script> -->
+    <script>
+    var lineOption=loadAllLineCode();
+    $("#lineCode").empty().append("<option value=''>请选择产线</option>"+lineOption);
+    var productOption = loadProductOption();
+	$("#pid").empty().append("<option value=''>请选择产品名</option>" + productOption);
+	//var workstaionOption=loadAllWorkStation();
+   // $("#workStation").empty().append("<option value=''>请选择工作站</option>"+workstaionOption)
+    var workLocation=JSON.parse(localStorage.getItem("location"));
+    $("input[name='locationCode']").val(workLocation.locationCode);
+    var lineCode=null;
+    if(workLocation.line!=null&&workLocation.line.lineCode!=null){
+ 	   lineCode=workLocation.line.lineCode;
+    }else{
+ 	   lineCode="";
+    }
+    
+    $("#pid option").each(function(){
+    	if($(this).text()==workLocation.wsCode.pname){
+   		  $(this).prop("selected",true);
+   	   } 
+    });
+    
+   
+    
+    $("#lineCode option").each(function(){
+ 	   if($(this).val()==lineCode){
+ 		  $(this).prop("selected",true);
+ 	   }
+    });
+    if(workLocation.worker!=null){
+ 	   $("input[name='workerCode']").val(workLocation.worker.workerName+"("+workLocation.worker.workerCode+")");
+    }else{
+ 	   $("input[name='workerCode']").val();
+    }
+    var  locationState=workLocation.locationState;
+    $("input[name='sjob']").val(workLocation.sjob);
+    var mid=null;
+    if(workLocation.wsCode!=null&&workLocation.wsCode.mid!=null){
+ 	   mid=workLocation.wsCode.mid;
+    }else{
+ 	   mid="";
+    }
+    
+    var workstaionOption=loadAllWorkStation($("#pid").val());
+    $("#workStation").empty().append("<option value=''>请选择工作站</option>"+workstaionOption)
+    
+    $("#workStation option").each(function(){
+ 	   if($(this).val()==mid){
+ 		   $(this).prop("selected",true);
+ 	   }
+    });
+    
+    $("#locationState option").each(function(){
+ 	   if($(this).val()==locationState){
+ 		   $(this).prop("selected",true);
+ 	   }
+    });
+    
+    $("select[name='crossStatus'] option").each(function(){
+ 	   if($(this).val()==workLocation.crossStatus){
+ 		   $(this).prop("selected",true);
+ 	   }
+    });
+    
+    
+    
+        layui.use(['form','layer'], function(){
+          $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+         form.render();
+        
+      	   
+         form.on('select(pid)', function(data){
+      	   var pid=data.value;
+      	   
+      	   console.log("data:"+data);
+      	   $("#workStation").empty().append("<option value=''>请选择工作站</option>"+loadAllWorkStation(pid));
+      	  /*  $("#workStation option").each(function(){
+       	   if($(this).val()==workLocation.wsCode.mid){
+       		   $(this).prop("selected",true);
+       	   }
+          }); */
+      	   form.render('select');
+         }); 
+      	   
+      	   
+          //监听提交
+          form.on('submit(add)', function(data){
+              var param=data.field;
+              var workerCodeDemo=$("input[name='workerCode']").val().trim();
+              param['workerCode']=workerCodeDemo.substring(workerCodeDemo.indexOf("(")+1,workerCodeDemo.indexOf(")"));
+              param['workerName']=workerCodeDemo.substring(0,workerCodeDemo.indexOf("("));
+              var stationText=$("#workStation option:selected").text();
+              param['wsNumber']=stationText.substring(0,stationText.indexOf("("));
+              param['sid']=workLocation.sid;
+              console.log(workerCodeDemo);
+              $.ajax({
+              	type:"post",
+              	url:"line/saveLine.do",
+              	dataType:"json",
+              	data:param,
+              	success:function(result){
+              		if(result.state==1){
+              			layer.alert("修改成功", {icon: 6},function () {
+                              // 获得frame索引
+                              var index = parent.layer.getFrameIndex(window.name);
+                              //关闭当前frame
+                              parent.layer.close(index);
+                          });
+              		}else{
+              			layer.msg(result.msg);
+              		}
+              		 
+              	},
+              	error:function(){
+              		layer.msg("errror");
+              	}
+              });
+             
+              return false;
+          });
+          
+          
+        });
+            
+        $(document).off("click","#matchWorker").on("click","#matchWorker",function(){
+        	  var lineCode=$("#lineCode option:selected").val();
+        	  console.log(lineCode);
+        	  x_admin_show("匹配人员",'./worker_match_list.html?stateTwo=1&lineCode='+lineCode,600,400);
+        	  
+        });
+    
+
+        function GetValue(obj){
+            console.log(obj);
+            
+            $("#selectWorker").val(obj);
+       }
+            
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

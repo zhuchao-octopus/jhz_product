@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.product.fyj.FyjCodeDao">
+    
+       <!-- 產品展示 -->
+       <select id="findAll" resultType="com.cy.domain.product.fyj.FyjCode" parameterType="com.cy.domain.product.fyj.FyjCode">
+          select * from fyjCode
+          <where>
+             <if test="id!=null">
+             id=#{id}
+             </if>
+             
+             <if test="sn!=null and sn!=''">
+             and SN=#{sn} 
+             </if>
+             
+             <if test="boxNum!=null and boxNum!=''">
+             and boxNum=#{boxNum}
+             </if>
+             
+          </where>
+          order by  creatime
+      </select>
+      
+      <!-- 根据SN删除 -->
+      <delete id="deleteBySn" parameterType="com.cy.domain.product.fyj.FyjCode">
+          delete from fyjCode where SN=#{sn}
+      </delete>
+     
+     
+      <!-- 根据箱号删除 -->
+      <delete id="deleteByBoxNum" parameterType="com.cy.domain.product.fyj.FyjCode">
+          delete from fyjCode where boxNum=#{boxNum}
+      </delete>
+  
+      
+ </mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.check.NewCheckDao">
+    <!-- 查询出当日,当前产线当前产品下所有员工的工时信息 -->
+    <select id="findCheckByLineCode" parameterType="map" resultMap="checkMap">
+       select p.wid, p.workerCode,p.workerName,c.ccid,c.upLine,c.downLine,c.nowTm,c.nowDate,w.sid,w.locationCode
+       from cy_productWorker p LEFT JOIN cy_newCheck c on
+       p.workerCode=c.workerCode LEFT JOIN cy_workLocation w on
+       w.workerCode=p.workerCode 
+       <where>
+       <if test="lineCode!=null">
+        w.lineCode=#{lineCode}
+        </if>
+       <if test="nowDate!=null">
+       and c.nowDate=#{nowDate}
+       </if>
+       <if test="pid!=null">
+       and c.pid=#{pid}
+       </if>
+      
+      </where>
+    </select>
+    
+    <resultMap type="com.cy.domain.line.WorkLocation" id="checkMap">
+       <id property="sid" column="wid"/>
+       <result property="locationCode" column="locationCode"/>
+       <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+           <id property="wid" column="wid"/>
+           <result property="workerCode" column="workerCode"/>
+           <result property="workerName" column="workerName"/>
+           <collection property="newCheckList" ofType="com.cy.domain.check.NewCheck">
+              <id property="ccid" column="ccid"/>
+              <result property="upLine" column="upLine"/>
+              <result property="downLine" column="downLine"/>
+              <result property="nowTm" column="nowTm"/>
+              <result property="nowDate" column="nowDate"/>
+           </collection>
+       </association>
+    </resultMap>
+    
+    
+    <!-- 查询出该人当日当前产线下的打卡信息 -->
+    <select id="findNewCheckByWorkerCode" parameterType="com.cy.domain.check.NewCheck" resultMap="selectCheckMap">
+        select * from cy_newCheck 
+        <where>
+        <if test="nowDate!=null">
+        nowDate=#{nowDate} 
+        </if>
+        <if test="line!=null and line.lineCode!=null">
+        and lineCode=#{line.lineCode} 
+        </if>
+        <if test="worker!=null and worker.workerCode!=null">
+        and workerCode=#{worker.workerCode}
+        </if>
+        <if test="workerName!=null">
+        and workerName=#{workerName}
+        </if>
+        <if test="product!=null and product.pid!=null">
+        and pid=#{product.pid} 
+        </if>
+        
+        <if test="pname!=null">
+        and pname=#{pname} 
+        </if>
+        
+        <if test="ccid!=null">
+        and ccid=#{ccid}
+        </if>
+        </where> 
+         order by ccid desc
+    </select>
+    
+    
+    <resultMap type="com.cy.domain.check.NewCheck" id="selectCheckMap">
+        <id property="ccid" column="ccid"/>
+        <result property="upLine" column="upLine"/>
+        <result property="downLine" column="downLine"/>
+        <result property="nowTm" column="nowTm"/>
+        <result property="nowDate" column="nowDate"/>
+        <result property="workerName" column="workerName"/>
+        <result property="pname" column="pname"/>
+        <result property="scstate" column="scstate"/>
+        <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+            <id property="wid" column="wid"/>
+            <result property="workerName" column="workerName"/>
+            <result property="workerCode" column="workerCode"/>
+        </association>
+        <association property="line" javaType="com.cy.domain.line.WorkLine">
+            <id property="lid" column="lid"/>
+            <result property="lineCode" column="lineCode"/>
+        </association> 
+        <association property="product" javaType="com.cy.domain.line.ProductDetails">
+            <id property="pid" column="pid"/>
+            <result property="pname" column="pname"/>
+        </association>
+    </resultMap>
+    
+    <!--增加一条打卡记录 -->
+    <insert id="addNewCheck" parameterType="com.cy.domain.check.NewCheck">
+        insert into cy_newCheck
+        (upLine,
+        downLine,
+        nowTm,
+        workerCode,
+        workerName,
+        nowDate,
+        pid,
+        pname,
+        lineCode,
+        scstate
+        )
+        values(
+        #{upLine},
+        #{downLine},
+        #{nowTm},
+        #{worker.workerCode},
+        #{worker.workerName},
+        #{nowDate},
+        #{product.pid},
+        #{product.pname},
+        #{line.lineCode},
+        #{scstate}
+        
+        )
+    </insert>
+    
+    <!-- 修改一条打卡记录 -->
+    <update id="updateNewCheck" parameterType="com.cy.domain.check.NewCheck" >
+       update cy_newCheck
+       <set>
+       <trim suffixOverrides=",">
+       <if test="upLine!=null">
+       upLine=#{upLine},
+       </if>
+       <if test="downLine!=null">
+       downLine=#{downLine},
+       </if>
+       <if test="nowTm!=null">
+       nowTm=#{nowTm},
+       </if>
+       <if test="worker!=null and worker.workerCode!=null">
+       workerCode=#{worker.workerCode},
+       </if>
+       <if test="worker!=null and worker.workerName!=null">
+       workerName=#{worker.workerName},
+       </if>
+       <if test="nowDate!=null">
+       nowDate=#{nowDate},
+       </if>
+       <if test="product!=null and product.pid!=null">
+       pid=#{product.pid},
+       </if>
+       <if test="product!=null and product.pname!=null">
+       pname=#{product.pname},
+       </if>
+       <if test="line!=null and line.lineCode!=null">
+       lineCode=#{line.lineCode},
+       </if>
+       <if test="scstate!=null">
+       scstate=#{scstate}
+       </if>
+       </trim>
+       </set>
+       where
+       ccid=#{ccid}
+    </update>
+    
+    
+    <!-- 查询出打卡记录对应的所有的产线 -->
+    <select id="findAllLineCode" resultType="String">
+      select distinct lineCode from cy_newCheck
+    </select>
+    
+    <!-- 查询出打卡记录所有的产品 -->
+    <select id="findAllPname" resultType="com.cy.domain.line.ProductDetails">
+      select distinct pname from cy_newCheck
+    </select>
+ </mapper>

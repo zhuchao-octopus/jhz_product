@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="lib/layui/css/layui.css"  media="all">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<div class="layui-btn-group demoTable">
+  <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+  <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+  <button class="layui-btn" data-type="isAll">验证是否全选</button>
+</div>
+<div class="layui-btn-group demoTable" style="margin-bottom: 10px;">
+  <button class="layui-btn" data-type="parseTable">立即转化为数据表格</button>
+</div>
+ 
+<table lay-filter="parse-table-demo" lay-data="{id: 'idTest'}">
+  <thead>
+    <tr>
+      <th lay-data="{field:'',type:'checkbox', fixed: 'left'}"></th>
+      <th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+      <th lay-data="{field:'username', width:80}">用户名</th>
+      <th lay-data="{field:'sex', width:80, sort: true}">性别</th>
+      <th lay-data="{field:'city', width:80}">城市</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>1</td>
+      <td>aaaa</td>
+      <td>2016-11-28</td>
+      <td>人生就像是一场修行 A</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>2</td>
+      <td>bbbb</td>
+      <td>2016-11-29</td>
+      <td>人生就像是一场修行 B</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>3</td>
+      <td>cccc</td>
+      <td>2016-11-30</td>
+      <td>人生就像是一场修行 C</td>
+    </tr>
+  </tbody>
+</table>
+ 
+ 
+<script src="lib/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+layui.use('table', function(){
+  var table = layui.table;
+ 
+  var $ = layui.$, active = {
+    parseTable: function(){
+      table.init('parse-table-demo', { //转化静态表格
+        //height: 'full-500'
+      });
+    },
+    getCheckLength: function(){ //获取选中数目
+      var checkStatus = table.checkStatus('idTest')
+      ,data = checkStatus.data;
+      layer.msg('选中了：'+ data.length + ' 个');
+    },
+    getCheckData: function(){ //获取选中数据
+      var arr=[];
+      var checkStatus = table.checkStatus('idTest')
+      ,data = checkStatus.data;
+ 
+      for(var i=0;i<data.length;i++){    //循环筛选出id
+        arr.push(data[i].id);
+      }
+      alert(arr)
+    },
+ 
+  };
+ 
+ 
+  $('.demoTable .layui-btn').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
+ 
+</body>

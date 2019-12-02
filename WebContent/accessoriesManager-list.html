@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+     <link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.all.js" charset="utf-8"></script>
+     <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div >
+      <span class="layui-breadcrumb">
+        <a href="">仓库管理</a>
+        <a href="">辅料仓</a>
+        <!-- <a>
+          <cite>导航元素</cite></a> -->
+      </span>
+      
+      <ul class="layui-nav"  style="text-align: right">
+             <!-- <li class="layui-nav-item"  style="margin-right: 20px"> 
+                <a href="javascript:void(0)">当前为推送应用列表</a>
+				<dl class="layui-nav-child">
+					<dd>
+						<a href="marketApp-list.html"  target="_self">切换为市场应用列表</a>
+					</dd>
+				
+				</dl>
+			</li> -->
+			<li class="layui-nav-item">	
+		      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+		        <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		    </li>    
+        </ul>
+    </div>
+    <div class="x-body">
+ 
+      
+      
+      <div class="layui-row" style="text-align: center">
+       <form class="layui-form"  onsubmit="return false;">
+           <div class="layui-inline">
+             <input type="text" name="pn"  id="pn" placeholder="请输入料号" autocomplete="off"  class="layui-input">
+           </div>
+           <!-- <div class="layui-inline">
+	          <select   id="custHeader">
+				  
+			  </select>
+		   </div>
+		   <div class="layui-inline">
+	          <select   id="lunchHeader">
+				  <option value="010">北京</option>
+				  <option value="021">上海</option>
+				  <option value="0571">杭州</option>
+				  <option value="">请选择一个Lunch</option>
+			  </select>
+		   </div>
+		    <div class="layui-inline">
+	          <select   id="statusHeader">
+				  <option value="">---请选择启用状态---</option>
+				  <option value="1">已启用</option>
+				  <option value="0">已停用</option>
+			  </select>
+		   </div>
+		    <div class="layui-inline">
+	          <select   id="pushHeader">
+	              <option value="">---请选择推送类型---</option>
+				  <option value="0">全局应用</option>
+				  <option value="1">局部应用</option>
+			  </select>
+		   </div> -->
+          <button class="layui-btn"  lay-submit="" lay-filter="sreach"  data-type="search"><i class="layui-icon">&#xe615;</i></button>
+       </form>
+      </div>
+      <xblock id="app-push-button">
+        <button class="layui-btn" onclick="x_admin_show('出(入)库','./finishedProductsWarehouse-add.html?paramStr=plc',700,700)"><i class="layui-icon">&#xe61f;</i>出(入)库</button>
+        <button class="layui-btn" onclick="x_admin_show('待打印数据','./readyToPrint5.html',1200,700)"><i class="layui-icon">&#xe60a;</i>待打印数据</button>
+<!--          <button class="layui-btn"  data-type="startApp"><i class="layui-icon">&#x1005;</i>启用</button>
+         <button class="layui-btn layui-btn-danger"  data-type="stopApp"><i class="layui-icon">&#x1007;</i>停用</button>
+         <button class="layui-btn"  data-type="push"><i class="layui-icon">&#xe65b;</i>推送</button> -->
+        <!-- <span class="x-right" style="line-height:40px">共有数据：88 条</span> -->
+        <button class="layui-btn" onclick="x_admin_show('待审核','./instruct_list.html?paramStr=plc',1000,700)"><i class="layui-icon">&#xe60a;</i>待审核数据</button>
+        
+      </xblock>
+      <table class="layui-table"  id="table-demo"  lay-filter="app-demo"></table>
+      
+   
+      
+       
+
+    </div>
+    <script type="text/html"  id="barDemo">
+            <button  class='layui-btn layui-btn-sm permission' lay-event='details'>
+	               <i class='layui-icon'>&#xe617;</i>查看
+	       </button>
+    </script>
+    <script type="text/html"  id="link_demo">
+          {{#  if(d.advLink != null){ }}
+           <a href={{d.advLink}}  target=“_blank" style="color:#009688">{{d.advLink}}</a>
+          {{#  } }}
+    </script>
+    <script type="text/html"  id="img_demo">
+           {{#  if(d.cy_advertisement_imgAddress != null){ }}
+           <a href={{d.cy_advertisement_imgAddress}}  target=“_blank" style="color:#009688">{{d.cy_advertisement_imgAddress}}</a>
+          {{#  } }}
+          
+    </script>
+    <script type="text/html" id="toolbarDemo">     
+	</script>
+    <script type="text/html"  id="vedio_demo">
+         
+            {{#  if(d.cy_advertisement_videoAddress != null){ }}
+                <a href={{d.cy_advertisement_videoAddress}}  target=“_blank" style="color:#009688">{{d.cy_advertisement_videoAddress}}</a>
+            {{#  } }}
+    </script>
+    <script>
+    /*  var customerOption=loadCustomer(cy_brand_id);
+     $("#custHeader").empty().append(customerOption+"<option value=''>---请选择一个客户---</option>");
+     var lunchOption=loadLunchOption(cy_brand_id);
+     $("#lunchHeader").empty().append("<option value=''>---请选择一个lunch---</option>"+lunchOption); */
+     
+     layui.use('table',function(){
+    	 var table=layui.table;
+    	 table.render({
+    		 elem: '#table-demo'
+		     ,height: 500
+		     ,id:"app-push-id"
+		    ,url:'tv/loadps.do'
+		    ,where:{
+		    	storeState:5
+		    }		
+		    ,page: true //开启分页
+		    ,id:"app-push-id"
+		    ,cols: [[ //表头z
+		      {type:'checkbox'},        
+		       {field: 'productName', title: '品名', width:200, sort: true}
+		      ,{field: 'pn', title: '料号', width:200,sort: true}
+		      ,{field: 'specification', title: '说明', width:450,sort: true} 
+		      ,{field: 'weight', title: '重量', width:200,sort: true}
+		      ,{field: 'putNumber', title: '入库个数', width:150,sort: true}
+		      ,{field: 'outNumber', title: '出库个数', width:150,sort: true}
+		      ,{field: 'bindingQuantity', title: '绑定数量', width:150, sort: true}
+		      ,{field: 'residue', title: '库存', width:150, sort: true}
+		      ,{field: '', title: '出入库记录', width: 150,align:'center',toolbar:"#barDemo"}
+		     /* 
+		      ,{fileld:"",title:"操作", width:380, align:'center', toolbar:"#barDemo"} */
+		    ]]
+		    ,toolbar : '#toolbarDemo'
+				,defaultToolbar : ['exports' ]
+		    ,done:function(){
+		    	if(!contains('plc_edit',per_arr)){
+			    	  $("#app-push-button").css("display","none");
+			    	  $(".layui-table .permission").css("display","none");
+			      }
+		    }
+		  });
+    	 
+    	 
+    	 var active={
+    			 push:function(){
+    				 var checkStatus = table.checkStatus("app-push-id")
+	                 ,data = checkStatus.data;
+    				 var arr=active.getId(data);
+    				 var noPitArr=active.getNoPit(data);
+    				 
+ 	                 if(arr.length==0){
+ 	                	layer.msg('未选中任何数据',{"icon":7,time:5000});
+ 	                	return;
+ 	                }
+ 	                active.getCid(data);
+ 	                //layer.msg("批量推送要求每项应用从属客户一样,请确认!",{icon:2, time: 5000});
+ 	                /* console.log("noPitArr:"+noPitArr);
+ 	                console.log(noPitArr.length);
+ 	                 if(noPitArr.length>0){
+ 	                	 layer.msg(noPitArr.join(",")+"在推送前应先加入坑位!",{"icon":7,time:5000});
+ 	                	 return false;
+ 	                 } */
+ 	                var idstring=arr.join(",");
+ 	               if(!window.localStorage){
+	    			    layer.msg("浏览器不支持localstorage");
+	    			    return false;
+	    			}else{
+	    				var storage=window.localStorage;
+	    				storage.setItem("appIdString",idstring);
+	    			}
+ 	                x_admin_show("设备推送","./mac-app-push.html", 900, 700);
+    			 }
+    			 ,startApp:function(){
+    				 var checkStatus = table.checkStatus("app-push-id")
+	                 ,data = checkStatus.data;
+    				 var arr=active.getId(data);
+    				 
+ 	                 if(arr.length==0){
+ 	                	layer.msg('未选中任何数据');
+ 	                	return;
+ 	                }
+ 	                var idstring=arr.join(",");
+ 	                console.log("idstring",idstring);
+ 	                layer.confirm("确定要启用吗？",{btn:["确定","取消"]},function(){
+ 	                	layer.closeAll();
+ 	                	  $.ajax({
+ 	                		 type:"get",
+ 	 	                	 url:"/jhz_mtvCms/syy/startOrStopApp.do",
+ 	 	                	 data:{"idstring":idstring,"status":1},
+ 	 	                     dataType:"json",
+ 	 	                     success:function(result){
+ 	 	                    	 if(result.status==1){
+ 	 	                    		table.reload("app-push-id",{
+	                				    	page:{
+	                				    		curr:$("#layui-table-page1 .layui-laypage-skip").find("input").val()
+	                				    	}
+	                				    })
+ 	 	                    	 }else{
+ 	 	                    		 layer.msg(result.msg);
+ 	 	                    	 }
+ 	 	                     },
+ 	 	                     error:function(result){
+ 	 	                    	layer.msg("errror");
+ 	 	                     }
+ 	                	  });
+ 	                })
+ 	               
+ 	                
+ 	                
+    			 }
+    	         ,stopApp:function(){
+    				 var checkStatus = table.checkStatus("app-push-id")
+	                 ,data = checkStatus.data;
+    				 var arr=active.getId(data);
+    				 
+ 	                 if(arr.length==0){
+ 	                	layer.msg('未选中任何数据');
+ 	                	return;
+ 	                }
+ 	                var idstring=arr.join(",");
+ 	                console.log("idstring",idstring);
+ 	                layer.confirm("确定要停用吗？",{btn:["确定","取消"]},function(){
+ 	                	layer.closeAll();
+	                	  $.ajax({
+	                		 type:"get",
+	 	                	 url:"/jhz_mtvCms/syy/startOrStopApp.do",
+	 	                	 data:{"idstring":idstring,"status":0},
+	 	                     dataType:"json",
+	 	                     success:function(result){
+	 	                    	 if(result.status==1){
+	 	                    		table.reload("app-push-id",{
+	                				    	page:{
+	                				    		curr:$("#layui-table-page1 .layui-laypage-skip").find("input").val()
+	                				    	}
+	                				    })
+	 	                    	 }else{
+	 	                    		 layer.msg(result.msg);
+	 	                    	 }
+	 	                     },
+	 	                     error:function(result){
+	 	                    	layer.msg("errror");
+	 	                     }
+	                	  });
+	                })   
+ 			     }
+    	         ,getNoPit:function(data){
+    	           	
+    	        	 var noPitArr=[];
+    	        	 for(var i=0;i<data.length;i++){
+    	        		
+    	        		 if(data[i].syy_app_local==""||data[i].syy_app_local==null||data[i].syy_app_local==undefined){
+    	        			 noPitArr.push(data[i].syy_app_name);
+    	        		 }
+    	        	 }
+    	        	 return noPitArr;
+    	         }
+    	         ,getCid:function(data){
+    	        	 var cidArr=[];
+    	        	 for(var i=0;i<data.length;i++){
+    	        		 //idArr.push(data[i].syy_app_id)
+    	        		 cidArr.push(data[i].cid);
+    	        	 }
+    	         	 for(var i=0;i<cidArr.length;i++){
+ 				    	if(cidArr[0]!=cidArr[i]){
+ 				    
+ 				    		layer.msg("批量推送要求每项应用从属客户一样,请确认!",{icon:2, time: 5000});
+ 				    		return;
+ 				    	}
+ 				    }
+ 	        	 if(cidArr.length!=0){
+ 				    	if(!window.localStorage){
+ 		    			    layer.msg("浏览器不支持localstorage");
+ 		    			    return false;
+ 		    			}else{
+ 		    				var storage=window.localStorage;
+ 		    				storage.setItem("appCid",cidArr[0]);
+ 		    			}
+ 				    }
+ 	        	 return cidArr;
+    	         }
+    	         ,getId:function(data){
+    	        	 var idArr=[];
+    	        	
+    	      
+    	        	 for(var i=0;i<data.length;i++){
+    	        		 idArr.push(data[i].syy_app_id)
+    	        		 //cidArr.push(data[i].cid);
+    	        		 
+    	        	 }
+    	        	 return idArr;
+    	         }
+    	         ,search:function(){
+        				 var pn=$("#pn").val().trim();
+        				//执行重载
+    	   	    	      table.reload('app-push-id', {
+    	   	    	        page: {
+    	   	    	          curr: 1 //重新从第 1 页开始
+    	   	    	        }
+    	   	    	        ,where: {	
+                                "pn":pn
+    	   	    	        }
+    	   	    	      });
+    	       
+    	      }
+    	 };
+    	 $('.x-body .layui-btn').on('click', function () {
+             var type = $(this).data('type');
+             active[type] ? active[type].call(this) : '';
+         });
+    	 table.on("tool(app-demo)",function(obj){
+    		 var data = obj.data; //获得当前行数据
+    		  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+    		  var tr = obj.tr; //获得当前行 tr 的DOM对象
+    		     if(layEvent === 'addPit'){ //加入
+    			    layer.msg("加入");
+    			    var app=JSON.stringify(data)
+   	       		    if(!window.localStorage){
+   	       			    layer.msg("浏览器不支持localstorage");
+   	       			    return false;
+   	       			}else{
+   	       				var storage=window.localStorage;
+   	       				storage.setItem("addApp",app);
+   	       			}
+    			    x_admin_show('加入坑位','./pit_Carousel.html',500,700);
+    			  } else if(layEvent === 'delete'){ //删除
+    			    layer.confirm('真的删除行么', function(index){
+    			    	$.ajax({
+    			    		type:"get",
+    			    		url:"/jhz_mtvCms/syy/deleteApp.do",
+    			    		data:{"syy_app_id":data.syy_app_id},
+    			    	    dataType:"json",
+    			    	    success:function(res){
+    			    	    	if(res.status==0){
+    			    	    		obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+    			    			    layer.close(index);
+    			    	    	}else{
+    			    	    		layer.msg(res.msg);
+    			    	    	}
+    			    	    },
+    			    	    error:function(){
+    			    	    	layer.msg("error");
+    			    	    }
+    			    	});
+    			      
+    			      //向服务端发送删除指令
+    			    });
+    			  } else if(layEvent === 'update'){ //编辑
+    			    var app=JSON.stringify(data)
+   	       		    if(!window.localStorage){
+   	       			    layer.msg("浏览器不支持localstorage");
+   	       			    return false;
+   	       			}else{
+   	       				var storage=window.localStorage;
+   	       				storage.setItem("app",app);
+   	       			}
+          		    x_admin_show("应用列表编辑", "./app-push-edit.html", 700, 700);
+    			    layer.msg("编辑")
+    			    //同步更新缓存对应的值
+    			    obj.update({
+    			      username: '123'
+    			      ,title: 'xxx'
+    			    });
+    			  }else if(layEvent === 'details'){//推送
+    				    var mid=data.id;
+     	       		    if(!window.localStorage){
+     	       			    layer.msg("浏览器不支持localstorage");
+     	       			    return false;
+     	       			}else{
+     	       				var storage=window.localStorage;
+     	       				storage.setItem("mid5",mid);
+     	       			}
+    				  layer.msg("查看出入库记录")
+    				  x_admin_show('当前料出入库记录','./outAndInRecord5.html',1200,700);
+    			  }
+    	 });
+    	 
+    	
+     });
+     
+    
+    
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+
+       /*用户-停用*/
+      function member_stop(obj,id){
+          layer.confirm('确认要停用吗？',function(index){
+
+              if($(obj).attr('title')=='启用'){
+
+                //发异步把用户状态进行更改
+                $(obj).attr('title','停用')
+                $(obj).find('i').html('&#xe62f;');
+
+                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+                layer.msg('已停用!',{icon: 5,time:1000});
+
+              }else{
+                $(obj).attr('title','启用')
+                $(obj).find('i').html('&#xe601;');
+
+                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+                layer.msg('已启用!',{icon: 5,time:1000});
+              }
+              
+          });
+      }
+
+      /*用户-删除*/
+      function member_del(obj,id){
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $(obj).parents("tr").remove();
+              layer.msg('已删除!',{icon:1,time:1000});
+          });
+      }
+
+
+
+      function delAll (argument) {
+
+        var data = tableCheck.getData();
+  
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+      }
+      
+      
+      function GetStoreState(){
+    	  return "5"
+      }
+      
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

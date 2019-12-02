@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<link rel="stylesheet" href="./lib/layui/css/layui.css">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<script type="text/javascript" src="./js/self.js"></script>
+
+<script type="text/javascript" src="./lib/layui/layui.all.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="./lib/layui/layui.js"
+	charset="utf-8"></script>	
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="layui-tab layui-tab-card">
+		<ul class="layui-tab-title">
+			<li class="layui-this">统计表</li>
+			<!-- <li>统计图</li> -->
+		</ul>
+		<div class="layui-tab-content" style="height: 640px;">
+			<div class="layui-tab-item layui-show">
+
+				<div class="x-body">
+					<div class="layui-row" >
+
+						<!-- <div class="layui-inline">
+							<input type="text" name="cy_advertisement_name"
+								id="cy_advertisement_name" placeholder="请输入广告名"
+								autocomplete="off" class="layui-input">
+						</div> -->
+
+						<!-- <div class="layui-inline" >
+							<select id="apply_id">
+								<option value="date">按日期统计</option>
+								<option value="month">按月份统计</option>
+								<option value="year">按年份统计</option>
+							</select>
+						</div> -->
+						<div class="layui-input-inline" id="apply_date" style="display: none">
+					         <input type="text" class="layui-input"  placeholder="yyyy-MM-dd"  id="timeDemo">
+					     </div>
+						<!-- <div class="layui-input-inline" id="apply_month" style="display: none" >
+					         <input type="text" class="layui-input"  placeholder="yyyy-MM" id="monthDemo">
+					     </div>
+					
+						<div class="layui-input-inline" id="apply_year"  style="display: none">
+					         <input type="text" class="layui-input" placeholder="yyyy" id="yearDemo">
+					     </div> -->
+					     <div class="layui-inline"> 
+					       <button class="layui-btn"  lay-submit="" lay-filter="search"  data-type='search'><i class="layui-icon">&#xe615;</i></button>
+					      </div> 
+						<!-- </form> -->
+					</div>
+			       <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+					  <legend id="regon-mac">引用区块 - 默认风格</legend>
+					</fieldset>
+					<table class="layui-table" id="analy-demo" lay-filter='ana-filter'></table>
+				</div>
+			</div>
+			<!-- <div class="layui-tab-item">2</div> -->
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+     
+     var url=window.location.search;
+     console.log(url);
+     var searchURL = url.substring(1, url.length);
+     var mac=searchURL.split("&")[0].split("=")[1];
+     var cid=searchURL.split("&")[1].split("=")[1];
+     var typeWay=searchURL.split("&")[2].split("=")[1];
+     console.log("url:"+url);
+     console.log(typeWay);
+     $("#regon-mac").text(mac);
+     $("#apply_date").css("display","inline-block");
+     layui.use('laydate', function(){
+		  var laydate = layui.laydate;  //常规用法
+		  laydate.render({
+		    elem: '#timeDemo'
+		  });
+     }) 
+     layui.use('laydate', function(){
+		  var laydate = layui.laydate;  //常规用法
+		  laydate.render({
+		    elem: '#monthDemo'
+		    ,type:"month"
+		  });
+     }) 
+      layui.use('laydate', function(){
+		  var laydate = layui.laydate;  //常规用法
+		  laydate.render({
+		    elem: '#yearDemo'
+		    ,type:"year"
+		  });
+     }) 
+    /*  $("#apply_id").change(function(){
+    	 if($(this).val()=="month"){
+    		 $("#apply_month").css("display","inline-block");
+    		 $("#apply_year").css("display","none");
+    		 $("#apply_date").css("display","none");
+    	 }else if($(this).val()=="year"){
+    		 $("#apply_month").css("display","none");
+    		 $("#apply_year").css("display","inline-block");
+    		 $("#apply_date").css("display","none");
+    	 }else if($(this).val()=="date"){
+    		 $("#apply_month").css("display","none");
+    		 $("#apply_year").css("display","none");
+    		 $("#apply_date").css("display","inline-block");
+    	 }
+     }); */
+     
+     layui.use("table",function(){
+    	 var table=layui.table;
+    	 table.render({
+    		     elem: '#analy-demo'
+     		     ,height: 400
+     		    ,url: '/jhz_mtvCms/user/loadAnaSy.do'
+     		    ,id:"analy-id"
+     		    ,where:{
+     		    	"brandId":cy_brand_id,
+     		    	"mac":mac,
+     		    	"cid":cid,
+     		    	"searchType":"date",
+     		    	"typeWay":typeWay
+     		    }
+     		    ,totalRow:true
+     		    ,page: true //开启分页
+     		    ,cols: [[ //表头z
+     		      /*  {type:'checkbox'}, */
+     		        {type: 'checkbox', fixed: 'left',totalRowText: '合计'}     
+    	      
+     		       ,{field: 'numbers', title: '登录次数', width:150, sort: true,totalRow:true}
+     		      ,{field: 'onlineHours', title: '在线时间(小时)', width:200,sort:true,totalRow:true}
+     		      ,{field: 'oDate', title: '分组', width:200,sort: true} 
+
+     		    ]]
+     		    ,done:function(){
+     		    	/* if(!contains("user_one_cz",per_arr)){
+    		    		 $("#admin-button").css("display","none");
+    		    		 $(".layui-table .permission").css("display","none");
+    		    	} */
+     		    }
+    	 });
+    	 
+    	 var active={
+    			search:function(){
+    				//var searchType=$("#apply_id option:selected").val();
+    				var currTime=$("#timeDemo").val();
+    				/* if(searchType=='date'){
+    					currTime=$("#timeDemo").val();
+    				}else if(searchType=='month'){
+    					currTime=$("#monthDemo").val();
+    				}else{
+    					currTime=$("#yearDemo").val();
+    				} */
+    				 table.reload('analy-id', {
+ 	   	    	        page: {
+ 	   	    	          curr: 1 //重新从第 1 页开始
+ 	   	    	        }
+ 	   	    	        ,where: {
+                             //"searchType":searchType,
+                             "currTime":currTime
+ 	   	    	        }
+ 	   	    	      });
+    			}
+    	 }
+    	 $('.x-body .layui-btn').on('click', function () {
+             var type = $(this).data('type');
+             active[type] ? active[type].call(this) : '';
+         });
+   	  
+     });
+     
+     
+
+
+</script>
+
+</html>

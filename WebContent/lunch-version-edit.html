@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+          
+           
+         
+          <div class="layui-form-item">
+              <label for="phone" class="layui-form-label">
+                  <span class="x-red">*</span>应用
+              </label>
+             <div class="layui-upload">
+				  <button type="button" class="layui-btn"   id="uploadApp"><i class="layui-icon">&#xe67c;</i>上传应用</button>
+		  </div>		 
+          </div>
+          <div class="layui-form-item"  style="display: none"  id="appAddress">
+              <label for="syy_app_download" class="layui-form-label">
+                  <span class="x-red">*</span>应用地址回显
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="syy_app_download" name="cy_versions_path" 
+                  autocomplete="off" class="layui-input" disabled="disabled">
+              </div>
+          </div>
+          <div class="layui-form-item"  style="display: none"  id="lunch-version">
+              <label for="syy_app_name" class="layui-form-label">
+                  <span class="x-red">*</span>版本号
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="cy_version_num"  name="cy_versions_versions"   autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item"  style="display: none"  id="package">
+              <label for="syy_app_packageName" class="layui-form-label">
+                  <span class="x-red">*</span>包名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="syy_app_packageName" name="syy_app_packageName" 
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item"  style="display: none" id="md5">
+              <label for="syy_app_MD5" class="layui-form-label">
+                  <span class="x-red">*</span>MD5
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="syy_app_MD5" name="cy_versions_md5" 
+                  autocomplete="off" class="layui-input" disabled="disabled">
+              </div>
+          </div>
+          <div class="layui-form-item"  style="display: none" id="app-size">
+              <label for="cy_versions_size" class="layui-form-label">
+                  <span class="x-red">*</span>大小
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="cy_versions_size" name="cy_versions_size" 
+                  autocomplete="off" class="layui-input" disabled="disabled">
+              </div>
+          </div>
+        
+          <div class="layui-form-item">
+              <label for="lunchname" class="layui-form-label">
+                  <span class="x-red">*</span>LUNCHER
+              </label>
+              <div class="layui-input-inline">
+                  <select id="lunchname" name="lunchname" class="valid">
+                    <option value="shentong">申通物流</option>
+                    <option value="shunfeng">顺丰物流</option>
+                  </select>
+              </div>
+          </div>
+          
+          
+          <div class="layui-form-item layui-form-text">
+              <label for="syy_app_introduce" class="layui-form-label">
+                  描述
+              </label>
+              <div class="layui-input-block">
+                  <textarea placeholder="请输入内容"  id="syy_app_introduce" name="cy_versions_info" class="layui-textarea"></textarea>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add"  lay-submit="" >
+                  确定
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+	    var url=window.location.search;
+	    var cy_versions_id= url.substring(1, url.length).split("&")[0].split("=")[1];
+	    var lunchname=url.substring(1, url.length).split("&")[1].split("=")[1];
+	    console.log("cy_versions_id",cy_versions_id);
+	    console.log("lunchname",lunchname);
+	    
+        var lunchOption=loadLunchOption(cy_brand_id);
+        $("#lunchname").empty().append(lunchOption);
+        $("#lunchname option").each(function(){
+        	if($(this).val()==lunchname){
+        		$(this).prop("selected",true);
+        	}
+        });
+        layui.use(['form','layer','upload'], function(){
+          $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer
+          ,upload=layui.upload;
+          upload.render({
+        	  elem:"#uploadApp"
+        	  ,url:'/jhz_mtvCms/ad/upLoad.do'
+        	  ,accept:"file"
+        	  ,exts:"apk"
+        	  ,auto:true
+        	  ,data:{"folderName":"jhzVersion"}
+        	  ,before:function(obj){
+        		  layer.load();
+        	  }
+        	  ,done:function(res,index,upload){
+        		  layer.closeAll('loading');
+        		  $("#appAddress").css("display","block");
+        		  $("#md5").css("display","block");
+        		  $("#package").css("display","block");
+        		  $("#app-size").css("display","block");
+        		  $("#lunch-version").css("display","block");
+        		  $("#cy_version_num").val(res.data.versionName);
+        		  $("#syy_app_download").val(res.data.syy_app_download);
+        		  $("#syy_app_MD5").val(res.data.syy_app_MD5);
+        		  $("#syy_app_packageName").val(res.data.syy_app_packageName);
+        		  $("#cy_versions_size").val(res.data.syy_app_size+"kb");
+        		  
+        	  }
+          });
+        
+          
+          
+       
+
+          //监听提交
+          form.on('submit(add)', function(data){
+        
+            var cy_versions_name=data.field.lunchname;
+            var cy_versions_versions=data.field.cy_versions_versions;
+            var cy_versions_info=data.field.cy_versions_info;
+            var cy_versions_md5=data.field.cy_versions_md5;
+            var lunchname=data.field.lunchname;
+            var cy_versions_size=data.field.cy_versions_size;
+            var cy_versions_path=data.field.cy_versions_path;
+            var param={
+            		"cy_brand_id":cy_brand_id,
+            		"cy_versions_versions":cy_versions_versions,
+            		"cy_versions_info":cy_versions_info,
+            		"cy_versions_name":cy_versions_name,
+            		"cy_versions_md5":cy_versions_md5,
+            		"lunchname":lunchname,
+            		"cy_versions_size":cy_versions_size,
+            		"cy_versions_path":cy_versions_path,
+            		"cy_versions_id":cy_versions_id
+            }
+            console.log(param);
+            $.ajax({
+               type:"get",
+               url:"/jhz_mtvCms/syyMarket/updateAppVersion.do",
+               data:param,
+               dataType:"json",
+               success:function(res){
+            	   if(res.status==0){
+            		   layer.alert(res.msg, {icon: 6},function () {
+                           // 获得frame索引
+                           var index = parent.layer.getFrameIndex(window.name);
+                           //关闭当前frame
+                           parent.layer.close(index);
+                       });
+            		   //parent.layer.close(index);
+            	   }else{
+            		   layer.alert(res.msg);
+            	   }
+               },
+               error:function(){
+            	   layer.alert("error");
+               }
+            }); 
+            
+            return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

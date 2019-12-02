@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.check.CheckEquipmentDao">
+    <select id="getEquipmentList" parameterType="com.cy.domain.check.CheckEquipment" resultType="com.cy.domain.check.CheckEquipment">
+        select * from cy_equipment 
+        <where>
+            <if test="id  != null and id != ''">id like concat('%',#{id},'%')</if>
+            <if test="name != null and name != ''">and name like concat('%',#{name},'%')</if>
+            <if test="information != null and information != ''">and information like concat('%',#{information},'%')</if>
+            <if test="brand != null and brand != ''">and brand like concat('%',#{brand},'%')</if>
+            <if test="region != null and region != ''">and region like concat('%',#{region},'%')</if>
+            <if test="sn1 !=null and sn1 != ''">and sn1 like concat('%',#{sn1),'%')</if>
+            <if test="mac1 != null and mac1 != ''">and mac1 like concat('%',#{mac1},'%')</if>
+            <if test="ip1 != null and ip1 != ''">and ip1 like concat('%',#{ip1},'%')</if>
+            <if test="ip2 != null and ip2 != ''">and ip2 like concat('%',#{ip2},'%')</if>
+            <if test="sn1 !=null and sn1 != ''">and sn1 like concat('%',#{sn2),'%')</if>
+            <if test="mac2 != null and mac2 != ''">and mac2 like concat('%',#{mac2},'%')</if>
+            <if test="way != null and way != ''">and way = #{way}</if>
+            <if test="status != null and status != ''">and status = #{status}</if>
+        </where>
+        limit #{pageSize},#{limit}
+    </select>
+	 <select id="count" parameterType="com.cy.domain.check.CheckEquipment" resultType="java.lang.Integer">
+        select count(id) from cy_equipment
+        <where>
+            <if test="id  != null and id != ''">id like concat('%',#{id},'%')</if>
+            <if test="name != null and name != ''">and name like concat('%',#{name},'%')</if>
+            <if test="information != null and information != ''">and information like concat('%',#{information},'%')</if>
+            <if test="brand != null and brand != ''">and brand like concat('%',#{brand},'%')</if>
+            <if test="region != null and region != ''">and region like concat('%',#{region},'%')</if>
+            <if test="sn1 !=null and sn1 != ''">and sn1 like concat('%',#{sn1),'%')</if>
+            <if test="mac1 != null and mac1 != ''">and mac1 like concat('%',#{mac1},'%')</if>
+            <if test="ip1 != null and ip1 != ''">and ip1 like concat('%',#{ip1},'%')</if>
+            <if test="ip2 != null and ip2 != ''">and ip2 like concat('%',#{ip2},'%')</if>
+            <if test="sn1 !=null and sn1 != ''">and sn1 like concat('%',#{sn2),'%')</if>
+            <if test="mac2 != null and mac2 != ''">and mac2 like concat('%',#{mac2},'%')</if>
+            <if test="way != null and way != ''">and way = #{way}</if>
+            <if test="status != null and status != ''">and STATUS = #{status}</if>
+        </where>
+        
+    </select>
+    
+	 <select id="findEquipmentByMac1" resultType="com.cy.domain.check.CheckEquipment">
+        select * from cy_equipment  where mac1=#{mac1}
+     </select>
+	 
+	 <insert id="insertEquipment" parameterType="com.cy.domain.check.CheckEquipment">
+	    insert into cy_equipment 
+	    (name, information, brand, region, note, sn1, mac1, ip1, sn2, mac2, ip2,way, status)
+	    
+	    values(
+	    	#{name},
+	    	#{information},
+	    	#{brand},
+	    	#{region},
+	    	#{note},
+	    	#{sn1},
+	    	#{mac1},
+	    	#{ip1},
+	    	#{sn2},
+	    	#{mac2},
+	    	#{ip2},
+	    	#{way},
+	    	#{status}
+	    )
+	     
+	 </insert>
+	 
+	 <insert id="insertEquipmentLists" parameterType="com.cy.domain.check.CheckEquipment">
+	    insert into cy_equipment 
+	    (name, information, brand, region, note, sn1, mac1, ip1, sn2, mac2, ip2,way, status)
+	    
+	    values
+	    	<foreach collection ="list"  item="item"  separator =",">
+			(
+			#{item.name},
+			#{item.information},
+			#{item.brand},
+			#{item.region},
+			#{item.note},
+			#{item.sn1},
+			#{item.mac1},
+			#{item.ip1},
+			#{item.sn2},
+			#{item.mac2},
+			#{item.ip2},
+			#{item.way},
+			#{item.status}
+			)
+		</foreach>
+	 </insert>
+	 
+	 <delete id="deleteEquipment" parameterType="Integer">
+		delete from
+		cy_equipment where id = #{id}
+	</delete>
+		<delete id="deleteBatchEquipment" parameterType="Integer">
+		delete from
+		cy_equipment where id=#{strId}
+	</delete>
+	
+	<update id="updateEquipment" parameterType="com.cy.domain.check.CheckEquipment">
+	    update cy_equipment 
+		<set>
+		    status = #{status}
+		</set>
+	    where id = #{id}
+	</update>
+	 
+	 <update id="updateBatchEquipment" parameterType="com.cy.domain.check.CheckEquipment" >
+	     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+	     	update cy_equipment
+	     	<set>
+	     	    status = #{item.status}
+	     	</set>
+	     	where id=#{item.id}
+	     </foreach>
+	 </update>
+ </mapper>

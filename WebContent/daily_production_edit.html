@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<!-- <script type="text/javascript" src="./js/self.js"></script> -->
+<script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+
+
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="x-body">
+		<form class="layui-form">
+			<div class="layui-form-item">
+				<label for="L_username" class="layui-form-label"> <span
+					class="x-red">*</span>产线编码
+				</label>
+				<div class="layui-input-inline">
+					<select name="lid" id="lineCode">
+
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_wxxAdmin_adminName" class="layui-form-label">
+					<span class="x-red">*</span>产品类型
+				</label>
+				<div class="layui-input-inline">
+					<select name="pid" id="pname">
+
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="L_username" class="layui-form-label"> 订单号 </label>
+				<div class="layui-input-inline">
+					<input type="text" id="orderNumber" name="orderNumber"
+						class="layui-input">
+				</div>
+				<button class="layui-btn layui-btn-sm" id="matchOrder">
+					<span>匹配订单</span>
+				</button>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_wxxAdmin_accounts" class="layui-form-label">
+					<span class="x-red">*</span>说明
+				</label>
+				<div class="layui-input-inline">
+					<input type="text" id="explain" name="explain"
+						lay-verify="cy_wxxAdmin_accounts" autocomplete="off"
+						class="layui-input">
+						<input type="text" id="id" name="id"
+						lay-verify="cy_wxxAdmin_accounts" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_wxxAdmin_accounts" class="layui-form-label">
+					<span class="x-red">*</span>拼版周期
+				</label>
+				<div class="layui-input-inline">
+					<input type="text" id="impositionDate" name="impositionDate"
+						lay-verify="cy_wxxAdmin_accounts" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_wxxAdmin_accounts" class="layui-form-label">
+					<span class="x-red">*</span>目标产能
+				</label>
+				<div class="layui-input-inline">
+					<input type="text" id="targetProduction" name="targetProduction"
+						required="" lay-verify="cy_wxxAdmin_accounts" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_wxxAdmin_accounts" class="layui-form-label">
+					<span class="x-red">*</span>实际产能
+				</label>
+				<div class="layui-input-inline">
+					<input type="text" id="actualProduction" name="actualProduction"
+						required="" lay-verify="cy_wxxAdmin_accounts" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="syy_special_name" class="layui-form-label"> <span
+					class="x-red">*</span> 生产时间
+				</label>
+				<div class="layui-input-inline">
+					<input type="text" id="time" name="time" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_wxxAdmin_accounts" class="layui-form-label">
+					<span class="x-red">*</span>当班产量
+				</label>
+				<div class="layui-input-inline">
+					<input type="text" id="yield" name="yield"
+						lay-verify="cy_wxxAdmin_accounts" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label for="cy_wxxAdmin_accounts" class="layui-form-label">
+					<span class="x-red">*</span>累计数量
+				</label>
+				<div class="layui-input-inline">
+					<input type="text" id="cumulativeOutput" name="cumulativeOutput"
+						required="" lay-verify="cy_wxxAdmin_accounts" autocomplete="off"
+						class="layui-input">
+				</div>
+			</div>
+
+
+			<div class="layui-form-item">
+				<label for="layui-btn" class="layui-form-label"> </label>
+				<button class="layui-btn" lay-filter="add" lay-submit="">
+					修改</button>
+			</div>
+		</form>
+	</div>
+	<script>
+		var daily = JSON.parse(localStorage.getItem("product"));
+		
+		/* $("input[name='lineCode']").val(daily.lineCode);
+		$("input[name='pname']").val(daily.pname); */
+		 alert(daily.pname);
+		 alert(daily.pid);
+		 alert(daily.product);
+		$("#pname").val(daily.pid);
+		$("input[name='id']").val(daily.id);
+		$("input[name='orderNumber']").val(daily.orderNumber);
+		$("input[name='explain']").val(daily.explain);
+		$("input[name='impositionDate']").val(daily.impositionDate);
+		$("input[name='targetProduction']").val(daily.targetProduction);
+		$("input[name='actualProduction']").val(daily.actualProduction);
+		$("input[name='time']").val(daily.time);
+		$("input[name='yield']").val(daily.yield);
+		$("input[name='cumulativeOutput']").val(daily.cumulativeOutput);
+		$("#pname option").each(function(){
+        	if(daily.product!=null&&$(this).val()==daily.product.pid){
+        		$(this).prop("selected",true);
+        	}
+        });
+
+	 	
+	 	
+		var productOption = loadProductOption();
+		var lineOption = loadAllLineCode();
+		$("#lineCode").empty().append(
+				"<option value=''>请选择产线</option>" + lineOption);
+		$("#pname").empty().append(
+				"<option value=''>请选择产品</option>" + productOption);
+
+		var lineOption = loadAllLineCodeId();
+		$("#lineCode").empty()
+				.append("<option value=''></option>" + lineOption);
+		$(document).off('blur', '#pn').on('blur', '#pn', function() {
+			var pn = $("#pn").val().trim();
+			$("#id").empty()
+			var options = searchBom(pn);
+			console.log(options);
+			$("#id").append(options);
+		});
+
+		layui.use('laydate', function() {
+			var laydate = layui.laydate;
+
+			//执行一个laydate实例
+			laydate.render({
+				elem : '#time' //指定元素
+				,
+				type : 'datetime'
+			});
+		});
+
+		layui.use([ 'form', 'layer' ], function() {
+
+			$ = layui.jquery;
+			var form = layui.form, layer = layui.layer
+
+			//监听提交
+			form.on('submit(add)', function(data) {
+				var param = data.field;
+				console.log(param);
+				$.ajax({
+					type : "get",
+					url : "daily/updateDailyProduction.do",
+					data : param,
+					dataType : "json",
+					success : function(res) {
+						if (res.status == 0) {
+							layer.alert(res.msg, {
+								icon : 6
+							}, function() {
+								// 获得frame索引
+								var index = parent.layer
+										.getFrameIndex(window.name);
+								//关闭当前frame
+								parent.layer.close(index);
+							});
+							//parent.layer.close(index);
+						} else {
+							layer.alert(res.msg);
+						}
+					},
+					error : function() {
+						layer.alert("error");
+					}
+				});
+
+				return false;
+			});
+		});
+
+		function GetValue(obj) {
+			console.log(obj);
+			$("#pn").val(obj.pn);
+			$("#id").val(obj.id);
+			$("#pname").val(obj.pname);
+			$("#mid").val(obj.mid);
+		}
+		function GetOrders(obj) {
+			console.log(obj);
+			$("#orderNumber").val(obj.orderNumber);
+			$("#oid").val(obj.id);
+		}
+
+		$(document).off("click", "#matchOrder").on("click", "#matchOrder",
+				function() {
+					x_admin_show("匹配订单", './porder_match_list.html', 600, 400);
+				});
+	</script>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<link rel="stylesheet" href="./lib/layui/css/layui.css" media="all">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<script type="text/javascript" src="./js/self.js"></script>
+<script type="text/javascript" src="./lib/layui/layui.js"
+	charset="utf-8"></script>
+<script type="text/javascript" src="./lib/layui/layui.all.js"
+	charset="utf-8"></script>
+
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="x-nav">
+		<span class="layui-breadcrumb"> <!--  <a href="">MAC管理</a>
+        <a href="">MAC列表</a> --> <!--<a>
+          <cite>导航元素</cite></a>-->
+		</span> <a class="layui-btn layui-btn-small"
+			style="line-height: 1.6em; margin-top: 3px; float: right"
+			href="javascript:location.replace(location.href);" title="刷新"> <i
+			class="layui-icon" style="line-height: 30px">&#xe666;</i></a>
+	</div>
+	<div class="x-body">
+	    
+		<div class="layui-tab">
+			<ul class="layui-tab-title">
+				<li class="layui-this">入库单数据查看</li>
+				<li>出库单数据查看</li>
+
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+				    <button class="layui-btn"  onclick="x_admin_show('入库打印配置','./printSetting6.html?state=1',500,500)">入库打印配置</button>
+					<form class="layui-form" action="">
+						<div class="layui-form-item">
+							<table class="layui-table" id="readyPrintInData">
+								<colgroup>
+									<col width="100">
+									<col width="150">
+									<col width="100">
+									<col width="100">
+									<col width="100">
+									<col width="150">
+									<col width="100">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>品名</th>
+										<th>料号</th>
+										<th>订单号</th>
+										<th>状态</th>
+										<th>数量</th>
+										<th>时间</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</form>
+				</div>
+				<div class="layui-tab-item">
+				    <button class="layui-btn"  onclick="x_admin_show('出库打印配置','./printSetting6.html?state=0',500,500)">出库打印配置</button>
+					<form class="layui-form" action="">
+						<div class="layui-form-item">
+							<table class="layui-table" id="readyPrintOutData">
+								<colgroup>
+									<col width="100">
+									<col width="150">
+									<col width="100">
+									<col width="100">
+									<col width="100">
+									<col width="150">
+									<col width="100">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>品名</th>
+										<th>料号</th>
+										<th>订单号</th>
+										<th>状态</th>
+										<th>数量</th>
+										<th>时间</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+
+
+	<script>
+		var printDataJson = JSON.parse(localStorage.getItem("printArr6"));
+		console.log("printData:" + printDataJson);
+		var printData=uniqueArray(printDataJson, "id");
+		var stringInData = "<tbody>";
+		var stringOutData = "<tbody>"
+	/* 	var printInDataIds=new Array();
+		var printOutDataIds=new Array(); */
+		for (var i = 0; i < printData.length; i++) {
+			if (printData[i].state == 1) {
+				stringInData += "<tr><td style='display:none'  class='id'>"+printData[i].id+"</td><td>"
+						+ printData[i].materialName
+						+ "</td><td>"
+						+ printData[i].pn
+						+ "</td><td>"
+						+ printData[i].orderNumber
+						+ "</td><td>"
+						+ ('入库')
+						+ "</td><td>"
+						+ printData[i].pnumber
+						+ "</td><td>"
+						+ printData[i].ptime
+						+ "</td><td><button class='layui-btn layui-btn-danger' onclick='removeData(this,"+printData[i].id+")'>移除</button></td></tr>";
+						/* printInDataIds.push(printData[i].id); */
+			}else{
+				stringOutData +="<tr><td style='display:none' class='id'>"+printData[i].id+"</td><td>"
+					+ printData[i].materialName
+					+ "</td><td>"
+					+ printData[i].pn
+					+ "</td><td>"
+					+ printData[i].orderNumber
+					+ "</td><td>"
+					+ ('出库')
+					+ "</td><td>"
+					+ printData[i].pnumber
+					+ "</td><td>"
+					+ printData[i].ptime
+					+ "</td><td><button class='layui-btn layui-btn-danger' onclick='removeData(this,"+printData[i].id+")'>移除</button></td></tr>";
+					/* printOutDataIds.push(printData[i].id); */
+			}
+		}
+		
+		
+		stringInData += "</tbody>";
+		stringOutData += "</tbody>";
+		$("#readyPrintInData").append(stringInData);
+		$("#readyPrintOutData").append(stringOutData);
+		
+		function removeData(now,id){
+			
+			$(now).parent().parent().remove();
+			var printArr0=JSON.parse(localStorage.getItem("printArr6"));
+			var newArr=printArr0.filter(function(item){
+				return item.id !==id; 
+			});
+			console.log("newArr",newArr);
+			if(!window.localStorage){
+ 			    layer.msg("浏览器不支持localstorage");
+ 			    return false;
+ 			}else{
+ 				var storage=window.localStorage;
+ 				storage.setItem("printArr6",JSON.stringify(newArr));
+ 			}
+			
+			return false;
+		}
+		
+
+		
+	</script>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+</body>
+
+</html>

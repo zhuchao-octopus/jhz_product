@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+          <div class="layui-form-item">
+              <label for="market_class_number" class="layui-form-label">
+                  <span class="x-red">*</span>编号
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="market_class_number" name="market_class_number" 
+                  autocomplete="off" class="layui-input">
+              </div>
+         
+          </div>
+          <div class="layui-form-item">
+              <label for="market_class_name" class="layui-form-label">
+                  <span class="x-red">*</span>分类名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="market_class_name" name="market_class_name" required="" 
+               lay-verify="required"   autocomplete="off" class="layui-input">
+              </div>
+   
+          </div>
+          <div class="layui-form-item">
+              <label for="nid" class="layui-form-label">
+                  <span class="x-red">*</span>所属市场
+              </label>
+              <div class="layui-input-inline">
+                  <select id="nid" name="nid">
+                    <option value="0">全局应用</option>
+                    <option value="1">局部应用</option>
+                  </select>
+              </div>
+          </div>
+          
+           <div class="layui-form-item">
+              <label for="market_info" class="layui-form-label">
+                  备注
+              </label>
+              <div class="layui-input-block">
+                  <textarea placeholder="请输入内容"  id="market_info" name="market_info" class="layui-textarea"></textarea>
+              </div>
+           </div>
+            <div class="layui-form-item">
+              <label for="layui-btn" class="layui-form-label">
+              </label>
+              <button  class="layui-btn"  lay-filter="add" lay-submit="">
+                  确定
+              </button>
+          </div>
+      </form>
+   
+          </div>
+    <script>
+       var appClass=JSON.parse(localStorage.getItem("appClass"));
+       $("#market_class_number").val(appClass.market_class_number);
+       $("#market_class_name").val(appClass.market_class_name);
+   
+       var marketNameOption=loadAllMarketName(cy_brand_id);
+       $("#nid").empty().append(marketNameOption);
+       $("#nid option").each(function(){
+    	   if($(this).val()==appClass.nid){
+    		   $(this).prop("selected",true);
+    	   }
+       });
+       $("#market_info").val(appClass.appClass);
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer;
+        
+
+
+          
+          //监听提交
+          form.on('submit(add)', function(data){
+        	  console.log(data.field);
+        	var market_class_number=data.field.market_class_number;
+        	var market_class_name=data.field.market_class_name;
+        	var market_info=data.field.market_info;
+        	var nid=data.field.nid;
+        	var market_class_id=appClass.market_class_id;
+        	var param={
+        			"market_class_number":market_class_number,
+        			"market_class_name":market_class_name,
+        			"cy_brand_id":cy_brand_id,
+        			"market_info":market_info,
+        			"nid":nid,
+        			"marketName":$("#nid option:selected").text(),
+        			"market_class_id":market_class_id
+        	}
+        	console.log("param",param);
+            $.ajax({
+            	type:"post",
+            	url:"/jhz_mtvCms/syyMarket/updateMarketClass.do",
+            /* 	async: false, */
+            	data:param,
+            	dataType:"json",
+            	success:function(res){
+            		if(res.status==0){
+            			 layer.alert("修改成功", {icon: 6},function () {
+            	                // 获得frame索引
+            	                var index = parent.layer.getFrameIndex(window.name);
+            	                //关闭当前frame
+            	                parent.layer.close(index);
+            	            });
+            	           return false;
+            		}else{
+            			layer.alert(res.msg);
+            		}
+            		
+            	},
+            	error:function(res){
+            		layer.msg("error");
+            	}
+            });
+           return false;
+          });
+          
+          
+        });
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

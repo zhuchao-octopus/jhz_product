@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.line.WorkLineDao">
+    
+    <!-- 加载出所有的生产线 -->
+    <select id="loadAllLine"  resultMap="workLineResultMap" parameterType="com.cy.domain.line.WorkLine">
+       select 
+       w.lid,
+       w.countValue,
+       w.status,
+       w.lineCode,
+       w.checkNum,
+       w.rentApport,
+       w.scstate,
+       w.timeScope1,
+       w.timeScope2,
+       w.flushTime,
+       p.pid,
+       p.pname,
+       p.price 
+       from cy_workLine w left join cy_productDetails p on w.pid=p.pid order by w.creatime desc
+       limit #{pageSize}, #{limit}
+    </select>
+    
+    <resultMap id="workLineResultMap" type="com.cy.domain.line.WorkLine">
+        <id property="lid" column="lid"/>
+		<result property="countValue" column="countValue"/>
+		<result property="status" column="status"/>
+		<result property="lineCode" column="lineCode"/>
+		<result property="scstate" column="scstate"/>
+		<result property="checkNum" column="checkNum"/>
+		<result property="rentApport" column="rentApport"/>
+		<result property="timeScope1" column="timeScope1"/>
+		<result property="timeScope2" column="timeScope2"/>
+		<result property="flushTime" column="flushTime"/>
+		<association property="product" javaType="com.cy.domain.line.ProductDetails">
+           <id property="pid" column="pid"/>
+           <result property="pname" column="pname"/>
+           <result property="price" column="price"/>  
+        </association>
+       
+    </resultMap>
+    
+    <!-- 新增生产线 -->
+    <insert id="addWorkLine" parameterType="map">
+        insert into cy_workLine
+        (
+         pid,
+         countValue,
+         status,
+         lineCode,
+         rentApport,
+         scstate,
+         timeScope1,
+         timeScope2,
+         flushTime,
+         creatime
+        )
+        value(
+         #{pid},
+         #{countValue},
+         #{status},
+         #{lineCode},
+         #{rentApport},
+         #{scstate},
+         #{timeScope1},
+         #{timeScope2},
+         #{flushTime},
+         #{creatime}
+        )
+    </insert>
+    
+    
+    <!-- 新增工位 -->
+    <insert id="addWorkLocation" parameterType="map">
+       insert into cy_workLocation
+       (
+       lineCode,
+       sjob,
+       workerCode,
+       locationCode,
+       mid,
+       workStationCode,
+       locationState
+       )
+       value(
+       #{lineCode},
+       #{sjob},
+       #{workerCode},
+       #{locationCode},
+       #{mid},
+       #{workStationCode},
+       #{locationState}
+       )
+    </insert>
+    
+    
+    <!-- 新增工位 -->
+    <insert id="addWorkLocationByBean" parameterType="com.cy.domain.line.WorkLocation">
+       insert into cy_workLocation
+       (
+       lineCode,
+       sjob,
+       workerCode,
+       locationCode,
+       mid,
+       workStationCode,
+       locationState,
+       crossStatus
+
+       )
+       value(
+       #{line.lineCode},
+       #{sjob},
+       #{worker.workerCode},
+       #{locationCode},
+       #{wsCode.mid},
+       #{wsCode.wsNumber},
+       #{locationState},
+       #{crossStatus}
+       )
+    </insert>
+    
+    
+    
+    
+    <!-- 加載出產綫詳情 -->
+    <select id="loadline" parameterType="com.cy.domain.line.WorkLine" resultMap="lineWorkResult">
+        select 
+        a.sid,
+        a.lineCode,
+        a.sjob,
+        a.workerCode,
+        a.locationCode,
+        a.workStationCode,
+        a.locationState,
+        b.lid,
+        b.pid,
+        b.countValue,
+        b.status,
+        c.pid,
+        c.pname,
+        c.price,
+        d.wid,
+        d.workerName,
+        d.workerPrice,
+        d.fingerCode 
+        from 
+        cy_workLocation a,
+        cy_workLine b,
+        cy_productDetails c,
+        cy_productWorker d
+        where a.lineCode=b.lineCode and b.pid=c.pid and d.workerCode=a.workerCode and b.lid=#{lid}
+    </select>
+    
+    <resultMap id="lineWorkResult" type="com.cy.domain.line.WorkLocation">
+        <id property="sid" column="sid"/>
+        <result property="sjob" column="sjob"/>
+      
+        
+        <result property="locationCode" column="locationCode"/>
+        <result property="locationState" column="locationState"/>
+        <association property="wsCode" javaType="com.cy.domain.line.WorkStationCode">
+           <result property="mid" column="mid"/>
+           <result property="wsNumber"  column="wsNumber"/>
+           <result property="wsFunction" column="wsFunction"/>
+           <result property="pname" column="pname"/>
+        </association>
+        <association property="line" javaType="com.cy.domain.line.WorkLine">
+           <id property="lid" column="lid"/>
+           <result property="countValue" column="countValue"/>
+           <result property="status" column="status"/>
+           <result property="lineCode" column="lineCode"/>
+           <association property="product" javaType="com.cy.domain.line.ProductDetails">
+               <id property="pid" column="pid"/>
+               <result property="pname" column="pname"/>
+               <result property="price" column="price"/>  
+           </association>
+        </association>
+        <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+              <id property="wid" column="wid"/>
+              <result property="workerCode" column="workerCode"/>
+              <result property="workerName" column="workerName"/>
+              <result property="fingerCode" column="fingerCode"/>
+              <result property="workerPrice" column="workerPrice"/>
+        </association>
+
+    </resultMap>
+    
+    <!-- 数据字典 -->
+   <select id="findWorker" resultType="com.cy.domain.line.ProductWorker">
+     select * from cy_productWorker
+    </select>
+    
+    <select id="findProduct" resultType="com.cy.domain.line.ProductDetails">
+     select * from cy_productDetails
+    </select>
+    
+    <select id="loadPd" resultType="com.cy.domain.line.ProductDetails" parameterType="com.cy.domain.line.ProductDetails">
+     select * from cy_productDetails limit #{pageSize}, #{limit}
+    </select>
+    
+    <select id="countPd" resultType="int">
+     select count(*) from cy_productDetails
+    </select>
+    
+    <select id="findWorkStation" resultType="com.cy.domain.line.WorkStationCode"  parameterType="map">
+     select * from cy_workStationCode 
+     <where>
+         <if test="pid!=null">
+            pid=#{pid}
+         </if>
+         <if test="pname!=null and pname!=''">
+            and pname=#{pname}
+         </if>
+     </where> 
+    </select>
+    
+    <!-- 根据编码查询出一条产线 -->
+    <select id="findLineByCode" resultType="com.cy.domain.line.WorkLine" parameterType="com.cy.domain.line.WorkLine">
+     select * from cy_workLine 
+     <where>
+      <if test="lineCode!=null and lineCode!=''">
+        lineCode=#{lineCode}
+      </if>
+      <if test="lid!=null">
+         and lid=#{lid}
+      </if>
+     </where>
+    </select>
+    
+    
+    <!-- 查询出当前产线下所有的工位 -->
+    <select id="findLocationBylineCode" parameterType="com.cy.domain.line.WorkLine" resultMap="locationMap">
+    select w.sid,
+    w.locationCode,
+    w.sjob,
+    w.workerCode,
+    w.locationState,
+    p.wid,
+    p.workerName,
+    p.workerPrice,
+    wk.mid,
+    wk.wsNumber,
+    wk.wsFunction,
+    l.lid,
+    l.lineCode
+    from cy_workLocation w LEFT JOIN cy_workLine l on w.lineCode=l.lineCode LEFT JOIN cy_productWorker p ON p.workerCode=w.workerCode LEFT JOIN cy_workStationCode wk on wk.mid=w.mid
+    where  l.lid=#{lid} order by CONVERT(SUBSTR(w.locationCode, 2),SIGNED) asc
+    </select> 
+    
+    <!-- 查询有效工位 -->
+    <select id="findCountValue" parameterType="com.cy.domain.line.WorkLine" resultType="int">
+    select count(sid) as countNumber from cy_workLocation where lineCode=(select lineCode from cy_workLine where lid=#{lid})
+    </select>
+    
+    <!-- 查询上线人数 -->
+    <select id="countLocation" parameterType="com.cy.domain.line.WorkLine" resultType="int">
+    select count(locationState) as countNumber from cy_workLocation where locationState = 1 and lineCode=(select lineCode from cy_workLine where lid=#{lid})
+    </select>
+    
+    
+    <resultMap id="locationMap" type="com.cy.domain.line.WorkLocation">
+        <id property="sid" column="sid"/>
+        <result property="sjob" column="sjob"/>
+        <result property="locationCode" column="locationCode"/>
+        <result property="locationState" column="locationState"/>
+        
+        <association property="wsCode" javaType="com.cy.domain.line.WorkStationCode">
+           <result property="mid" column="mid"/>
+           <result property="wsNumber"  column="wsNumber"/>
+           <result property="wsFunction" column="wsFunction"/>
+        </association>
+        
+        <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+              <id property="wid" column="wid"/>
+              <result property="workerCode" column="workerCode"/>
+              <result property="workerName" column="workerName"/>
+              <result property="workerPrice" column="workerPrice"/>
+        </association>
+       <association property="line" javaType="com.cy.domain.line.WorkLine">
+             <id property="lid" column="lid"/>
+             <result property="lineCode" column="lineCode"/>
+       </association>
+    </resultMap>
+    
+    <!-- 修改工位信息 -->
+    <update id="updateLocation" parameterType="map" >
+       update cy_workLocation set
+       <trim suffixOverrides=",">
+       <if test="locationCode!=null">
+       locationCode=#{locationCode},
+       </if>
+
+       sjob=#{sjob},
+
+       workerCode=#{workerCode},
+   
+       
+       mid=#{mid},
+       
+       <if test="locationState!=null">
+       locationState=#{locationState},
+       </if>
+       <if test="nowTime!=null">
+       nowTime=#{nowTime}
+       </if>
+       </trim>
+       where sid=#{sid}
+    </update>
+    
+        <!-- 修改工位信息 -->
+    <update id="updateLocationByBean" parameterType="com.cy.domain.line.WorkLocation" >
+       update cy_workLocation set
+       <trim suffixOverrides=",">
+       <if test="locationCode!=null">
+       locationCode=#{locationCode},
+       </if>
+		crossStatus=#{crossStatus},
+       sjob=#{sjob},
+       
+       <if test="line!=null and line.lineCode!=null">
+       lineCode=#{line.lineCode},
+       </if>
+       
+       <if test="worker!=null and worker.workerCode!=null">
+       workerCode=#{worker.workerCode},
+       </if>
+   
+       <if test="wsCode!=null">
+       mid=#{wsCode.mid},
+       </if>
+       
+        <if test="wsCode!=null">
+       workStationCode=#{wsCode.wsNumber},
+       </if>
+       
+       <if test="locationState!=null">
+       locationState=#{locationState},
+       </if>
+       <if test="nowTime!=null">
+       nowTime=#{nowTime}
+       </if>
+       </trim>
+       where sid=#{sid}
+    </update>
+    
+    
+    
+    
+    
+    <!-- 查找员工对应工位信息 -->
+    <select id="findWorkerLocation" parameterType="com.cy.domain.line.ProductWorker"  resultType="integer">
+    select sid from cy_workLocation 
+    where workerCode = (select workerCode from cy_productWorker where wid = #{wid});
+    </select>
+    
+    <!-- 清除员工对应工位信息 -->
+    <update id="updateWorkerLocation" parameterType="Integer" >
+       update cy_workLocation set      
+       workerCode=null      
+       where sid = #{abc} 
+    </update>
+    
+    <!--修改产线信息 -->
+    <update id="updateLine" parameterType="map">
+    update cy_workLine
+    set
+    <trim suffixOverrides=",">
+    <if test="lineCode!=null and lineCode!=''">
+    lineCode=#{lineCode},   
+    </if>
+    <if test="pid!=null">
+    pid=#{pid},
+    </if>
+    <if test="countValue!=null">
+    countValue=#{countValue},
+    </if>
+    <if test="status!=null">
+    status=#{status},
+    </if>
+    <if test="scstate">
+    scstate=#{scstate}
+    </if>
+    </trim>
+    where 
+    lid=#{lid}
+    </update>
+    
+    <!-- 设置产线信息 -->
+    <update id="setLine" parameterType="com.cy.domain.line.WorkLine">
+    update cy_workLine
+    set
+    <trim suffixOverrides=",">
+    <if test="product.pid!=''">
+    pid=#{product.pid},
+    </if>
+    <if test="scstate!=null">
+    scstate=#{scstate},
+    </if>
+    
+    <if test="rentApport!=null">
+    rentApport=#{rentApport},
+    </if>
+    
+    <if test="timeScope1!=null">
+    timeScope1=#{timeScope1},
+    </if>
+    <if test="timeScope2!=null">
+    timeScope2=#{timeScope2},
+    </if>
+     <if test="flushTime!=null">
+    flushTime=#{flushTime},
+    </if>
+    <if test="lineCode!=null and lineCode!=''">
+    lineCode=#{lineCode}
+    </if>
+    </trim>
+    where 
+    lid=#{lid}
+    </update>
+    
+    
+    <!-- 删除工位-->
+    <delete id="deleteLocation" parameterType="com.cy.domain.line.WorkLocation">
+     delete from cy_workLocation where sid=#{sid}
+    </delete>
+    
+    <!-- 通過locationCode查詢對應的工位 -->
+    <select id="findLocationByCode" parameterType="com.cy.domain.line.WorkLocation" resultType="com.cy.domain.line.WorkLocation">
+    select * from cy_workLocation 
+    <where>
+     <if test="locationCode!=null and locationCode!=''">
+       locationCode=#{locationCode}
+     </if>
+     <if test="sid!=null">
+       and sid=#{sid}
+     </if>
+     </where>
+    </select>
+    
+    
+   <!-- 删除产线 -->
+   <delete id="deleteLine" parameterType="com.cy.domain.line.WorkLine">
+   delete from cy_workLine where lid=#{lid}
+   </delete>
+   
+   
+   <!-- 通过员工和产线编码反查生产线 -->
+   <select id="findLineByCodeAndWorker" parameterType="map" resultMap="lineByCodeAndWorkerResult">
+       select 
+       w.lineCode,
+       p.workerCode,
+       p.workerName,
+       s.locationCode
+       from cy_workLine w,cy_productWorker p,cy_workLocation s
+       where 
+       s.lineCode=w.lineCode and p.workerCode=s.workerCode
+       and w.lineCode=#{lineCode} and p.workerCode=#{workerCode} 
+   </select>
+   
+   <resultMap type="com.cy.domain.line.WorkLine" id="lineByCodeAndWorkerResult">
+     <id property="lid" column="lid"/>
+     <result property="lineCode" column="lineCode"/>
+     <collection property="list" ofType="com.cy.domain.line.WorkLocation">
+         <id property="sid" column="sid"/>
+         <result property="locationCode" column="locationCode"/>
+         <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+            <id property="wid" column="wid"/>
+            <result property="workerCode" column="workerCode"/>
+            <result property="workerName" column="workerName"/>
+         </association>
+     </collection>
+   </resultMap>
+   
+   
+   <!-- 通过工位的sid查询出人员 -->
+   <select id="findWorkerBySid" parameterType="com.cy.domain.line.WorkLocation" resultType="com.cy.domain.line.ProductWorker">
+      select * from cy_productWorker where workerCode=(select workerCode from cy_workLocation where sid=#{sid})
+   </select>
+   
+   
+   <!-- 單獨修改工作站 -->
+   <update id="updateWorkStation" parameterType="map">
+      update cy_workLocation set
+      mid=#{mid},
+      workStationCode=#{workStationCode}
+      where sid=#{sid}
+   </update>
+   
+   <!-- 通过产线查询出对应的产品 -->
+   <select id="findProductByLine" parameterType="com.cy.domain.line.WorkLine" resultType="com.cy.domain.line.ProductDetails">
+   select pid from cy_workLine where lineCode=#{lineCode}
+   </select>
+   
+   <!-- 查询产品 -->
+   <select id="findProductById" parameterType="com.cy.domain.line.ProductDetails" resultType="com.cy.domain.line.ProductDetails">
+   select *  from cy_productDetails
+   <where>
+     <if test="pid!=null">
+     pid=#{pid}
+     </if>
+     <if test="pname!=null">
+     and pname=#{pname}
+     </if>
+   </where>
+   </select>
+   
+   <!-- 查询产品 -->
+   <select id="findPdById" parameterType="com.cy.domain.line.ProductDetails" resultType="com.cy.domain.line.ProductDetails">
+   select *  from cy_productDetails where  pid=#{pid}
+   </select>
+   
+   <!-- 新增产品 -->
+   <insert id="addProduct" parameterType="com.cy.domain.line.ProductDetails">
+     insert into
+     cy_productDetails
+     (
+      pname,pweight,perror,berror,bweight,boxCount
+     )values(
+      #{pname},#{pweight},#{perror},#{berror},#{bweight},#{boxCount}
+     )
+   
+   </insert>
+   
+    <!-- 修改产品 -->
+   <update id="editPd" parameterType="com.cy.domain.line.ProductDetails">
+       update cy_productDetails 
+       <set>
+       <trim suffixOverrides=",">
+         <if test="pname!=null and pname!=''">
+              pname=#{pname},
+           </if>   
+           <if test="pweight!=null">
+              pweight=#{pweight},
+            </if>
+           <if test="perror!=null">
+              perror=#{perror},
+            </if>  
+           <if test="bweight!=null">
+              bweight=#{bweight},
+            </if>  
+           <if test="berror!=null">
+              berror=#{berror},
+              </if>
+              <if test="boxCount!=null">
+              boxCount=#{boxCount}
+              </if>
+           </trim>   
+       </set>
+       where pid=#{pid}
+   </update>
+   <!-- 删除产品 -->
+   <delete id="deletePdById" parameterType="java.lang.Integer">
+       delete from cy_productDetails where pid=#{pid}
+   </delete>
+   
+   
+   <!-- 加载工作站 -->
+	<select id="loadAllWSC" resultType="com.cy.domain.line.WorkStationCode" parameterType="com.cy.domain.line.WorkStationCode">
+	    select * from cy_workStationCode where mid=#{mid}
+	</select>
+   
+   <!-- 加载工艺 -->
+   <select  id="findClass" resultType="com.cy.domain.list.ProductScheduling">
+        select  distinct pclass  from cy_productScheduling
+   </select>
+   
+   
+   
+   <!-- 看板-->
+   <select id="findAllDashBoard" parameterType="com.cy.domain.line.DashBoard" resultMap="dashBoardMap">
+      select *
+      from cy_dashBoard b left join  cy_workLine w on b.lid=w.lid 
+      <where>
+          <if test="line!=null and line.lid!=null">
+          lid=#{line.lid}
+          </if>
+          <if test="tid!=null">
+          and tid=#{tid}
+          </if>
+      </where> 
+      limit #{pageSize}, #{limit}
+   </select>
+   
+   
+   <resultMap type="com.cy.domain.line.DashBoard" id="dashBoardMap">
+      <id property="tid" column="tid"/>
+      <result property="startime" column="startime"/>
+      <result property="endtime" column="endtime"/>
+      <association property="line" javaType="com.cy.domain.line.WorkLine">
+         <id property="lid" column="lid"/>
+         <result property="lineCode" column="lineCode"/>
+      </association>
+   </resultMap>
+   
+   <select id="findAllDashBoardCount" parameterType="com.cy.domain.line.DashBoard" resultType="int">
+      select count(*)
+      from cy_dashBoard b left join  cy_workLine w on b.lid=w.lid 
+      <where>
+          <if test="line!=null and line.lid!=null">
+          lid=#{line.lid}
+          </if>
+          <if test="tid!=null">
+          and tid=#{tid}
+          </if>
+      </where> 
+   </select>
+   
+   <!-- 增加 -->
+   <insert id="addDashBoard" parameterType="com.cy.domain.line.DashBoard">
+       insert into
+       cy_dashBoard
+       (startime,endtime,lid)
+       values(#{startime},#{endtime},#{line.lid})
+   </insert>
+   
+   <!-- 删除看板 -->
+   <delete id="deleteBoardById" parameterType="com.cy.domain.line.DashBoard">
+       delete from cy_dashBoard where tid=#{tid}
+   </delete>
+   
+  <!-- 通过产品的id查询出与之相关的 -->
+   <select  id="findLineByPid" parameterType="java.lang.Integer"  resultType="com.cy.domain.line.WorkLine">
+       select *  from cy_workLine where pid=#{pid}
+   </select>
+   
+   
+   
+   
+   
+   
+   <!-- 将所有的工位状态重置-->
+   <update id="updateLocationState" >
+   update cy_workLocation set locationState=3
+   </update>
+   
+   <update id="updateWSC" parameterType="com.cy.domain.line.ProductDetails">
+      update cy_workStationCode set
+      pname=#{pname}
+      where pid=#{pid}
+   </update>
+   
+   <select id="loadWorkLocation"  parameterType="com.cy.domain.line.WorkLocation"  resultType="com.cy.domain.line.WorkLocation">
+      select *  from cy_workLocation 
+       <where>
+      <if test="lineCode!=null and lineCode!=''">
+          lineCode=#{lineCode} and 
+      </if>
+      
+      <if test="locationCode!=null and locationCode!=''">
+          locationCode=#{locationCode} and 
+      </if>
+      
+       <if test="workerCode!=null and workerCode!=''">
+          workerCode=#{workerCode} and 
+      </if>
+      
+      
+      </where>
+   </select>
+   
+      <select id="loadCountLine" resultType="int">
+          select count(*) from cy_workLine
+      </select>
+      
+      <select id="loadWl" parameterType="com.cy.domain.line.WorkLocation" resultMap="workLocaResult">
+          select a.sid, a.sjob, a.locationCode, a.locationState,a.crossStatus, b.lid, b.countValue, b.status, b.lineCode, c.mid, c.wsNumber, c.pname, c.wsFunction,
+          d.wid,
+          d.workerCode,
+          d.workerName,
+          d.workerPrice,
+          d.fingerCode
+          from 
+          cy_workLocation a  left join cy_workLine b on a.lineCode=b.lineCode
+          left join cy_workStationCode c  on a.workStationCode=c.wsNumber
+          left join cy_productWorker d on  a.workerCode=d.workerCode 
+          <where>
+          <if test="lineCode!=null and lineCode!=''">a.lineCode=#{lineCode}</if>
+          <if test="locationCode!=null and locationCode!=''">and a.locationCode=#{locationCode}</if>
+          <if test="worker!=null and worker.workerCode!=null and worker.workerCode!=''">and a.workerCode=#{worker.workerCode}</if>
+          <if test="locationState!=null and locationState!=''">and a.locationState=#{locationState}</if>
+          </where>
+          limit #{pageSize}, #{limit}
+      </select>
+      
+      <resultMap id="workLocaResult" type="com.cy.domain.line.WorkLocation">
+        <id property="sid" column="sid"/>
+        <result property="sjob" column="sjob"/>
+      	<result property="crossStatus" column="crossStatus"/>
+        <result property="locationCode" column="locationCode"/>
+        <result property="locationState" column="locationState"/>
+        <association property="wsCode" javaType="com.cy.domain.line.WorkStationCode">
+           <result property="mid" column="mid"/>
+           <result property="wsNumber"  column="wsNumber"/>
+           <result property="wsFunction" column="wsFunction"/>
+           <result property="pname" column="pname"/>
+        </association>
+        <association property="line" javaType="com.cy.domain.line.WorkLine">
+           <id property="lid" column="lid"/>
+           <result property="countValue" column="countValue"/>
+           <result property="status" column="status"/>
+           <result property="lineCode" column="lineCode"/>
+        </association>
+        <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+              <id property="wid" column="wid"/>
+              <result property="workerCode" column="workerCode"/>
+              <result property="workerName" column="workerName"/>
+              <result property="fingerCode" column="fingerCode"/>
+              <result property="workerPrice" column="workerPrice"/>
+        </association>
+
+    </resultMap>
+    
+    
+    <select id="loadWlCount" parameterType="com.cy.domain.line.WorkLocation" resultType="int">
+          select count(*)
+
+          from 
+          cy_workLocation a  left join cy_workLine b on a.lineCode=b.lineCode
+          left join cy_workStationCode c  on a.workStationCode=c.wsNumber
+          left join cy_productWorker d on a.workerCode=d.workerCode 
+          <where>
+          <if test="lineCode!=null and lineCode!=''"> a.lineCode=#{lineCode}</if>
+          <if test="locationCode!=null and locationCode!=''">and a.locationCode=#{locationCode}</if>
+          <if test="worker!=null and worker.workerCode!=null and worker.workerCode!=''">and a.workerCode=#{worker.workerCode}</if>
+          <if test="locationState!=null and locationState!=''">and a.locationState=#{locationState}</if>
+          </where>
+      </select>
+      
+      <select id="loadAllworkLine" resultType="com.cy.domain.line.WorkLine">
+          select * from cy_workLine
+      </select>
+      
+      <insert id="insertWorkLine" parameterType="com.cy.domain.line.WorkLine">
+          insert into cy_workLine(locationCode,sjob,workerCode,workStationCode,lineCode,locationState,nowTime,mid) 
+          values(#{locationCode},#{sjob},#{workerCode},#{workStationCode},#{lineCode},#{locationState},#{nowTime},#{mid})
+      </insert>
+      
+      <update  id="updateBoard" parameterType="com.cy.domain.line.DashBoard">
+         update cy_dashBoard
+         set 
+         startime=#{startime},
+         endtime=#{endtime},
+         lid=#{line.lid}
+         where 
+         tid=#{tid}
+      </update>
+      
+      
+      <select id="loadLocationByCode"  parameterType="string"  resultType="com.cy.domain.line.WorkLocation">
+         select *  from cy_workLocation where locationCode=#{locationCode}
+      </select>
+       
+       
+      <select id="loadWorkerByWorker" parameterType="com.cy.domain.line.WorkLine" resultType="com.cy.domain.line.ProductWorker">
+		select * from cy_productWorker where lineCode=#{lineCode} limit #{pageSize},#{limit}
+	</select>
+	
+	<select id="loadWorkerByWorkerCount" parameterType="com.cy.domain.line.WorkLine" resultType="int">
+		select count(*) from cy_productWorker where lineCode=#{lineCode}
+	</select>
+	
+	 <update id="updateWorkerLineByCode"  parameterType="com.cy.domain.line.ProductWorker">
+	
+        update cy_productWorker
+        set lineCode=#{lineCode} where workerCode=#{workerCode}     
+	</update> 
+     <select id="finNuber" resultType="com.cy.domain.line.ProductWorker">
+          select * from cy_productWorker where lineCode=#{lineCode}
+      </select>  
+     <update id="deletePersonnel"  parameterType="com.cy.domain.line.ProductWorker">
+	
+        update cy_productWorker
+        set lineCode=null where wid=#{wid}     
+	</update> 
+	<select id="findbdWorker" resultType="com.cy.domain.line.ProductWorker">
+     select * from cy_productWorker where lineCode is null
+    </select>
+    <!--   <update id="updateBatch"  parameterType="java.util.List">  
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+        update course
+        <set>
+            name=${item.name}
+        </set>
+        where id = ${item.id}deletePersonnel
+    </foreach>  finNuber    
+</update>  -->
+ </mapper>

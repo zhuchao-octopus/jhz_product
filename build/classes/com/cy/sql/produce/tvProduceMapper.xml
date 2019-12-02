@@ -1,0 +1,1956 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.cy.dao.produce.tv.ProduceTvDao">
+
+	<select id="findTvByMac" parameterType="com.cy.domain.produce.tv.TvProduce"
+		resultType="com.cy.domain.produce.tv.TvProduce">
+		select * from tv_produce
+		where mac=#{mac}
+	</select>
+
+
+	<select id="findTvBySn" parameterType="com.cy.domain.produce.tv.TvProduce"
+		resultType="com.cy.domain.produce.tv.TvProduce">
+		select * from tv_produce
+		where tv_sn_code=#{tv_sn_code}
+	</select>
+
+
+	<select id="loadAllTvproduces" resultType="int">
+		select count(*) from tv_produce
+	</select>
+
+
+
+
+
+	<select id="loadTvproduces" resultType="com.cy.domain.produce.tv.TvProduce"
+		parameterType="int">
+		select * from tv_produce limit #{pageNumber} ,20
+	</select>
+
+	<select id="loadAllTvproduceById" resultType="com.cy.domain.produce.tv.TvProduce"
+		parameterType="int">
+		select * from tv_produce where tv_test_id=#{tv_test_id}
+	</select>
+
+	<select id="loadAllMM" resultType="int"
+		parameterType="com.cy.domain.produce.tv.MaterialManage">
+		select count(*) from materialManage
+		<where>
+			<if test="pn!=null and pn!=''">
+				pn=#{pn}
+			</if>
+			<if test="storeState!=null  and storeState!='' and storeState!=8">
+				and storeState=#{storeState}
+			</if>
+			<if test="mexplain!=null and mexplain!=''">
+				and  mexplain like concat('%',#{mexplain},'%')
+			</if>
+		</where>
+		order by id desc
+	</select>
+
+	<select id="loadMM" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '0' order by id desc limit
+		#{pageNumber} ,15
+	</select>
+
+	<select id="loadzhuMM" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage order by id desc limit #{pageNumber} ,15
+	</select>
+
+	<select id="loadfzMM" parameterType="com.cy.domain.produce.tv.MaterialManage"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage
+		<where>
+			<if test="pn!=null and pn!=''">
+				pn=#{pn}
+			</if>
+			<if test="storeState!=null and storeState!='' and storeState!=8">
+				and storeState=#{storeState}
+			</if>
+			<if test="mexplain!=null and mexplain!=''">
+				and  mexplain like concat('%',#{mexplain},'%')
+			</if>
+		</where>
+		limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="loadcaiMM" resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '0' order by id desc
+	</select>
+
+	<select id="searchMM" resultType="com.cy.domain.produce.tv.MaterialManage"
+		parameterType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where pn=#{pn}
+	</select>
+
+	<select id="searchMMpn" resultType="com.cy.domain.produce.tv.MaterialManage"
+		parameterType="String">
+		select * from materialManage where pn=#{pn}
+	</select>
+
+	<insert id="insertMM" parameterType="com.cy.domain.produce.tv.MaterialManage">
+		insert into
+		materialManage(materialName,pn,mexplain,weight,storeState,softwareAddress,downPassword,supplier,inDate,batch,incomingQuantity,bindingQuantity,residue)
+		values(#{materialName},#{pn},#{mexplain},#{weight},#{storeState},#{softwareAddress},#{downPassword},#{supplier},#{inDate},#{batch},#{incomingQuantity},#{bindingQuantity},#{residue})
+	</insert>
+
+	<update id="updateMM" parameterType="com.cy.domain.produce.tv.MaterialManage">
+		update materialManage set materialName=#{materialName}, pn=#{pn},
+		mexplain=#{mexplain},
+		weight=#{weight},storeState=#{storeState},softwareAddress=#{softwareAddress},downPassword=#{downPassword},
+		supplier=#{supplier},inDate=#{inDate},batch=#{batch},incomingQuantity=#{incomingQuantity},bindingQuantity=#{bindingQuantity},
+		residue=#{residue}
+		where id=#{id}
+	</update>
+
+	<delete id="removeMM" parameterType="int">
+		delete from materialManage where id=#{id}
+	</delete>
+
+	<select id="loadwh" parameterType="int"
+		resultType="com.cy.domain.produce.tv.WarehouseHistory">
+		select * from warehouseHistory where mid=#{mid} order by ptime desc
+	</select>
+
+	<select id="outwh" parameterType="int" resultType="String">
+		select sum(pnumber) from warehouseHistory where mid=#{mid} and state='0'
+	</select>
+
+	<select id="putwh" parameterType="int" resultType="String">
+		select sum(pnumber) from warehouseHistory where mid=#{mid} and state='1'
+	</select>
+
+	<select id="outwhss" parameterType="map" resultType="String">
+		select sum(pnumber) from warehouseHistory where mid=#{mid} and state='0' and
+		oid=#{oid}
+	</select>
+
+	<select id="putwhss" parameterType="map" resultType="String">
+		select sum(pnumber) from warehouseHistory where mid=#{mid} and state='1' and
+		oid=#{oid}
+	</select>
+
+	<delete id="deletewh" parameterType="int">
+		delete from warehouseHistory where id=#{id}
+	</delete>
+
+	<insert id="insertwh" parameterType="com.cy.domain.produce.tv.WarehouseHistory">
+		insert into warehouseHistory(mid,pnumber,ptime,state,oid)
+		values(#{mid},#{pnumber},#{ptime},#{state},#{oid})
+	</insert>
+
+	<select id="searchOid" parameterType="map" resultType="integer">
+		select id from orderList where orderNumber=#{orderNumber} and mid=#{mid}
+	</select>
+
+	<select id="searchMate" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where id=#{mid}
+	</select>
+
+	<select id="searchMateById" parameterType="map"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+
+
+		select * from materialManage
+		<where>
+			id in
+			<foreach collection="ids" item="item" index="index" open="("
+				separator="," close=")">#{item}</foreach>
+		</where>
+		limit #{pageNumber},15
+
+
+	</select>
+
+
+	<select id="loadsearchmm" parameterType="map"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage
+		where
+		<if test="pn!=null and pn!=''">
+			pn=#{pn}
+		</if>
+		<if test="storeState!=null and storeState!=''">
+			and storeState=#{storeState}
+		</if>
+	</select>
+
+	<select id="loadcpMM" resultType="int"
+		parameterType="com.cy.domain.produce.tv.MaterialManage">
+		select count(*) from materialManage
+		<where>
+		<if test="storeState!=null and storeState!='' and storeState!=8">
+			storeState = #{storeState}
+		</if>
+		<if test="pn!=null and pn!=''">
+			and pn=#{pn}
+		</if>
+		</where>
+		order by id desc
+		
+	</select>
+
+	<select id="loadprodMM" parameterType="com.cy.domain.produce.tv.MaterialManage"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage 
+		<where> 
+		<if test="storeState!=null and storeState!='' and storeState!=8">
+			storeState = #{storeState}
+		</if>
+		<if test="pn!=null and pn!=''">
+			and pn like "%"#{pn}"%"
+		</if>
+		<if test="productName!=null and productName!=''">
+			and materialName like "%"#{productName}"%"
+		</if>
+		<if test="specification!=null and specification!=''">
+			and mexplain like "%"#{specification}"%"
+		</if>
+		</where>
+		order by id desc limit #{pageSize} ,#{limit}
+	</select>
+
+	<select id="outph" parameterType="int" resultType="String">
+		select sum(pnumber) from productHistory where mid=#{mid} and state='0' and qsid is null
+	</select>
+
+	<select id="putph" parameterType="int" resultType="String">
+		select sum(pnumber) from productHistory where mid=#{mid} and state='1' and qsid is null
+	</select>
+	<select id="outzfph" parameterType="int" resultType="String">
+		select sum(pnumber) from productHistory where mid=#{mid} and state='0' and qsid='1'
+	</select>
+
+	<select id="putzfph" parameterType="int" resultType="String">
+		select sum(pnumber) from productHistory where mid=#{mid} and state='1' and qsid='1'
+	</select>
+	<select id="outfxph" parameterType="int" resultType="String">
+		select sum(pnumber) from productHistory where mid=#{mid} and state='0' and qsid='2'
+	</select>
+
+	<select id="putfxph" parameterType="int" resultType="String">
+		select sum(pnumber) from productHistory where mid=#{mid} and state='1' and qsid='2'
+	</select>
+
+	<select id="outphss" parameterType="int" resultType="String">
+		select sum(pnumber) from productHistory where mid=#{mid} and state='0' and
+		oid=#{oid}
+	</select>
+
+	<select id="putphss" parameterType="int" resultType="String">
+		select sum(pnumber) from productHistory where mid=#{mid} and state='1' and
+		oid=#{oid}
+	</select>
+
+	<select id="findWhById" parameterType="int"
+		resultType="com.cy.domain.produce.tv.WarehouseHistory">
+		select m.materialName as materialName ,m.pn as pn,m.mexplain as mexplain,w.*
+		from warehouseHistory w, materialManage m where w.mid=m.id and
+		w.id=#{id} order by w.id desc
+	</select>
+
+
+	<select id="findProductHistoryById" parameterType="int"
+		resultType="com.cy.domain.produce.tv.ProductHistory">
+		select m.materialName as materialName ,m.pn as pn ,m.mexplain as
+		mexplain,w.* from productHistory w, materialManage m where w.mid=m.id
+		and w.id=#{id} order by w.id desc
+	</select>
+
+	<select id="findStructureHistoryById" parameterType="int"
+		resultType="com.cy.domain.produce.tv.StructureHistory">
+		select m.materialName as materialName ,m.pn as pn ,m.mexplain as
+		mexplain,w.* from structureHistory w, materialManage m where
+		w.mid=m.id and w.id=#{id} order by w.id desc
+	</select>
+
+	<select id="findBoardcardHistoryById" parameterType="int"
+		resultType="com.cy.domain.produce.tv.BoardcardHistory">
+		select m.materialName as materialName ,m.pn as pn ,m.mexplain as
+		mexplain,w.* from boardcardHistory w, materialManage m where
+		w.mid=m.id and w.id=#{id} order by w.id desc
+	</select>
+
+	<select id="findPreciousHistoryById" parameterType="int"
+		resultType="com.cy.domain.produce.tv.PreciousHistory">
+		select m.materialName as materialName ,m.pn as pn ,m.mexplain as
+		mexplain,w.* from preciousHistory w, materialManage m where w.mid=m.id
+		and w.id=#{id} order by w.id desc
+	</select>
+
+	<select id="findAccessoryHistoryById" parameterType="int"
+		resultType="com.cy.domain.produce.tv.AccessoryHistory">
+		select m.materialName as materialName ,m.pn as pn ,m.mexplain as
+		mexplain,w.* from accessoryHistory w, materialManage m where
+		w.mid=m.id and w.id=#{id} order by w.id desc
+	</select>
+
+	<select id="findDumpsterHistoryById" parameterType="int"
+		resultType="com.cy.domain.produce.tv.DumpsterHistory">
+		select m.materialName as materialName ,m.pn as pn ,m.mexplain as
+		mexplain,w.* from dumpsterHistory w, materialManage m where w.mid=m.id
+		and w.id=#{id} order by w.id desc
+	</select>
+
+
+
+	<select id="loadph" parameterType="com.cy.domain.produce.tv.ProductHistory"
+		resultType="com.cy.domain.produce.tv.ProductHistory">
+		select * from productHistory
+
+		<where>
+			mid=#{mid}
+			<if test="state!=null and state!=''">
+				and state=#{state}
+			</if>
+			<if test="qsid!=null and qsid!=''">
+				and qsid=#{qsid}
+			</if>
+		</where>
+		order by ptime desc limit #{pageSize},#{limit}
+	</select>
+
+	<select id="loadphCount" parameterType="com.cy.domain.produce.tv.ProductHistory"
+		resultType="int">
+		select count(*) from productHistory
+		<where>
+			mid=#{mid}
+			<if test="state!=null and state!=''">
+				and state=#{state}
+			</if>
+		</where>
+		order by ptime desc
+	</select>
+
+
+	<insert id="insertph" parameterType="com.cy.domain.produce.tv.ProductHistory">
+		insert into productHistory(mid,pnumber,ptime,state,oid,qsid,inDate,supplier,batch)
+		values(#{mid},#{pnumber},#{ptime},#{state},#{oid},#{qsid},#{inDate},#{supplier},#{batch})
+	</insert>
+
+	<delete id="deleteph" parameterType="int">
+		delete from productHistory where id=#{id}
+	</delete>
+
+	<select id="findAllOrders" resultType="int"
+		parameterType="com.cy.domain.produce.tv.OrderList">
+		select count(*) from orderList where stuat=1
+
+		<if test="orderNumber!=null and  orderNumber!=''">
+			and orderNumber=#{orderNumber}
+		</if>
+		<if test="storeState!=null and storeState!=''">
+			and storeState=#{storeState}
+		</if>
+        <if test="mid!=null">
+           and mid=#{mid}
+        </if>
+	</select>
+
+	<select id="findAllEndOrders" resultType="int">
+		select count(*) from orderList where stuat=0
+
+		<if test="orderNumber!=null and  orderNumber!=''">
+			and orderNumber=#{orderNumber}
+		</if>
+		<if test="storeState!=null and storeState!=''">
+			and storeState=#{storeState}
+		</if>
+        <if test="mid!=null">
+           and mid=#{mid}
+        </if>
+	</select>
+
+	<select id="loadOrders" resultType="com.cy.domain.produce.tv.OrderList"
+		parameterType="com.cy.domain.produce.tv.OrderList">
+		select * from orderList where stuat=1
+
+		<if test="orderNumber!=null and  orderNumber!=''">
+			and orderNumber=#{orderNumber}
+		</if>
+		<if test="storeState!=null and storeState!=''">
+			and storeState=#{storeState}
+		</if>
+        <if test="mid!=null">
+           and mid=#{mid}
+        </if>
+		limit #{pageSize} ,#{limit}
+	</select>
+
+	<select id="loadEndOrders" resultType="com.cy.domain.produce.tv.OrderList"
+		parameterType="com.cy.domain.produce.tv.OrderList">
+		select * from orderList where stuat=0
+
+		<if test="orderNumber!=null and  orderNumber!=''">
+			and orderNumber=#{orderNumber}
+		</if>
+		<if test="storeState!=null and storeState!=''">
+			and storeState=#{storeState}
+		</if>
+         <if test="mid!=null">
+           and mid=#{mid}
+        </if>
+		limit #{pageSize} ,#{limit}
+	</select>
+
+	<insert id="addOrder" parameterType="com.cy.domain.produce.tv.OrderList">
+		insert into
+		orderList(mid,orderNumber,numbers,price,stuat,money,createTime,storeState)
+		values(#{mid},#{orderNumber},#{numbers},#{price},#{stuat},#{money},#{createTime},#{storeState})
+	</insert>
+
+	<select id="findOrder" parameterType="com.cy.domain.produce.tv.OrderList"
+		resultType="com.cy.domain.produce.tv.OrderList">
+		select * from orderList where orderNumber=#{orderNumber} and
+		storeState=#{storeState} and mid=#{mid}
+	</select>
+
+	<select id="findOrderstate" parameterType="int"
+		resultType="com.cy.domain.produce.tv.OrderList">
+		select * from orderList o,materialManage m where o.mid=m.id and
+		o.storeState=#{storeState}
+	</select>
+
+	<select id="outwhOrderNum" parameterType="map" resultType="String">
+		select sum(pnumber) from warehouseHistory where oid=#{oid} and
+		state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outphOrderNum" parameterType="map" resultType="String">
+		select sum(pnumber) from productHistory where oid=#{oid} and state='0'
+		and id &lt;=#{id}
+	</select>
+
+	<select id="outstrhOrderNum" parameterType="map" resultType="String">
+		select sum(pnumber) from structureHistory where oid=#{oid} and
+		state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outbkhOrderNum" parameterType="map" resultType="String">
+		select sum(pnumber) from boardcardHistory where oid=#{oid} and
+		state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outgzhOrderNum" parameterType="map" resultType="String">
+		select sum(pnumber) from preciousHistory where oid=#{oid} and
+		state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outflhOrderNum" parameterType="map" resultType="String">
+		select sum(pnumber) from accessoryHistory where oid=#{oid} and
+		state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outzfhOrderNum" parameterType="map" resultType="String">
+		select sum(pnumber) from dumpsterHistory where oid=#{oid} and
+		state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outwhOrderNumNoOrder" parameterType="map"
+		resultType="String">
+		select sum(pnumber) from warehouseHistory where state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outphOrderNumNoOrder" parameterType="map"
+		resultType="String">
+		select sum(pnumber) from productHistory where state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outstrhOrderNumNoOrder" parameterType="map"
+		resultType="String">
+		select sum(pnumber) from structureHistory where state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outbkhOrderNumNoOrder" parameterType="map"
+		resultType="String">
+		select sum(pnumber) from boardcardHistory where state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outgzhOrderNumNoOrder" parameterType="map"
+		resultType="String">
+		select sum(pnumber) from preciousHistory where state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outflhOrderNumNoOrder" parameterType="map"
+		resultType="String">
+		select sum(pnumber) from accessoryHistory where state='0' and id &lt;=#{id}
+	</select>
+
+	<select id="outzfhOrderNumNoOrder" parameterType="map"
+		resultType="String">
+		select sum(pnumber) from dumpsterHistory where state='0' and id &lt;=#{id}
+	</select>
+
+
+	<select id="outOrderNumW" parameterType="com.cy.domain.produce.tv.OrderList"
+		resultType="String">
+		select sum(pnumber) from warehouseHistory where oid=#{id} and state='0' and
+		mid=#{mid}
+	</select>
+
+	<select id="outOrderNumH" parameterType="com.cy.domain.produce.tv.OrderList"
+		resultType="String">
+		select sum(pnumber) from productHistory where oid=#{id} and state='0' and
+		mid=#{mid}
+	</select>
+
+
+
+	<select id="findOrderid" parameterType="int"
+		resultType="com.cy.domain.produce.tv.OrderList">
+		select * from orderList where id=#{oid}
+	</select>
+
+	<select id="findOrders" parameterType="String"
+		resultType="com.cy.domain.produce.tv.OrderList">
+		select * from orderList where orderNumber=#{orderNumber}
+	</select>
+
+	<update id="updateOrder" parameterType="com.cy.domain.produce.tv.OrderList">
+		update orderList
+		<set>
+			<trim suffixOverrides=",">
+				<if test="mid!=null">
+					mid=#{mid},
+				</if>
+				<if test="orderNumber!=null  and orderNumber!=''">
+					orderNumber=#{orderNumber},
+				</if>
+				<if test="numbers!=null">
+					numbers=#{numbers},
+				</if>
+				<if test="price!=null">
+					price=#{price},
+				</if>
+				<if test="storeState!=null">
+					storeState=#{storeState},
+				</if>
+				<if test="createTime!=null and createTime!=''">
+					createTime=#{createTime}
+				</if>
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updatePdHistory" parameterType="com.cy.domain.produce.tv.ProductHistory">
+		update productHistory
+		<set>
+			<trim suffixOverrides=",">
+				<if test="pnumber!=null">
+					pnumber=#{pnumber},
+				</if>
+				<if test="inDate!=null">
+					inDate=#{inDate},
+				</if>
+				<if test="supplier!=null">
+					supplier=#{supplier},
+				</if>
+				<if test="batch!=null">
+					batch=#{batch},
+				</if>
+				<if test="state!=null">
+					state=#{state},
+				</if>
+
+				oid=#{oid}
+
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updateStrHistory" parameterType="com.cy.domain.produce.tv.StructureHistory">
+		update structureHistory
+		<set>
+			<trim suffixOverrides=",">
+				<if test="pnumber!=null">
+					pnumber=#{pnumber},
+				</if>
+				<if test="state!=null">
+					state=#{state},
+				</if>
+
+				oid=#{oid}
+
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updatebkHistory" parameterType="com.cy.domain.produce.tv.BoardcardHistory">
+		update boardcardHistory
+		<set>
+			<trim suffixOverrides=",">
+				<if test="pnumber!=null">
+					pnumber=#{pnumber},
+				</if>
+				<if test="state!=null">
+					state=#{state},
+				</if>
+
+				oid=#{oid}
+
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updategzHistory" parameterType="com.cy.domain.produce.tv.PreciousHistory">
+		update preciousHistory
+		<set>
+			<trim suffixOverrides=",">
+				<if test="pnumber!=null">
+					pnumber=#{pnumber},
+				</if>
+				<if test="state!=null">
+					state=#{state},
+				</if>
+
+				oid=#{oid}
+
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updateflHistory" parameterType="com.cy.domain.produce.tv.AccessoryHistory">
+		update accessoryHistory
+		<set>
+			<trim suffixOverrides=",">
+				<if test="pnumber!=null">
+					pnumber=#{pnumber},
+				</if>
+				<if test="state!=null">
+					state=#{state},
+				</if>
+
+				oid=#{oid}
+
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updatezfHistory" parameterType="com.cy.domain.produce.tv.DumpsterHistory">
+		update dumpsterHistory
+		<set>
+			<trim suffixOverrides=",">
+				<if test="pnumber!=null">
+					pnumber=#{pnumber},
+				</if>
+				<if test="state!=null">
+					state=#{state},
+				</if>
+
+				oid=#{oid}
+
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+
+	<update id="updateWhHistory" parameterType="com.cy.domain.produce.tv.WarehouseHistory">
+		update warehouseHistory
+		<set>
+			<trim suffixOverrides=",">
+				<if test="pnumber!=null">
+					pnumber=#{pnumber},
+				</if>
+				<if test="state!=null">
+					state=#{state},
+				</if>
+
+				oid=#{oid}
+
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+	<delete id="deleteOrderById" parameterType="int">
+		delete from orderList where id=#{id}
+	</delete>
+
+	<insert id="addBomList" parameterType="com.cy.domain.produce.tv.BomList">
+		insert into bomList(mid,pname,pn,mexplain,weight,dosage,creamTime,uname)
+		values(#{mid},#{pname},#{pn},#{mexplain},#{weight},#{dosage},#{creamTime},#{uname})
+	</insert>
+
+	<delete id="delBomList" parameterType="int">
+		delete from bomList where id=#{id}
+	</delete>
+
+	<select id="loadBom" parameterType="int"
+		resultType="com.cy.domain.produce.tv.BomList">
+		select * from bomList where id=#{id}
+	</select>
+
+	<select id="loadMidBom" parameterType="int"
+		resultType="com.cy.domain.produce.tv.BomList">
+		select * from bomList where mid=#{mid}
+	</select>
+
+	<delete id="delBomMate" parameterType="int">
+		delete from bomMaterials where bid=#{bid}
+	</delete>
+
+	<select id="loadBomList" parameterType="com.cy.domain.produce.tv.BomList"
+		resultType="com.cy.domain.produce.tv.BomList">
+		SELECT m.materialName as pname,b.* FROM bomList b
+		LEFT JOIN materialManage m ON m.pn = b.pn
+		<where>
+			<if test="pn!=null and pn!=''">
+				pn=#{pn}
+			</if>
+			<if test="uname!=null and uname!=''">
+				uname=#{uname}
+			</if>
+		</where>
+		limit #{pageSize} ,#{limit}
+	</select>
+
+	<select id="loadAllBomList" resultType="int"
+		parameterType="com.cy.domain.produce.tv.BomList">
+		select count(*) from bomList
+		<where>
+			<if test="pn!=null and pn!=''">
+				pn=#{pn}
+			</if>
+		</where>
+	</select>
+
+	<select id="loadBM" parameterType="int"
+		resultType="com.cy.domain.produce.tv.BomMaterials">
+		select * from bomMaterials where bid=#{bid}
+	</select>
+
+	<select id="loadBMSS" parameterType="com.cy.domain.produce.tv.BomMaterials"
+		resultType="com.cy.domain.produce.tv.BomMaterials">
+		select * from bomMaterials where bid=#{bid} 
+		<if test="pn != null and pn !=''">and pn = #{pn}</if>
+		<if test="mexplain != null and mexplain !=''">and mexplain like concat('%',#{mexplain},'%')</if>
+		limit #{pageSize} ,#{limit}
+	</select>
+
+	<select id="loadBMCount" parameterType="com.cy.domain.produce.tv.BomMaterials"
+		resultType="int">
+		select count(*) from bomMaterials where bid=#{bid}
+	</select>
+
+	<insert id="addBomMate" parameterType="com.cy.domain.produce.tv.BomMaterials">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into bomMaterials(bid,mid,bitNumber,useNumer)
+		values(#{bid},#{mid},#{bitNumber},#{useNumer})
+	</insert>
+
+	<delete id="deleBomMate" parameterType="int">
+		delete from bomMaterials where id=#{id}
+	</delete>
+
+	<update id="updateBomMate" parameterType="com.cy.domain.produce.tv.BomMaterials">
+		update bomMaterials
+		<set>
+			<trim suffixOverrides=",">
+				<if test="bitNumber!=null and bitNumber!=''">
+					bitNumber=#{bitNumber},
+				</if>
+				<if test="useNumer!=null">
+					useNumer=#{useNumer}
+				</if>
+			</trim>
+		</set>
+		where id=#{id}
+	</update>
+
+	<select id="searchBom" parameterType="String"
+		resultType="com.cy.domain.produce.tv.BomList">
+		select * from bomList where pn=#{pn}
+	</select>
+
+	<select id="loadbol" parameterType="int"
+		resultType="com.cy.domain.produce.tv.BomOrderList">
+		select a.*, a.id as bid, b.* from bomList a , orderList b where a.mid =
+		b.mid limit #{pageNumber}, 15
+	</select>
+
+	<select id="phid" parameterType="int"
+		resultType="com.cy.domain.produce.tv.ProductHistory">
+		select * from productHistory where id=#{id}
+	</select>
+
+	<select id="whid" parameterType="int"
+		resultType="com.cy.domain.produce.tv.WarehouseHistory">
+		select * from warehouseHistory where id=#{id}
+	</select>
+
+	<select id="sreachBol" parameterType="map"
+		resultType="com.cy.domain.produce.tv.BomOrderList">
+		select a.*, a.id as oid, b.id as bid, b.* from orderList a, bomList b where
+		a.orderNumber =#{orderNumber} and b.pn=#{pn} and a.mid=b.mid
+	</select>
+
+	<select id="loadPrices" parameterType="com.cy.domain.produce.tv.PriceList"
+		resultType="com.cy.domain.produce.tv.PriceList">
+		select * from priceList
+		<where>
+			<if test="mid!=null and mid!=''">
+				mid=#{mid}
+			</if>
+		</where>
+		limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="loadAllPrices" resultType="int"
+		parameterType="com.cy.domain.produce.tv.PriceList">
+		select count(*) from priceList
+		<where>
+			<if test="mid!=null and mid!=''">
+				mid=#{mid}
+			</if>
+		</where>
+	</select>
+
+	<insert id="addPrice" parameterType="com.cy.domain.produce.tv.PriceList">
+		insert into
+		priceList(mid,jprice,supplier,telphone,email,creamTime,minNumbers,processCost,sampleCost)
+		values(#{mid},#{jprice},#{supplier},#{telphone},#{email},#{creamTime},#{minNumbers},#{processCost},#{sampleCost})
+	</insert>
+
+	<delete id="deletePrice" parameterType="int">
+		delete from priceList where id=#{id}
+	</delete>
+
+	<update id="updatePrice" parameterType="com.cy.domain.produce.tv.PriceList">
+		update priceList
+		<trim prefix="set" suffixOverrides=",">
+			<if test="jprice != null">jprice=#{jprice},</if>
+			<if test="supplier != null">supplier=#{supplier},</if>
+			<if test="telphone != null">telphone=#{telphone},</if>
+			<if test="email != null">email=#{email},</if>
+			<if test="minNumbers != null">minNumbers=#{minNumbers},</if>
+			<if test="processCost  != null">processCost =#{processCost },</if>
+			<if test="sampleCost  != null">sampleCost =#{sampleCost },</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<select id="sreachPrice" parameterType="int"
+		resultType="com.cy.domain.produce.tv.PriceList">
+		select * from priceList where mid=#{mid}
+	</select>
+
+	<select id="searchPO" parameterType="String" resultType="String">
+		select purchaseOrders from purchaseList where id=(select max(id) from
+		purchaseList) and substring(creamTime,1,10)=#{time}
+	</select>
+
+	<select id="searchPOJO" parameterType="String" resultType="String">
+		select purchaseOrders from reportPriceList where id=(select max(id)
+		from reportPriceList) and substring(creamTime,1,10)=#{time}
+	</select>
+
+	<select id="loadReportPriceDetails" parameterType="int"
+		resultType="com.cy.domain.produce.tv.ReportPrice">
+		select * from reportPriceList where id=#{id}
+	</select>
+
+
+
+	<insert id="addDemandList" parameterType="com.cy.domain.produce.tv.DemandList">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		demandList(bid,mid,demandNumber,jprice,dmoney,purchaseOrders,creamTime,deliveryTime)
+		values(#{bid},#{mid},#{demandNumber},#{jprice},#{dmoney},#{purchaseOrders},#{creamTime},#{deliveryTime})
+	</insert>
+
+	<insert id="addPriceDemandList" parameterType="com.cy.domain.produce.tv.ReportDemandList">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="id">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		reportDemandList(bid,mid,demandNumber,jprice,dmoney,purchaseOrders,creamTime,deliveryTime)
+		values(#{bid},#{mid},#{demandNumber},#{jprice},#{dmoney},#{purchaseOrders},#{creamTime},#{deliveryTime})
+	</insert>
+
+
+
+	<insert id="addPurchaseList" parameterType="com.cy.domain.produce.tv.PurchaseList">
+		insert into
+		purchaseList(bid,demandNumber,purchaseOrders,operator,materialNumber,totalMoney,creamTime,stuat,orderStuat,site,deliveryTime,sort,technology)
+		values(#{bid},#{demandNumber},#{purchaseOrders},#{operator},#{materialNumber},#{totalMoney},#{creamTime},#{stuat},#{orderStuat},#{site},#{deliveryTime},#{sort},#{technology})
+	</insert>
+
+	<insert id="addReportList" parameterType="com.cy.domain.produce.tv.ReportPrice">
+		insert into
+		reportPriceList(bid,demandNumber,purchaseOrders,operator,materialNumber,totalMoney,creamTime,stuat,orderStuat,site,deliveryTime,sort,technology)
+		values(#{bid},#{demandNumber},#{purchaseOrders},#{operator},#{materialNumber},#{totalMoney},#{creamTime},#{stuat},#{orderStuat},#{site},#{deliveryTime},#{sort},#{technology})
+	</insert>
+
+	<insert id="addCostList" parameterType="com.cy.domain.produce.tv.CostList">
+		insert into
+		costList(bid,demandNumber,costOrders,operator,materialNumber,totalMoney,creamTime,stuat)
+		values(#{bid},#{demandNumber},#{costOrders},#{operator},#{materialNumber},#{totalMoney},#{creamTime},#{stuat})
+	</insert>
+
+	<select id="sumPrice" parameterType="String" resultType="Double">
+		select IFNULL(sum(dmoney), 0) from demandList where
+		purchaseOrders=#{purchaseOrders}
+	</select>
+
+
+	<select id="sumReportPrice" parameterType="String" resultType="Double">
+		select IFNULL(sum(dmoney), 0) from reportDemandList where
+		purchaseOrders=#{purchaseOrders}
+	</select>
+
+	<select id="loadPurchaseList" parameterType="com.cy.domain.produce.tv.PurchaseList"
+		resultType="com.cy.domain.produce.tv.PurchaseList">
+		select * from purchaseList where stuat=1 and bid is not null
+		<if test="purchaseOrders!=null and purchaseOrders!=''">
+			and purchaseOrders=#{purchaseOrders}
+		</if>
+		limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="loadEndPurchaseList" parameterType="com.cy.domain.produce.tv.PurchaseList"
+		resultType="com.cy.domain.produce.tv.PurchaseList">
+		select * from purchaseList where stuat=0 and bid is not null
+		<if test="purchaseOrders!=null and purchaseOrders!=''">
+			and purchaseOrders=#{purchaseOrders}
+		</if>
+		limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="loadAllPurchaseList" resultType="int"
+		parameterType="com.cy.domain.produce.tv.PurchaseList">
+		select count(*) from purchaseList where stuat=1 and bid is not null
+		<if test="purchaseOrders!=null and purchaseOrders!=''">
+			and purchaseOrders=#{purchaseOrders}
+		</if>
+	</select>
+
+	<select id="loadAllEndPurchaseList" resultType="int"
+		parameterType="com.cy.domain.produce.tv.PurchaseList">
+		select count(*) from purchaseList where stuat=0 and bid is not null
+		<if test="purchaseOrders!=null and purchaseOrders!=''">
+			and purchaseOrders=#{purchaseOrders}
+		</if>
+	</select>
+
+	<delete id="deletepl" parameterType="int">
+		delete from purchaseList where id=#{id}
+	</delete>
+
+	<select id="loadPl" parameterType="int"
+		resultType="com.cy.domain.produce.tv.PurchaseList">
+		select * from purchaseList where id=#{id}
+	</select>
+
+	<delete id="deleteDemandList" parameterType="String">
+		delete from demandList where purchaseOrders=#{purchaseOrders}
+	</delete>
+
+	<select id="loadDemandLists" parameterType="String"
+		resultType="com.cy.domain.produce.tv.DemandList">
+		select * from demandList where purchaseOrders=#{purchaseOrders}
+	</select>
+
+	<select id="loadDemandListssss" parameterType="com.cy.domain.produce.tv.DemandList"
+		resultType="com.cy.domain.produce.tv.DemandList">
+		select * from demandList where purchaseOrders=#{purchaseOrders} limit
+		#{pageSize}, #{limit}
+	</select>
+
+	<select id="loadDemandListsCountssss" parameterType="com.cy.domain.produce.tv.DemandList"
+		resultType="int">
+		select count(*) from demandList where purchaseOrders=#{purchaseOrders}
+	</select>
+
+	<select id="loadDemandListsLimit" parameterType="com.cy.domain.produce.tv.PurchaseList"
+		resultType="com.cy.domain.produce.tv.DemandList">
+		select * from demandList where purchaseOrders=#{purchaseOrders} limit
+		#{pageSize}, #{limit}
+	</select>
+
+	<select id="loadPriceReportDemand" parameterType="com.cy.domain.produce.tv.ReportPrice"
+		resultType="com.cy.domain.produce.tv.ReportDemandList">
+		select * from reportDemandList where purchaseOrders=#{purchaseOrders} limit
+		#{pageSize}, #{limit}
+	</select>
+	<select id="dyPriceReportDemand" parameterType="com.cy.domain.produce.tv.ReportPrice"
+		resultType="com.cy.domain.produce.tv.ReportDemandList">
+		select * from reportDemandList where purchaseOrders=#{purchaseOrders}
+	</select>
+
+	<select id="loadDemandListsCount" parameterType="com.cy.domain.produce.tv.PurchaseList"
+		resultType="int">
+		select count(*) from demandList where purchaseOrders=#{purchaseOrders}
+	</select>
+
+
+	<select id="reportDemandListCount" parameterType="com.cy.domain.produce.tv.PurchaseList"
+		resultType="int">
+		select count(*) from reportDemandList where purchaseOrders=#{purchaseOrders}
+	</select>
+
+
+
+	<update id="updateDemand" parameterType="map">
+		update demandList
+		<trim prefix="set" suffixOverrides=",">
+			<if test="demandNumber != null">demandNumber=#{demandNumber},</if>
+			<if test="deliveryTime != null">deliveryTime=#{deliveryTime},</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<delete id="deleteDemand" parameterType="int">
+		delete from demandList where id=#{id}
+	</delete>
+
+	<update id="updatePs" parameterType="com.cy.domain.produce.tv.PurchaseStuat">
+		update purchaseList
+		<trim prefix="set" suffixOverrides=",">
+			<if test="stuat != null">stuat=#{stuat},</if>
+			<if test="orderStuat != null">orderStuat=#{orderStuat},</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<select id="searchPP" parameterType="String"
+		resultType="com.cy.domain.produce.tv.PurchaseList">
+		select * from purchaseList where purchaseOrders=#{purchaseOrders}
+	</select>
+
+	<update id="updateOrderStuat" parameterType="map">
+		update orderList set stuat=#{stuat} where id=#{id}
+	</update>
+
+	<select id="loadjgMM" resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '2' order by id desc
+	</select>
+
+	<select id="loadbkMM" resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '3' order by id desc
+	</select>
+
+	<select id="loadgzMM" resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '4' order by id desc
+	</select>
+
+	<select id="loadflMM" resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '5' order by id desc
+	</select>
+
+	<select id="loadzfMM" resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '6' order by id desc
+	</select>
+
+	<select id="loadpagejgMM" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '2' order by id desc limit
+		#{pageNumber} ,15
+	</select>
+
+	<select id="loadpagebkMM" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '3' order by id desc limit
+		#{pageNumber} ,15
+	</select>
+
+	<select id="loadpagegzMM" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '4' order by id desc limit
+		#{pageNumber} ,15
+	</select>
+
+	<select id="loadpageflMM" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '5' order by id desc limit
+		#{pageNumber} ,15
+	</select>
+
+	<select id="loadpagezfMM" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where storeState = '6' order by id desc limit
+		#{pageNumber} ,15
+	</select>
+
+	<select id="outstrh" parameterType="int" resultType="String">
+		select sum(pnumber) from structureHistory where mid=#{mid} and state='0'
+	</select>
+
+	<select id="putstrh" parameterType="int" resultType="String">
+		select sum(pnumber) from structureHistory where mid=#{mid} and state='1'
+	</select>
+
+	<select id="outbkh" parameterType="int" resultType="String">
+		select sum(pnumber) from boardcardHistory where mid=#{mid} and state='0'
+	</select>
+
+	<select id="putbkh" parameterType="int" resultType="String">
+		select sum(pnumber) from boardcardHistory where mid=#{mid} and state='1'
+	</select>
+
+	<select id="outgzh" parameterType="int" resultType="String">
+		select sum(pnumber) from preciousHistory where mid=#{mid} and state='0'
+	</select>
+
+	<select id="putgzh" parameterType="int" resultType="String">
+		select sum(pnumber) from preciousHistory where mid=#{mid} and state='1'
+	</select>
+
+	<select id="outflh" parameterType="int" resultType="String">
+		select sum(pnumber) from accessoryHistory where mid=#{mid} and state='0'
+	</select>
+
+	<select id="putflh" parameterType="int" resultType="String">
+		select sum(pnumber) from accessoryHistory where mid=#{mid} and state='1'
+	</select>
+
+	<select id="outzfh" parameterType="int" resultType="String">
+		select sum(pnumber) from dumpsterHistory where mid=#{mid} and state='0'
+	</select>
+
+	<select id="putzfh" parameterType="int" resultType="String">
+		select sum(pnumber) from dumpsterHistory where mid=#{mid} and state='1'
+	</select>
+
+	<select id="loadstrh" parameterType="int"
+		resultType="com.cy.domain.produce.tv.StructureHistory">
+		select * from structureHistory where mid=#{mid} order by ptime desc
+	</select>
+
+	<select id="loadbkh" parameterType="int"
+		resultType="com.cy.domain.produce.tv.BoardcardHistory">
+		select * from boardcardHistory where mid=#{mid} order by ptime desc
+	</select>
+
+	<select id="loadgzh" parameterType="int"
+		resultType="com.cy.domain.produce.tv.PreciousHistory">
+		select * from preciousHistory where mid=#{mid} order by ptime desc
+	</select>
+
+	<select id="loadflh" parameterType="int"
+		resultType="com.cy.domain.produce.tv.AccessoryHistory">
+		select * from accessoryHistory where mid=#{mid} order by ptime desc
+	</select>
+
+	<select id="loadzfh" parameterType="int"
+		resultType="com.cy.domain.produce.tv.DumpsterHistory">
+		select * from dumpsterHistory where mid=#{mid} order by ptime desc
+	</select>
+
+	<insert id="insertstrh" parameterType="com.cy.domain.produce.tv.StructureHistory">
+		insert into structureHistory(mid,pnumber,ptime,state,oid)
+		values(#{mid},#{pnumber},#{ptime},#{state},#{oid})
+	</insert>
+
+	<insert id="insertbkh" parameterType="com.cy.domain.produce.tv.BoardcardHistory">
+		insert into boardcardHistory(mid,pnumber,ptime,state,oid)
+		values(#{mid},#{pnumber},#{ptime},#{state},#{oid})
+	</insert>
+
+	<insert id="insertgzh" parameterType="com.cy.domain.produce.tv.PreciousHistory">
+		insert into preciousHistory(mid,pnumber,ptime,state,oid)
+		values(#{mid},#{pnumber},#{ptime},#{state},#{oid})
+	</insert>
+
+	<insert id="insertflh" parameterType="com.cy.domain.produce.tv.AccessoryHistory">
+		insert into accessoryHistory(mid,pnumber,ptime,state,oid)
+		values(#{mid},#{pnumber},#{ptime},#{state},#{oid})
+	</insert>
+
+	<insert id="insertzfh" parameterType="com.cy.domain.produce.tv.DumpsterHistory">
+		insert into dumpsterHistory(mid,pnumber,ptime,state,oid)
+		values(#{mid},#{pnumber},#{ptime},#{state},#{oid})
+	</insert>
+
+	<delete id="deletestrh" parameterType="int">
+		delete from structureHistory where id=#{id}
+	</delete>
+
+	<delete id="deletebkh" parameterType="int">
+		delete from boardcardHistory where id=#{id}
+	</delete>
+
+	<delete id="deletegzh" parameterType="int">
+		delete from preciousHistory where id=#{id}
+	</delete>
+
+	<delete id="deleteflh" parameterType="int">
+		delete from accessoryHistory where id=#{id}
+	</delete>
+
+	<delete id="deletezfh" parameterType="int">
+		delete from dumpsterHistory where id=#{id}
+	</delete>
+
+	<select id="loadAllCostList" resultType="int"
+		parameterType="com.cy.domain.produce.tv.CostList">
+		select count(*) from costList
+		<where>
+			<if test="costOrders!=null and  costOrders!=''">
+				costOrders=#{costOrders}
+			</if>
+		</where>
+	</select>
+
+	<select id="loadCostList" parameterType="com.cy.domain.produce.tv.CostList"
+		resultType="com.cy.domain.produce.tv.CostList">
+		select * from costList
+		<where>
+			<if test="costOrders!=null and  costOrders!=''">
+				costOrders=#{costOrders}
+			</if>
+		</where>
+		limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="loadCost" parameterType="int"
+		resultType="com.cy.domain.produce.tv.CostList">
+		select * from costList where id=#{id}
+	</select>
+
+	<delete id="deleteCost" parameterType="int">
+		delete from costList where id=#{id}
+	</delete>
+
+	<select id="searchCO" parameterType="String" resultType="String">
+		select costOrders from costList where id=(select max(id) from costList) and
+		substring(creamTime,1,10)=#{time}
+	</select>
+
+	<select id="searchCost" parameterType="String"
+		resultType="com.cy.domain.produce.tv.CostList">
+		select * from costList where costOrders=#{costOrders}
+	</select>
+
+	<select id="loadAllCodingList" parameterType="com.cy.domain.produce.tv.CodingList"
+		resultType="int">
+		select count(*) from codingList
+		<where>
+			<if test="number!=null and number!=''">
+				number=#{number}
+			</if>
+			<if test="pname!=null and pname!=''">
+				and pname=#{pname}
+			</if>
+		</where>
+	</select>
+
+	<select id="loadCodingList" parameterType="com.cy.domain.produce.tv.CodingList"
+		resultType="com.cy.domain.produce.tv.CodingList">
+		select * from codingList
+		<where>
+			<if test="number!=null and number!=''">
+				number=#{number}
+			</if>
+			<if test="pname!=null and pname!=''">
+				and pname=#{pname}
+			</if>
+		</where>
+		limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="searchNameCoding" parameterType="String"
+		resultType="com.cy.domain.produce.tv.CodingList">
+		select * from codingList where pname=#{pname}
+	</select>
+
+	<insert id="addCodingList" parameterType="com.cy.domain.produce.tv.CodingList">
+		insert into codingList(number,pname,mexplain,creamTime)
+		values(#{number},#{pname},#{mexplain},#{creamTime})
+	</insert>
+
+	<update id="updateCodingList" parameterType="com.cy.domain.produce.tv.CodingList">
+		update codingList
+		<trim prefix="set" suffixOverrides=",">
+			<if test="number != null">number=#{number},</if>
+			<if test="pname != null">pname=#{pname},</if>
+			<if test="mexplain != null">mexplain=#{mexplain},</if>
+			<if test="creamTime!= null">creamTime=#{creamTime},</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<delete id="delCodingList" parameterType="int">
+		delete from codingList where id=#{id}
+	</delete>
+
+	<select id="codingNumberCoding" parameterType="String"
+		resultType="com.cy.domain.produce.tv.CodingList">
+		select * from codingList where number=#{number}
+	</select>
+
+	<select id="allMakerList" resultType="int"
+		parameterType="com.cy.domain.produce.tv.MakerList">
+		select count(*) from makerList
+		<where>
+			<if test="makerName!=null and makerName!=''">
+				makerName=#{makerName}
+			</if>
+		</where>
+	</select>
+
+	<select id="allclientList" resultType="int">
+		select count(*) from clientList
+	</select>
+
+	<select id="loadMakerList" parameterType="com.cy.domain.produce.tv.MakerList"
+		resultType="com.cy.domain.produce.tv.MakerList">
+		select * from makerList
+		<where>
+			<if test="makerName!=null and makerName!=''">
+				makerName=#{makerName}
+			</if>
+
+		</where>
+		limit #{pageSize} ,#{limit}
+	</select>
+
+	<select id="loadClientList" parameterType="int"
+		resultType="com.cy.domain.produce.tv.ClientList">
+		select * from clientList limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="loadMakerListNo" parameterType="String"
+		resultType="com.cy.domain.produce.tv.MakerList">
+		select * from makerList where makerNo=#{makerNo}
+	</select>
+
+	<select id="loadClientListNo" parameterType="String"
+		resultType="com.cy.domain.produce.tv.ClientList">
+		select * from clientList where clientNo=#{clientNo}
+	</select>
+
+	<select id="loadMakerListName" parameterType="String"
+		resultType="com.cy.domain.produce.tv.MakerList">
+		select * from makerList where makerName=#{makerName}
+	</select>
+
+	<select id="loadClientListName" parameterType="String"
+		resultType="com.cy.domain.produce.tv.ClientList">
+		select * from clientList where clientName=#{clientName}
+	</select>
+
+	<insert id="addMakerList" parameterType="com.cy.domain.produce.tv.MakerList">
+		insert into
+		makerList(makerNo,makerName,linkman,telphone,email,makerAddress,creamTime,openbank,ratepayingNumber,papers,accountNumber,introduce)
+		values(#{makerNo},#{makerName},#{linkman},#{telphone},#{email},#{makerAddress},#{creamTime},#{openbank},#{ratepayingNumber},#{papers},#{accountNumber},#{introduce})
+	</insert>
+
+	<insert id="addClientList" parameterType="com.cy.domain.produce.tv.ClientList">
+		insert into
+		clientList(clientNo,clientName,linkman,telphone,email,clientAddress,creamTime,openbank,ratepayingNumber,papers,accountNumber,introduce)
+		values(#{clientNo},#{clientName},#{linkman},#{telphone},#{email},#{clientAddress},#{creamTime},#{openbank},#{ratepayingNumber},#{papers},#{accountNumber},#{introduce})
+	</insert>
+
+	<update id="updateMakerList" parameterType="com.cy.domain.produce.tv.MakerList">
+		update makerList
+		<trim prefix="set" suffixOverrides=",">
+			<if test="makerNo != null">makerNo=#{makerNo},</if>
+			<if test="makerName != null">makerName=#{makerName},</if>
+			<if test="linkman != null">linkman=#{linkman},</if>
+			<if test="telphone != null">telphone=#{telphone},</if>
+			<if test="email != null">email=#{email},</if>
+			<if test="openbank != null">openbank=#{openbank},</if>
+			<if test="ratepayingNumber != null">ratepayingNumber=#{ratepayingNumber},</if>
+			<if test="papers != null">papers=#{papers},</if>
+			<if test="accountNumber != null">accountNumber=#{accountNumber},</if>
+			<if test="introduce != null">introduce=#{introduce},</if>
+			<if test="makerAddress != null">makerAddress=#{makerAddress},</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<update id="updateClientList" parameterType="com.cy.domain.produce.tv.ClientList">
+		update clientList
+		<trim prefix="set" suffixOverrides=",">
+			<if test="clientNo != null">clientNo=#{clientNo},</if>
+			<if test="clientName != null">clientName=#{clientName},</if>
+			<if test="linkman != null">linkman=#{linkman},</if>
+			<if test="telphone != null">telphone=#{telphone},</if>
+			<if test="email != null">email=#{email},</if>
+			<if test="openbank != null">openbank=#{openbank},</if>
+			<if test="ratepayingNumber != null">ratepayingNumber=#{ratepayingNumber},</if>
+			<if test="papers != null">papers=#{papers},</if>
+			<if test="accountNumber != null">accountNumber=#{accountNumber},</if>
+			<if test="introduce != null">introduce=#{introduce},</if>
+			<if test="clientAddress != null">clientAddress=#{clientAddress},</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<delete id="deleteMakerList" parameterType="int">
+		delete from makerList where id=#{id}
+	</delete>
+
+	<delete id="deleteClientList" parameterType="int">
+		delete from clientList where id=#{id}
+	</delete>
+
+	<select id="searchMakerName" parameterType="String"
+		resultType="com.cy.domain.produce.tv.MakerList">
+		select * from makerList where makerName=#{makerName}
+	</select>
+
+	<select id="searchClientName" parameterType="String"
+		resultType="com.cy.domain.produce.tv.ClientList">
+		select * from clientList where clientName=#{clientName}
+	</select>
+
+	<delete id="deletePriceMM" parameterType="int">
+		delete from priceList where mid=#{id}
+	</delete>
+
+	<select id="maxNo" parameterType="map" resultType="String">
+		select max(substring(jobNo,-3)) from productHistory where
+		reverse(substring(reverse(jobNo),12))=#{clientNo} and
+		substring(jobNo,-11,8)=#{times}
+	</select>
+
+	<update id="updateProductHistoryJobNo" parameterType="map">
+		update productHistory set jobNo=#{jobNo} where id=#{id}
+	</update>
+
+	<select id="loadAllClientList" resultType="com.cy.domain.produce.tv.ClientList">
+		select * from clientList
+	</select>
+
+	<select id="loadchuhuodang" parameterType="int" resultMap="orderMap">
+		select o.*, p.* from orderList o left join productHistory p on
+		p.oid=o.id where p.oid=#{id} and p.state='0' and p.mid=(select mid
+		from orderList where id=#{id})
+	</select>
+
+	<resultMap type="com.cy.domain.produce.tv.OrderList" id="orderMap">
+		<id property="id" column="id" />
+		<result property="orderNumber" column="orderNumber" />
+		<result property="numbers" column="numbers" />
+		<result property="price" column="price" />
+		<result property="mid" column="mid" />
+		<collection property="phList"
+			ofType="com.cy.domain.produce.tv.ProductHistory">
+			<!-- <id property="id" column="id"/> -->
+			<result property="mid" column="mid" />
+			<result property="pnumber" column="pnumber" />
+			<result property="jobNo" column="jobNo" />
+			<result property="ptime" column="ptime" />
+		</collection>
+	</resultMap>
+
+	<select id="searchwarehouseHistoryId" parameterType="String"
+		resultType="int">
+		select id from warehouseHistory where ptime=#{ptime}
+	</select>
+
+	<select id="searchproductHistoryId" parameterType="String"
+		resultType="int">
+		select id from productHistory where ptime=#{ptime}
+	</select>
+
+	<select id="searchwh" parameterType="String"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where pn=#{pn} and storeState = '0'
+	</select>
+
+	<select id="searchph" parameterType="String"
+		resultType="com.cy.domain.produce.tv.MaterialManage">
+		select * from materialManage where pn=#{pn} and storeState = '1'
+	</select>
+
+	<select id="searchMaker" parameterType="int"
+		resultType="com.cy.domain.produce.tv.MakerList">
+		select * from makerList where id=#{id}
+	</select>
+
+	<select id="loadAllCountRequestList" resultType="int">
+		select count(*) from requestList
+	</select>
+
+	<select id="loadReqestList" parameterType="com.cy.domain.produce.tv.RequestList"
+		resultType="com.cy.domain.produce.tv.RequestList">
+		select * from requestList limit #{pageSize},#{limit}
+	</select>
+
+	<insert id="addRequestList" parameterType="com.cy.domain.produce.tv.RequestList">
+		insert into
+		requestList(serialNumber,qualityRequest,deliveryRequest,clearingform,taxDemands,informationChange,dissResolution)
+		values(#{serialNumber},#{qualityRequest},#{deliveryRequest},#{clearingform},#{taxDemands},#{informationChange},#{dissResolution})
+	</insert>
+
+	<update id="updateRequestList" parameterType="com.cy.domain.produce.tv.RequestList">
+		update requestList
+		<trim prefix="set" suffixOverrides=",">
+			<if test="serialNumber != null">serialNumber=#{serialNumber},</if>
+			<if test="qualityRequest != null">qualityRequest=#{qualityRequest},</if>
+			<if test="deliveryRequest != null">deliveryRequest=#{deliveryRequest},</if>
+			<if test="clearingform != null">clearingform=#{clearingform},</if>
+			<if test="taxDemands != null">taxDemands=#{taxDemands},</if>
+			<if test="informationChange != null">informationChange=#{informationChange},</if>
+			<if test="dissResolution != null">dissResolution=#{dissResolution},</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<delete id="deleteRequestList" parameterType="int">
+		delete from requestList where id=#{id}
+	</delete>
+
+	<select id="allCompanyList" resultType="int"
+		parameterType="com.cy.domain.produce.tv.CompanyList">
+		select count(*) from companyList
+		<where>
+			<if test="companyName != null and companyName != ''">
+				companyName=#{companyName}
+			</if>
+		</where>
+	</select>
+
+	<select id="loadCompanyList" parameterType="com.cy.domain.produce.tv.CompanyList"
+		resultType="com.cy.domain.produce.tv.CompanyList">
+		select * from companyList
+		<where>
+			<if test="companyName != null and companyName != ''">
+				companyName=#{companyName}
+			</if>
+		</where>
+		limit #{pageSize}, #{limit}
+	</select>
+
+	<select id="loadCompanyListNo" parameterType="String"
+		resultType="com.cy.domain.produce.tv.CompanyList">
+		select * from companyList where companyNo=#{companyNo}
+	</select>
+
+	<select id="loadCompanyListName" parameterType="String"
+		resultType="com.cy.domain.produce.tv.CompanyList">
+		select * from companyList where companyName=#{companyName}
+	</select>
+
+	<insert id="addCompanyList" parameterType="com.cy.domain.produce.tv.CompanyList">
+		insert into
+		companyList(companyNo,companyName,linkman,telphone,email,companyAddress,creamTime,openbank,ratepayingNumber,papers,accountNumber,introduce)
+		values(#{companyNo},#{companyName},#{linkman},#{telphone},#{email},#{companyAddress},#{creamTime},#{openbank},#{ratepayingNumber},#{papers},#{accountNumber},#{introduce})
+	</insert>
+
+	<select id="allMakerIdName" resultType="com.cy.domain.produce.tv.MakerList">
+		select id, makerNo, makerName from makerList
+	</select>
+
+	<select id="allCompanyIdName" resultType="com.cy.domain.produce.tv.CompanyList">
+		select id, companyNo, companyName from companyList
+	</select>
+
+	<select id="allRequestId" resultType="com.cy.domain.produce.tv.RequestList"
+		parameterType="com.cy.domain.produce.tv.RequestList">
+		select * from requestList
+		<where>
+			<if test="id!=null">
+				id=#{id}
+			</if>
+		</where>
+	</select>
+
+	<update id="updateCompanyList" parameterType="com.cy.domain.produce.tv.CompanyList">
+		update companyList
+		<trim prefix="set" suffixOverrides=",">
+			<if test="companyNo != null">companyNo=#{companyNo},</if>
+			<if test="companyName != null">companyName=#{companyName},</if>
+			<if test="linkman != null">linkman=#{linkman},</if>
+			<if test="telphone != null">telphone=#{telphone},</if>
+			<if test="email != null">email=#{email},</if>
+			<if test="openbank != null">openbank=#{openbank},</if>
+			<if test="ratepayingNumber != null">ratepayingNumber=#{ratepayingNumber},</if>
+			<if test="companyAddress != null">companyAddress=#{companyAddress},</if>
+			<if test="papers != null">papers=#{papers},</if>
+			<if test="accountNumber != null">accountNumber=#{accountNumber},</if>
+			<if test="introduce != null">introduce=#{introduce},</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<select id="loadRequestId" parameterType="int"
+		resultType="com.cy.domain.produce.tv.RequestList">
+		select * from requestList where id=#{id}
+	</select>
+
+	<select id="loadCompanyId" parameterType="int"
+		resultType="com.cy.domain.produce.tv.CompanyList">
+		select * from companyList where id=#{id}
+	</select>
+
+	<select id="loadRequestNumber" parameterType="String"
+		resultType="com.cy.domain.produce.tv.RequestList">
+		select * from requestList where serialNumber=#{serialNumber}
+	</select>
+
+	<delete id="deleteCompanyList" parameterType="int">
+		delete from companyList where id=#{id}
+	</delete>
+
+	<select id="searchCompanyName" parameterType="String"
+		resultType="com.cy.domain.produce.tv.CompanyList">
+		select * from companyList where companyName=#{companyName}
+	</select>
+
+	<delete id="deletePurchaseListBid" parameterType="int">
+		delete from purchaseList where bid=#{id}
+	</delete>
+
+	<delete id="deleteCostListBid" parameterType="int">
+		delete from costList where bid=#{id}
+	</delete>
+
+	<select id="searchDemandListId" parameterType="int"
+		resultType="com.cy.domain.produce.tv.DemandList">
+		select * from demandList where id=#{id}
+	</select>
+
+	<select id="sumDemandList" parameterType="String" resultType="int">
+		select count(*) from demandList where purchaseOrders=#{purchaseOrders}
+	</select>
+
+	<update id="updateSumPurchaseList" parameterType="map">
+		update purchaseList set materialNumber=#{materialNumber},
+		totalMoney=#{totalMoney} where purchaseOrders=#{purchaseOrders}
+	</update>
+
+	<select id="loadClientId" parameterType="int"
+		resultType="com.cy.domain.produce.tv.ClientList">
+		select * from clientList where id=#{id}
+	</select>
+
+	<select id="loadOrdersByMid" parameterType="int" resultType="string">
+		select distinct(orderNumber) from orderList where mid=#{mid}
+	</select>
+
+	<select id="loadAllReportPriceListCount" parameterType="com.cy.domain.produce.tv.ReportPrice"
+		resultType="int">
+		select count(*) from reportPriceList where stuat=1
+		<if test="purchaseOrders!=null and purchaseOrders!=''">
+			and purchaseOrders=#{purchaseOrders}
+		</if>
+	</select>
+
+	<select id="loadReportPriceList" parameterType="com.cy.domain.produce.tv.ReportPrice"
+		resultType="com.cy.domain.produce.tv.ReportPrice">
+		select * from reportPriceList where stuat=1
+		<if test="purchaseOrders!=null and purchaseOrders!=''">
+			and purchaseOrders=#{purchaseOrders}
+		</if>
+		limit #{pageSize}, #{limit}
+	</select>
+	<delete id="delreportPrice" parameterType="int">
+		delete from reportPriceList where id=#{id}
+	</delete>
+	<select id="LoadInstruct" parameterType="com.cy.domain.produce.tv.Instruct"
+		resultType="com.cy.domain.produce.tv.Instruct">
+		select * from erp_instruct
+		<where>
+			<if test="storeState!=null">
+				storeState=#{storeState} and instruct_pzState!=1
+			</if>
+			<if test="instructPermision!=1">
+				and instruct_userId=#{instruct_userId}
+			</if>
+		</where>
+		limit #{pageSize}, #{limit}
+	</select>
+	<select id="countLoadInstruct" parameterType="com.cy.domain.produce.tv.Instruct"
+		resultType="int">
+		select count(*) from erp_instruct
+		<where>
+			<if test="storeState!=null">
+				storeState=#{storeState} and instruct_state!=1
+			</if>
+			<if test="instructPermision!=1">
+				and instruct_userId=#{instruct_userId}
+			</if>
+		</where>
+
+	</select>
+
+
+	<select id="loadInstructByIds" parameterType="java.util.List"
+		resultType="com.cy.domain.produce.tv.Instruct">
+		select * from erp_instruct
+		where instruct_id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+
+	<insert id="insertInstruct" parameterType="com.cy.domain.produce.tv.Instruct">
+		insert erp_instruct
+		(instruct_pname,instruct_mid,instruct_pcode,instruct_order,instruct_state,instruct_pzState,instruct_number,instruct_time,instruct_user,instruct_userId,instruct_oid,storeState,qsid)
+		value(#{instruct_pname},#{instruct_mid},#{instruct_pcode},#{instruct_order},#{instruct_state},#{instruct_pzState},#{instruct_number},#{instruct_time},#{instruct_user},#{instruct_userId},#{instruct_oid},#{storeState},#{qsid})
+	</insert>
+
+	<select id="findUserById" parameterType="Integer"
+		resultType="com.cy.domain.user.ErpUser">
+		select * from erp_user where userId=#{userId}
+	</select>
+
+	<insert id="addHistory" parameterType="com.cy.domain.produce.tv.ProductHistory">
+		insert into productHistory(
+		mid,
+		pnumber,
+		ptime,
+		state,
+		oid,
+		qsid
+		)
+		values
+		<foreach collection="list" item="item" separator="," index="">
+			(
+			#{item.mid},
+			#{item.pnumber},
+			#{item.ptime},
+			#{item.state},
+			#{item.oid},
+			#{item.qsid}
+			)
+		</foreach>
+	</insert>
+	
+	
+	<update id="updataPzState" parameterType="map">
+		update erp_instruct set instruct_pzState=#{instruct_pzState} where instruct_id in
+		<foreach collection="idArr" item="item"  index="" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+    
+    <select id="loadboxFileList"  parameterType="com.cy.domain.list.FileUrl"  resultType="com.cy.domain.list.FileUrl">
+       select * from fileUrl
+       <where>
+           <if test="fileName!=null and fileName!=''">
+                 fileName=#{fileName}
+           </if>
+       </where>
+       limit #{pageSize},#{limit}
+    </select>
+    
+     <select id="loadboxFileListCount"  parameterType="com.cy.domain.list.FileUrl"  resultType="int">
+       select count(*) from fileUrl
+       <where>
+           <if test="fileName!=null and fileName!=''">
+                 fileName=#{fileName}
+           </if>
+           <if test="creatime!=null and creatime!=''">
+                 creatime=#{creatime}
+           </if>
+       </where>
+    </select>
+	<select id="loadCKBM" parameterType="String" resultType="com.cy.domain.produce.tv.BomMaterials">
+	select b.*,mm.materialName,mm.pn from bomMaterials b left join  bomList m on m.id=b.bid 
+	left join  materialManage mm on mm.id=b.mid
+	where m.pn=#{pn}
+	</select>
+	<select id="loadckHistory" parameterType="int" resultType="com.cy.domain.produce.tv.ProductHistory">
+	select * from productHistory where mid=#{mid}
+	</select>
+	<insert id="addkcnumber" parameterType="com.cy.domain.produce.tv.ProductHistory">
+	insert into productHistory(mid,oid,pnumber,state,ptime,qsid) 
+				values(#{mid},#{oid},#{pnumber},#{state},#{ptime},#{qsid})
+	</insert>
+	<insert id="addShortage" parameterType="com.cy.domain.produce.tv.Shortage">
+	insert into erp_shortage(shortageCode,pname,pid,pn,orderNumber,produceNumber,shortageNumber,stockNumber,remarks,qsid) 
+	values(#{shortageCode},#{pname},#{pid},#{pn},#{orderNumber},#{produceNumber},#{shortageNumber},#{stockNumber},#{remarks},#{qsid})
+	</insert>
+	<select id="countLoadShortage" parameterType="com.cy.domain.produce.tv.Shortage" resultType="int">
+	select count(*) from erp_shortage
+	<where>
+			<if test="shortageCode!=null and shortageCode!=''">
+                 shortageCode=#{shortageCode}
+           	</if>
+           	<if test="pname!=null and pname!=''">
+             and    pname=#{pname}
+           	</if>
+           	<if test="orderNumber!=null and orderNumber!=''">
+             and    orderNumber=#{orderNumber}
+           	</if>
+           	<if test="pn!=null and pn!=''">
+             and    pn=#{pn}
+           	</if>
+       </where>
+	</select>
+	<select id="loadShortage" parameterType="com.cy.domain.produce.tv.Shortage" resultType="com.cy.domain.produce.tv.Shortage">
+	select * from erp_shortage
+		<where>
+			<if test="shortageCode!=null and shortageCode!=''">
+                 shortageCode=#{shortageCode}
+           	</if>
+           	<if test="pname!=null and pname!=''">
+             and    pname=#{pname}
+           	</if>
+           	<if test="orderNumber!=null and orderNumber!=''">
+             and    orderNumber=#{orderNumber}
+           	</if>
+           	<if test="pn!=null and pn!=''">
+             and    pn=#{pn}
+           	</if>
+ 			
+       </where>
+       limit #{pageSize},#{limit}
+	</select>
+	<select id="findcksl" parameterType="com.cy.domain.produce.tv.BomMaterials" resultType="com.cy.domain.produce.tv.BomList">
+	select * from orderList where storeState=#{storeState} and mid=#{mid}
+	</select>
+	<select id="findQLSid" parameterType="String" resultType="com.cy.domain.produce.tv.Shortage">
+	select * from erp_shortage where shortageCode=#{shortageCode}
+	</select>
+	<insert id="addShortageList" parameterType="com.cy.domain.produce.tv.ShortageList">
+		insert into erp_shortagelist(sid,pcode,pname,produceNumber,stockNumber,shortageNumber,stime)
+		values
+		<foreach collection="list" item="item" separator="," index="">
+			(
+			#{item.sid},
+			#{item.pn},
+			#{item.pname},
+			#{item.produceNumber},
+			#{item.stockNumber},
+			#{item.shortageNumber},
+			#{item.stime}
+			)
+		</foreach>
+	</insert>
+	<select id="countLoadShortagelist" parameterType="com.cy.domain.produce.tv.ShortageList" resultType="int">
+	select count(*) from erp_shortagelist where sid=#{sid}
+	</select>
+	<select id="loadShortagelist" parameterType="com.cy.domain.produce.tv.ShortageList" resultType="com.cy.domain.produce.tv.ShortageList">
+	select * from erp_shortagelist where sid=#{sid} limit #{pageSize},#{limit}
+	</select>
+	<select id="sumQLPrice" parameterType="String" resultType="Double">
+	select ifnull(sum(p.jprice),0) from priceList p left join  materialManage m on m.id=p.mid where m.pn=#{pn}
+	</select>
+	<insert id="addQLXD" parameterType="com.cy.domain.produce.tv.PurchaseList">
+		insert into
+		purchaseList(sid,demandNumber,purchaseOrders,operator,materialNumber,totalMoney,creamTime,stuat,orderStuat,site,deliveryTime,sort,technology)
+		values(#{sid},#{demandNumber},#{purchaseOrders},#{operator},#{materialNumber},#{totalMoney},#{creamTime},#{stuat},#{orderStuat},#{site},#{deliveryTime},#{sort},#{technology})
+	</insert>
+	<select id="findQLbXD" parameterType="int" resultType="com.cy.domain.produce.tv.Shortage">
+	select * from erp_shortage where sid=#{sid} 
+	</select>
+	<update id="updateQLXD" parameterType="int">
+	update erp_shortage set `order`=1 where sid=#{sid}
+	</update>
+	<select id="PriceByPn" parameterType="String" resultType="com.cy.domain.produce.tv.PriceList">
+	select p.mid,p.jprice from priceList p left join  materialManage m on m.id=p.mid where m.pn=#{pcode}
+	</select>
+	<select id="findByPn" parameterType="String" resultType="com.cy.domain.produce.tv.MaterialManage">
+	select * from  materialManage  where pn=#{pcode}
+	</select>
+	<insert id="addQLPurchaseList">
+	insert into demandList(mid,demandNumber,jprice,dmoney,purchaseOrders,creamTime)
+		values
+		<foreach collection="list" item="item" separator="," index="">
+			(
+			#{item.mid},
+			#{item.demandNumber},
+			#{item.jprice},
+			#{item.dmoney},
+			#{item.purchaseOrders},
+			#{item.creamTime}
+			)
+		</foreach>
+	</insert>
+	<delete id="deleteShortage" parameterType="String">
+	delete from erp_shortage where qsid=#{qsid}
+	</delete>
+	<delete id="delCK" parameterType="String">
+	delete from productHistory where qsid=#{qsid}
+	</delete>
+	<delete id="deleteShortageList" parameterType="int">
+	delete from purchaseList where sid=#{sid}
+	</delete>
+	<select id="loadprecious" parameterType="com.cy.board.Precious" resultType="com.cy.board.Precious">
+	select * from jhz_precious where mid=#{mid} limit #{pageSize},#{limit}
+	</select>
+	<select id="countloadprecious" parameterType="com.cy.board.Precious" resultType="int">
+	select count(*) from jhz_precious where mid=#{mid}
+	</select>
+	<update id="updataBomList" parameterType="com.cy.domain.produce.tv.BomList">
+		UPDATE bomList SET `mid`=#{mid} ,`pname`=#{pname},`pn`=#{pn},uname=#{uname},mexplain=#{mexplain},weight=#{weight},dosage=#{dosage},creamTime=#{creamTime} WHERE id=#{id}
+	</update>
+	<select id="getParts" parameterType="com.cy.domain.produce.tv.ImportantParts" resultType="com.cy.domain.produce.tv.ImportantParts">
+	    select * from importantParts
+	        <trim prefix="WHERE"  prefixOverrides="AND |OR ">
+	       	<if test="SN1 != null and SN1 != ''">AND SN1 like concat('%',#{SN1},'%')</if>
+	       	<if test="time != null and time != ''">AND time = #{time}</if>
+	       	<if test="production != null and production != ''">AND production like concat('%',#{production},'%')</if>
+	       	<if test="workerCode != null and  workerCode != ''"> AND workerCode = #{workerCode}</if>
+	       	</trim>
+	       	limit #{pageSize},#{limit}
+	</select>
+	<select id="countParts" parameterType="com.cy.domain.produce.tv.ImportantParts" resultType="java.lang.Integer">
+	    select count(*)  from importantParts
+	    
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+	       		<if test="SN1 != null and SN1 != ''">AND SN1 like concat('%',#{SN1},'%')</if>
+	       	<if test="time != null and time != ''">AND time = #{time}</if>
+	       	<if test="production != null and production != ''">AND production like concat('%',#{production},'%')</if>
+	       	<if test="workerCode != null and workerCode != ''"> AND workerCode = #{workerCode}</if>
+	       	</trim> 
+	</select>
+	<insert id="insertInportant" parameterType="com.cy.domain.produce.tv.ImportantParts">
+	    insert into importantParts(SN1,part1,part1batch,part2,part2batch,part3,part3batch,part4,part4batch,part5,part5batch,part6,part6batch,part7,part7batch,part8,part8batch,part9,part9batch,part10,part10batch,time,production,workerCode)
+	    values(#{SN1},#{part1},#{part1batch},#{part2},#{part2batch},#{part3},#{part3batch},#{part4},#{part4batch},#{part5},#{part5batch},#{part6},#{part6batch},#{part7},#{part7batch},#{part8},#{part8batch},#{part9},#{part9batch},#{part10},#{part10batch},#{time},#{production},#{workerCode})
+	</insert>
+	<update id="updateInportant" parameterType="com.cy.domain.produce.tv.ImportantParts">
+	    update importantParts
+	    <set>
+	        <trim suffixOverrides=",">
+	        	<if test="SN1 != null">SN1 = #{SN1},</if>
+	        	<if test="part1 != null">part1 = #{part1},</if>
+	        	<if test="part1batch != null">part1batch = #{part1batch},</if>
+	        	<if test="part2 != null">part2 = #{part2},</if>
+	        	<if test="part2batch != null">part2batch = #{part2batch},</if>
+	        	<if test="part3 != null">part3 = #{part3},</if>
+	        	<if test="part3batch != null">part3batch = #{part3batch},</if>
+	        	<if test="part4 != null">part4 = #{part4},</if>
+	        	<if test="part4batch != null">part4batch = #{part4batch},</if>
+	        	<if test="part5 != null">part5 = #{part5},</if>
+	        	<if test="part5batch != null">part5batch = #{part5batch},</if>
+	        	<if test="part6 != null">part6 = #{part6},</if>
+	        	<if test="part6batch != null">part6batch = #{part6batch},</if>
+	        	<if test="part7 != null">part7 = #{part7},</if>
+	        	<if test="part7batch != null">part7batch = #{part7batch},</if>
+	        	<if test="part8 != null">part8 = #{part8},</if>
+	        	<if test="part8batch != null">part8batch = #{part8batch},</if>
+	        	<if test="part9 != null">part9 = #{part9},</if>
+	        	<if test="part9batch != null">part9batch = #{part9batch},</if>
+	        	<if test="part10 != null">part10 = #{part10},</if>
+	        	<if test="part10batch != null">part10batch = #{part10batch},</if>
+	        	<if test="time != null">time = #{time},</if>
+	        	<if test="production != null">production = #{production},</if>
+	        	<if test="workerCode != null">workerCode = #{workerCode},</if>
+	        </trim>
+	    </set>
+	    where id = #{id}
+	</update>
+	<delete id="deleteInportant" parameterType="java.lang.Integer">
+	    delete from importantParts where id=#{id}
+	</delete>
+</mapper>

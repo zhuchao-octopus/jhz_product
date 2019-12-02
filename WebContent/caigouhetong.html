@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>采购合同</title>
+
+    <style>
+        table{border:0;margin:0;}
+        /*table td{padding:0;}*/
+        tr,td{
+            border: 1px solid #000000;
+            width: 100px;
+            height:25px;
+            line-height:25px;
+            text-align:left;
+            font-size:12px
+        }
+        td{
+            padding-left: 10px;
+            width:170px
+        }
+    </style>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.PrintArea.js"></script>
+    <script src="js/jquery-ui-1.10.4.custom.js"></script>
+    <script>
+        $(function(){
+        	var url = window.location.search;
+        	console.log(url);
+    		var keyValue = new Map();
+    		if(url.indexOf("?")!=-1){
+    			var str=url.substr(url.indexOf("?")+1);
+    			var id1=str.split("&")[0].split("=")[1];
+    			console.log("id1",id1);
+    			var id2=str.split("&")[1].split("=")[1];
+    			console.log("id2",id2);
+    			var id3=str.split("&")[2].split("=")[1];
+    			console.log("id3",id3);
+    			var thisId=str.split("&")[3].split("=")[1];
+    			console.log("thisId",thisId);
+    			var sort=str.split("&")[4].split("=")[1];
+    			//console.log(decodeURI(sort));
+    			if(sort==3){
+    				$("#tit").text("加工合同");
+    			}else{
+    				$("#tit").text("采购合同");
+    			}
+    		    $.ajax({
+    		    	type:"get",
+    		        url:"tv/purchasePrint.do",
+    		        data:{
+    		        	"id1":id1,
+    		            "id2":id2,
+    		            "id3":id3,
+    		            "thisId":thisId
+    		        },
+    		        dataType:"json",
+    		        success:function(res){
+    		        	if(res.state==0){
+    		        		var company=res.data1;
+    		        		var marker=res.data;
+    		        		var purchase=res.data4;
+    		        		$("#makerName").text(marker.makerName);
+    		        		$("#companyName").text(company.companyName);
+    		        		$("#site").text(purchase.site);
+    		        		$("#purchaseOrders").text(purchase.purchaseOrders);
+    		        		$("#creamTime").text(purchase.creamTime);
+    		        		var merdise=res.data3;
+    		        		var require=res.data2;
+    		        		console.log(require);
+    		        		var arr=[];
+    		        		var totalMoney=0;
+    		        		for(var i=0;i<merdise.length;i++){
+    		        			var trstr="<tr><td>"+merdise[i].pname+"</td>";
+    		        			trstr+="<td style='text-align:center' colspan='2'>"+merdise[i].pn+"</td>";
+    		        			trstr+="<td style='text-align:center' colspan='2'>"+merdise[i].mexplain+"</td>";
+    		        			trstr+="<td style='text-align:center'>"+merdise[i].demandNumber+"</td>";
+    		        			if(merdise[i].jprice!=null){
+    		        				trstr+="<td style='text-align:center'>"+merdise[i].jprice+"</td>";
+    		        			}else{
+    		        				trstr+="<td style='text-align:center'></td>";
+    		        			}
+    		        			
+    		        			if(merdise[i].dmoney!=null){
+    		        			   trstr+="<td style='text-align:center'>"+merdise[i].dmoney+"</td>";
+    		        			   totalMoney+=merdise[i].dmoney
+    		        			}else{
+    		        			   trstr+="<td></td>";
+    		        			}
+    		        			if(merdise[i].deliveryTime!=null){
+    		        				trstr+="<td style='text-align:center'>"+merdise[i].deliveryTime+"</td></tr>";
+    		        			}else{
+    		        				trstr+="<td style='text-align:center'></td></tr>";
+    		        			}
+    		        			
+    		        			arr.push(trstr);
+    		        		}
+    		        		var demostr="<tr><td>合计</td><td style='text-align: center' colspan='9'>"+totalMoney+"</td></tr>";
+    		        		var amostr="<tr><td style='text-align: left' colspan='3'>RMB金额(大写)</td><td style='text-align: left' colspan='7'>"+digitUppercase(totalMoney)+"</td></tr>";
+    		        		var cdemo=[];
+    		        		for (var i in require) {
+    		        			cdemo.push(require[i]); //属性
+    		        		}
+    		        	
+    		        		console.log(cdemo);
+    		        		for(var i=2;i<cdemo.length;i++){
+    		        			if(cdemo[i]!=null&&cdemo[i]!=""){
+    		        				amostr+="<tr><td colspan='10' style='text-indent: 2em'>"+cdemo[i]+"</td></tr>"
+        		        		}
+    		        		}
+    		        		
+    		        		amostr+="<tr><td colspan=5' style='text-align: center'>供方</td><td colspan='5' style='text-align: center'>需方</td></tr>";
+    		        		amostr+="<tr><td>单位名称</td><td colspan='4'>"+(marker.makerName==null?"":marker.makerName)+"</td><td>单位名称(章)</td><td colspan='4'>"+(company.companyName==null?"":company.companyName)+"</td></tr>";
+    		        		amostr+="<tr><td>单位地址</td><td colspan='4'>"+(marker.makerAddress==null?"":marker.makerAddress)+"</td><td>单位地址</td><td colspan='4'>"+(company.companyAddress==null?"":company.companyAddress)+"</td></tr>";
+    		        		amostr+="<tr><td>业务</td><td colspan='4'>"+(marker.linkman==null?"":marker.linkman)+"</td><td>委托代理人</td><td colspan='4'>"+(company.linkman==null?"":company.linkman)+"</td></tr>";
+    		        		amostr+="<tr><td>电话</td><td colspan='4'>"+(marker.telphone==null?"":marker.telphone)+"</td><td>电话</td><td colspan='4'>"+(company.telphone==null?"":company.telphone)+"</td></tr>";
+    		        		amostr+="<tr><td>传真</td><td colspan='4'></td><td>传真</td><td colspan='4'></td></tr>";
+    		        		amostr+="<tr><td>开户银行</td><td colspan='4'>"+(marker.openbank==null?"":marker.openbank)+"</td><td>开户银行</td><td colspan='4'>"+(company.openbank==null?"":company.openbank)+"</td></tr>";
+    		        		amostr+="<tr><td>账号</td><td colspan='4'>"+(marker.accountNumber==null?"":marker.accountNumber)+"</td><td>账号</td><td colspan='4'>"+(company.accountNumber==null?"":company.accountNumber)+"</td></tr>";
+    		        		amostr+="<tr><td>日期</td><td colspan='4'>"+(purchase.creamTime==null?"":purchase.creamTime)+"</td><td>日期</td><td colspan='4'>"+(purchase.creamTime==null?"":purchase.creamTime)+"</td></tr>";
+    		        		arr.push(demostr+amostr);
+    		        		$("#tb").append(arr.join(""));
+    		        	}
+    		        },
+    		        error:function(res){
+    		        	
+    		        }
+    		        
+    		        
+    		        
+    		    });
+    			
+    		}
+
+
+        });
+        function printdiv(printpage) {
+            var headstr = "<html><head><title></title></head><body>";
+            var footstr = "</body>";
+            var newstr = document.all.item(printpage).innerHTML;
+            console.log(newstr);
+            var oldstr = document.body.innerHTML;
+            document.body.innerHTML = headstr + newstr + footstr;
+            //document.body.innerHTML=headstr+footstr;
+            window.print(); //调用浏览器打印控件
+            document.body.innerHTML = oldstr;
+            return false;
+        }
+        
+         function  digitUppercase(n) {
+        	var fraction = ['角', '分'];
+        	var digit = [
+        	'零', '壹', '贰', '叁', '肆',
+        	'伍', '陆', '柒', '捌', '玖'
+        	];
+        	var unit = [
+        	['元', '万', '亿'],
+        	['', '拾', '佰', '仟']
+        	];
+        	var head = n < 0 ? '欠' : '';
+        	n = Math.abs(n);
+        	var s = '';
+        	for (var i = 0; i < fraction.length; i++) {
+        	s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+        	}
+        	s = s || '整';
+        	n = Math.floor(n);
+        	for (var i = 0; i < unit[0].length && n > 0; i++) {
+        	var p = '';
+        	for (var j = 0; j < unit[1].length && n > 0; j++) {
+        	p = digit[n % 10] + unit[1][j] + p;
+        	n = Math.floor(n / 10);
+        	}
+        	s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+        	}
+        	return head + s.replace(/(零.)*零元/, '元')
+        	.replace(/(零.)+/g, '零')
+        	.replace(/^整$/, '零元整');
+        	};
+        
+        
+    </script>
+</head>
+<body>
+   <div>
+      <input type="button" onClick="printdiv('div_print');" value=" 打印 ">
+   </div>
+   <br>
+   <div id="div_print">
+       <table cellspacing="0" cellpadding="0"  id="tb">
+           <tr>
+               <td colspan="10"></td>
+           </tr>
+           <tr>
+               <td colspan="10" style="text-align: center;font-size: 25px;heigth:40px"  id="tit"></td>
+
+           </tr>
+           <tr>
+               <td>供方:</td>
+               <td colspan="6"  id="makerName"></td>
+               <td>合同号:</td>
+               <td colspan="2" id="purchaseOrders"></td>
+           </tr>
+           <tr>
+               <td>需方:</td>
+               <td colspan="6" id="companyName"></td>
+               <td>签订地点:</td>
+               <td colspan="2" id="site"></td>
+           </tr>
+           <tr>
+               <td colspan="7">产品名称、型号、厂家、数量、金额、供货时间</td>
+               <td colspan="1">日期:</td>
+               <td colspan="2"  id="creamTime"></td>
+
+           </tr>
+           <tr>
+               <td style="text-align: center">品名</td>
+               <td style="text-align: center" colspan="2">料号</td>
+               <td colspan="2" style="text-align: center">规格说明</td>
+               <td style="text-align: center">数量</td>
+               <td style="text-align: center">单价(RMB)</td>
+               <td style="text-align: center">金额(RMB)</td>
+               <td style="text-align: center">交货时间</td>
+           </tr>
+           
+
+
+       </table>
+
+       
+   </div>
+
+
+</body>
+</html>

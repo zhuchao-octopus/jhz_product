@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.check.CheckDao">
+    <select id="findObjectByLine" parameterType="com.cy.domain.line.WorkLine" resultMap="checkResult">
+       select 
+       w.lineCode,
+       p.workerCode,
+       p.workerName,
+       s.locationCode
+       from cy_workLine w,cy_productWorker p,cy_workLocation s
+       where 
+       s.lineCode=w.lineCode and p.workerCode=s.workerCode
+       and w.lineCode=#{lineCode}
+    </select>
+
+   <resultMap type="com.cy.domain.line.WorkLine" id="checkResult">
+     <id property="lid" column="lid"/>
+     <result property="lineCode" column="lineCode"/>
+     <collection property="list" ofType="com.cy.domain.line.WorkLocation">
+         <id property="sid" column="sid"/>
+         <result property="locationCode" column="locationCode"/>
+         <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+            <id property="wid" column="wid"/>
+            <result property="workerCode" column="workerCode"/>
+            <result property="workerName" column="workerName"/>
+         </association>
+     </collection>
+   </resultMap>
+   
+   
+   
+	<!-- 记录打卡时间 -->
+  <!--  <insert id="writeCheckTime" parameterType="com.cy.domain.check.CheckResource">
+     insert into cy_checkResource
+     (
+     wid,
+     beforeNoonUp,
+     beforeNoonDown,
+     afterNoonUp,
+     afterNoonDown,
+     overWorkUp,
+     overWorkDown,
+     writetime,
+     bufferTime
+     )
+     values(
+     <trim suffixOverrides=",">
+     <if test="wid!=null">
+      #{wid},
+     </if>
+     
+     <if test="beforeNoonUp!=null and beforeNoonUp!=''">
+      #{beforeNoonUp},
+     </if>
+     
+     <if test="beforeNoonDown!=null and beforeNoonDown!=''">
+      #{beforeNoonDown},
+     </if>
+     
+     <if test="afterNoonUp!=null and afterNoonUp!=''">
+      #{afterNoonUp},
+     </if>
+     
+     <if test="overWorkDown!=null and overWorkDown!=''">
+      #{overWorkDown},
+     </if>
+     
+     <if test="overWorkUp!=null and overWorkUp!=''">
+      #{overWorkUp},
+     </if>
+     
+     <if test="writetime!=null and writetime!=''">
+      #{writetime},
+     </if>
+     
+     <if test="bufferTime!=null and bufferTime!=''">
+      #{bufferTime}
+     </if>
+     </trim>
+     ) 
+   </insert> -->
+   
+  <!--继续打卡 -->
+<!--   <update id="updateResource" parameterType="com.cy.domain.check.CheckResource">
+   update set cy_checkResource 
+   
+     <trim suffixOverrides=",">
+     <if test="beforeNoonUp!=null and beforeNoonUp!=''">
+      #{beforeNoonUp},
+     </if>
+     
+     <if test="beforeNoonDown!=null and beforeNoonDown!=''">
+      #{beforeNoonDown},
+     </if>
+     
+     <if test="afterNoonUp!=null and afterNoonUp!=''">
+      #{afterNoonUp},
+     </if>
+     
+     <if test="overWorkDown!=null and overWorkDown!=''">
+      #{overWorkDown},
+     </if>
+     
+     <if test="overWorkUp!=null and overWorkUp!=''">
+      #{overWorkUp},
+     </if>
+   
+     <if test="bufferTime!=null and bufferTime!=''">
+      #{bufferTime}
+     </if>
+     
+     </trim>
+     
+     where 
+     wid=#{wid} and writetime=#{writetime}
+    </update> -->
+   
+  
+  <!--根據功號和日期來查詢出一個人一天的打卡記錄 -->
+ <!--  <select id="findCheckResource" parameterType="com.cy.domain.check.CheckResource" resultType="com.cy.domain.check.CheckResource">
+    select * from cy_checkResource
+    where wid=#{wid} and writetime=#{writetime}
+  </select>
+   -->
+  
+  <!-- 第一次上线 -->
+  <insert id="addCheck" parameterType="com.cy.domain.check.CheckModel">
+    insert into cy_checkModel
+    (
+    wid,
+    upTime1,
+    downTime1,
+    upTime2,
+    downTime2,
+    upTime3,
+    downTime3,
+    upTime4,
+    downTime4,
+    upTime5,
+    downTime5,
+    upTime6,
+    downTime6,
+    upTime7,
+    downTime7,
+    upTime8,
+    downTime8,
+    upTime9,
+    downTime9,
+    upTime10,
+    downTime10,
+    writeTime
+    )values(
+       #{worker.wid},
+       #{upTime1},
+       #{downTime1},
+       #{upTime2},
+       #{downTime2},
+       #{upTime3},
+       #{downTime3},
+       #{upTime4},
+       #{downTime4},
+       #{upTime5},
+       #{downTime5},
+       #{upTime6},
+       #{downTime6},
+       #{upTime7},
+       #{downTime7},
+       #{upTime8},
+       #{downTime8},
+       #{upTime9},
+       #{downTime9},
+       #{upTime10},
+       #{downTime10},
+       #{writeTime}
+    )
+   </insert>
+   
+   <!-- 通过人员和日期查询出对应的打卡记录 -->
+   <select id="findCheckByWid" parameterType="com.cy.domain.check.CheckModel" resultMap="checkModelResult">
+      select w.workerCode,w.workerName,k.locationCode,m.*
+      from cy_checkModel m,cy_productWorker w,cy_workLocation k
+      where m.wid=w.wid and k.workerCode=w.workerCode and
+      w.wid=(select wid from cy_productWorker where workerCode=#{worker.workerCode}) and
+      m.writeTime=#{writeTime}
+   </select>
+   
+   <resultMap type="com.cy.domain.check.CheckModel" id="checkModelResult">
+      <id property="modelId" column="modelId"/>
+      <result property="upTime1" column="upTime1"/>
+      <result property="downTime1" column="downTime1"/>
+      <result property="upTime2" column="upTime2"/>
+      <result property="downTime2" column="downTime2"/>
+      <result property="upTime3" column="upTime3"/>
+      <result property="downTime3" column="downTime3"/>
+      <result property="upTime4" column="upTime4"/>
+      <result property="downTime4" column="downTime4"/>
+      <result property="upTime5" column="upTime5"/>
+      <result property="downTime5" column="downTime5"/>
+      <result property="upTime6" column="upTime6"/>
+      <result property="downTime6" column="downTime6"/>
+      
+      <result property="upTime7" column="upTime7"/>
+      <result property="downTime7" column="downTime7"/>
+      <result property="upTime8" column="upTime8"/>
+      <result property="downTime8" column="downTime8"/>
+      <result property="upTime9" column="upTime9"/>
+      <result property="downTime9" column="downTime9"/>
+      <result property="upTime10" column="upTime10"/>
+      <result property="downTime10" column="downTime10"/>
+      <result property="writeTime" column="writeTime"/>
+      <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+         <id property="wid"  column="wid"/>
+         <result property="workerCode" column="workerCode"/>
+         <result property="workerName" column="workerName"/>
+         <association property="location" javaType="com.cy.domain.line.WorkLocation">
+             <id property="sid" column="sid"/>
+             <result property="locationCode" column="locationCode"/>
+         </association>
+      </association>
+   </resultMap>
+   
+   
+   <!-- 第二次或者以上 上线或者下线 -->
+  <update id="updateCheck" parameterType="com.cy.domain.check.CheckModel">
+    update  cy_checkModel
+    <set>
+    <trim suffixOverrides=",">
+      <if test="upTime1!=null and upTime1!=''">
+        upTime1=#{upTime1},
+      </if>
+      <if test="downTime1!=null and downTime1!=''">
+        downTime1=#{downTime1},
+      </if>
+      <if test="upTime2!=null and upTime2!=''">
+        upTime2=#{upTime2},
+      </if>
+      <if test="downTime2!=null and downTime2!=''">
+        downTime2=#{downTime2},
+      </if>
+      <if test="upTime3!=null and upTime3!=''">
+        upTime3=#{upTime3},
+      </if>
+      <if test="downTime3!=null and downTime3!=''">
+        downTime3=#{downTime3},
+      </if>
+      <if test="upTime4!=null and upTime4!=''">
+        upTime4=#{upTime4},
+      </if>
+      <if test="downTime4!=null and downTime4!=''">
+        downTime4=#{downTime4},
+      </if>
+      <if test="upTime5!=null and upTime5!=''">
+        upTime5=#{upTime5},
+      </if>
+      <if test="downTime5!=null and downTime5!=''">
+        downTime5=#{downTime5},
+      </if>
+      <if test="upTime6!=null and upTime6!=''">
+        upTime6=#{upTime6},
+      </if>
+      <if test="downTime6!=null and downTime6!=''">
+        downTime6=#{downTime6},
+      </if>
+      <if test="upTime7!=null and upTime7!=''">
+        upTime7=#{upTime7},
+      </if>
+      <if test="downTime7!=null and downTime7!=''">
+        downTime7=#{downTime7},
+      </if>
+      <if test="upTime8!=null and upTime8!=''">
+        upTime8=#{upTime8},
+      </if>
+      <if test="downTime8!=null and downTime8!=''">
+        downTime8=#{downTime8},
+      </if>
+      <if test="upTime9!=null and upTime9!=''">
+        upTime9=#{upTime9},
+      </if>
+      <if test="downTime9!=null and downTime9!=''">
+        downTime9=#{downTime9},
+      </if>
+      <if test="upTime10!=null and upTime10!=''">
+        upTime10=#{upTime10},
+      </if>
+      <if test="downTime10!=null and downTime10!=''">
+        downTime10=#{downTime10}
+      </if> 
+    </trim>
+   </set>
+   where 
+   wid=#{worker.wid} and writeTime=#{writeTime}
+   </update>
+
+    <!-- 查询出当前产线下所有的工位和人员信息 -->  
+    <select id="findWorkerByCode" parameterType="com.cy.domain.line.WorkLine" resultMap="workerResult">
+    select
+    w.sid,
+    l.lid,
+    p.wid,
+    w.locationCode, 
+    p.workerCode, 
+    p.workerName,
+    p.workerPrice,
+    p.workerOvertimePay,
+    p.workerWeekenPay,
+    p.workerHolidayPay,
+    l.lineCode,
+    w.locationState,
+    w.nowTime
+    from cy_workLocation w LEFT JOIN cy_workLine l on w.lineCode=l.lineCode LEFT JOIN cy_productWorker p ON p.workerCode=w.workerCode
+    where  l.lid=(select lid as id from cy_workLine where lineCode=#{lineCode}) order by CONVERT(SUBSTR(w.locationCode, 2),SIGNED) asc
+    </select> 
+    
+    <resultMap type="com.cy.domain.line.WorkLocation" id="workerResult">
+        <id property="sid" column="sid"/>
+        <result property="locationCode" column="locationCode"/>
+        <result property="locationState" column="locationState"/>
+        <result property="nowTime" column="nowTime"/>
+        <association property="line" javaType="com.cy.domain.line.WorkLine">
+            <id property="lid" column="lid"/>
+            <result property="lineCode" column="lineCode"/>
+        </association>
+        <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+            <id property="wid" column="wid"/>
+            <result property="workerName" column="workerName"/>
+            <result property="workerCode" column="workerCode"/>
+            <result property="workerPrice" column="workerPrice"/>
+            <result property="workerOvertimePay" column="workerOvertimePay"/>
+            <result property="workerWeekenPay" column="workerWeekenPay"/>
+            <result property="workerHolidayPay" column="workerHolidayPay"/>
+        </association>
+    </resultMap>   
+    
+    
+    
+    <!-- 通过人员的信息查询出打卡状态 -->
+    <select id="findCheckByWorker" parameterType="com.cy.domain.check.CheckModel" resultType="com.cy.domain.check.CheckModel">
+       select * from cy_checkModel where wid=#{worker.wid} and writeTime=#{writeTime}
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    <select id="findStatusByTimeAndWorker" parameterType="com.cy.domain.check.CheckUtil" resultType="com.cy.domain.check.CheckUtil">
+       select * from cy_checkStatus where workerCode=#{workerCode} and checkDate=#{checkDate}
+    </select>
+    
+    <insert id="addCheckStatus" parameterType="com.cy.domain.check.CheckUtil">
+       insert into
+       (
+       workerCode,
+       workerName,
+       locationCode,
+       checkTime,
+       checkDate,
+       checkStatus
+       )
+       values(
+       #{workerCode},
+       #{workerName},
+       #{locationCode},
+       #{checkTime},
+       #{checkDate},
+       #{checkStatus}
+       )
+    </insert>
+    
+    
+    <update id="updateStatus" parameterType="com.cy.domain.check.CheckUtil">
+    update cy_checkStatus
+    set
+    checkTime=#{checkTime},
+    checkStatus=#{checkStaus}
+    where workerCode=#{workerCode} and checkDate=#{checkDate}
+    </update>
+    
+    
+    
+ </mapper>

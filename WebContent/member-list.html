@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">设备管理</a>
+        <a href="">设备表</a>
+        <!-- <a><cite>导航元素</cite></a> -->
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+    </div>
+    <div class="x-body">
+
+		<!-- <div class="layui-form-item">  -->
+		<div class="layui-row" style="text-align: center">
+			<div class="layui-inline">
+				<input type="text" name="mac1" placeholder="请输入盒子MAC"
+					autocomplete="off" class="layui-input" id="mac1">
+			</div>
+			<div class="layui-inline">
+				<input type="text" name="mac2" placeholder="请输入手机MAC"
+					autocomplete="off" class="layui-input" id="mac2">
+			</div>
+			<div class="layui-inline">
+				<input type="text" name="brand" placeholder="请输入品牌"
+					autocomplete="off" class="layui-input" id="brand">
+			</div>
+			<div class="layui-inline">
+				<input type="text" name="region" placeholder="请输入地区"
+					autocomplete="off" class="layui-input" id="region">
+			</div>
+
+			<div class="layui-inline">
+				<select name="status" id="status">
+					<option value="">请选择状态</option>
+					<option value="2">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+
+			<div class="layui-inline">
+				<button class="layui-btn" lay-submit="" lay-filter="search"
+					data-type='search'>
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+		</div>
+
+
+
+
+		<xblock id="mac-button">
+
+		<button class="layui-btn"
+			onclick="x_admin_show('单个添加','./member-add.html',600,600)">
+			<i class="layui-icon">&#xe61f;</i>单个添加
+		</button>
+		<button class="layui-btn"
+			onclick="x_admin_show('批量添加','./moremac-add.html',600,600)">
+			<i class="layui-icon">&#xe61f;</i>批量添加
+		</button>
+		<button class="layui-btn" data-type="moreStart">
+			<i class="layui-icon">&#x1005;</i>批量启用
+		</button>
+		<button class="layui-btn layui-btn-danger " data-type="moreStop">
+			<i class="layui-icon">&#x1007;</i>批量停用
+		</button>
+		<button class="layui-btn layui-btn-danger" data-type='moreDelete'>
+			<i class="layui-icon">&#xe640;</i>批量删除
+		</button>
+		<!-- <span class="x-right" style="line-height:40px">共有数据：88 条</span> -->
+		</xblock>
+  
+        <table id="role-table" lay-filter="role-filter" class="mac-table"></table>
+
+    </div>
+     <script type="text/html"  id="barDemo">
+           <button class="layui-btn layui-btn-sm layui-btn-danger permission" lay-event='delete'><i class="layui-icon">&#xe640;</i>删除</button>
+        <!-- 这里同样支持 laytpl 语法，如： -->
+        {{#  if(d.status == '1'){ }}
+         <button title="停用" onclick="member_stop(this,{{d.id}})" href="javascript:;" class="layui-btn  layui-btn-sm layui-btn-primary permission">
+                <i class="layui-icon">&#x1007;</i><span>停用</span>
+        </button>
+        {{#  } }}
+        {{#  if(d.status == '2'){ }}
+         <button title="启用" onclick="member_stop(this,{{d.id}})" href="javascript:;" class="layui-btn  layui-btn-sm permission">
+                <i class="layui-icon" style="color:blue">&#x1005;</i><span>启用</span>
+        </button>
+        {{#  } }}
+
+
+    
+
+
+	</script>
+    <script type="text/html" id="statusDemo">
+       
+        {{#  if(d.status == '1'){ }}
+              <a class="td-status"><span class="layui-btn  layui-btn-sm">已启用</span></a>
+        {{#  } }}
+        {{#  if(d.status == '2'){ }}
+              <a class="td-status"><span class="layui-btn  layui-btn-sm layui-btn-disabled">已停用</span></a>
+        {{#  } }}
+    </script>
+  
+    
+    <script>
+      layui.use(['laydate','layer'], function(){
+        var laydate = layui.laydate,
+        layer=layui.layer;
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+      
+      layui.use('table', function(){
+    	  var table = layui.table;
+    	  table.render({
+    	    elem: '#role-table'
+        	,height: 560
+    	    ,cellMinWidth: 80
+    	    ,url: 'checkEquipment.do'//数据接口
+    	    ,page: true //开启分页
+    	    ,cols: [[ //表头
+      	      {type: 'checkbox'}    
+    	    	,{field: 'id',title:"设备ID",width:100,sort:true}
+    	     	,{field: 'name',title:"设备名称",width:100,sort:true}
+    	     	,{field:'information',title:"设备信息",width:100,sort:true}
+    	     	,{field:'brand',title:"品牌",width:100,sort:true}
+    	     	,{field:'region',title:"地区",width:100,sort:true}
+    	     	,{field:'note',title:"备注",width:100,sort:true}
+    	     	,{field:'sn1',title:"盒子sn号",width:100,sort:true}
+    	     	,{field:'mac1',title:"盒子mac地址",width:100,sort:true}
+    	     	,{field:'ip1',title:"盒子IP",width:100,sort:true}
+    	     	,{field:'sn2',title:"手机sn号",width:100,sort:true}
+    	     	,{field:'mac2',title:"手机mac地址",width:100,sort:true}
+    	     	,{field:'ip2',title:"手机IP",width:100,sort:true}
+    	     	,{field:'status',title:"状态",width:100,sort:true,templet:"#statusDemo"}
+    	      ,{fileld:"",title:"操作",width:200, align:'center', templet:"#barDemo"}
+    	    ]]
+    	    ,id:"demoId"
+    	    ,done:function(){
+    	       
+    	       if(!contains('shebei_edit',per_arr)){
+    	        	$("#mac-button").css("display","none");
+    	        	$(".permission").css("display","none");
+    	        } 
+    	    }
+    	  });
+    	  
+   	    //监听行工具事件
+       	  table.on('tool(role-filter)', function(obj){
+       	   var data = obj.data;
+       	   var role=JSON.stringify(data)
+   		    if(!window.localStorage){
+   			    layer.msg("浏览器不支持localstorage");
+   			    return false;
+   			}else{
+   				var storage=window.localStorage;
+   				storage.setItem("role",role);
+   			}
+       	   if(obj.event === 'update'){
+                  x_admin_show("编辑", "tree-edit.html", 900,700);
+       	    }else if(obj.event==='delete'){
+       	    	  var id=data.id;
+       	    	  console.log(id);
+       	    	  $.ajax({
+       	    		  type:"get",
+       	    		  url:"deleteEquipment.do",
+       	    		  data:{"id":id},
+       	    		  dataType:"json",
+       	    		  success:function(res){
+       	    			if(res.state==1){
+       	    				//layer.msg(res.msg);
+		    	    		obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+		    	    		layer.msg('已删除!',{icon:1,time:1000});
+		    			    
+		    	    	}else{
+		    	    		layer.msg(res.msg);
+		    	    	}
+       	    		  },
+       	    		  error:function(res){
+       	    			  layer.msg("error");
+       	    		  }
+       	    		  
+       	    	  });
+       	    }
+       	  });    
+    	      
+    	      
+    	      
+       	  var  active = {
+    			  moreStart: function(){ //批量上架
+   	                var checkStatus = table.checkStatus("demoId")
+   	                    ,data = checkStatus.data;
+   	    		    console.log(data);
+   	                var arr=active.getId(data);
+   	                if(arr.length==0){
+   	                	layer.msg('未选中任何数据');
+   	                	return;
+   	                }
+   	                var idstring=arr.join(",");
+  	                	layer.confirm('确定要启动吗？', {
+  	                	  btn: ['确定','取消'] //按钮
+  	                	}, function(){
+  	                		layer.msg('确定', {icon: 1});
+  	  		                	 $.ajax({
+  	  		                		 type:"get",
+  	  		                		 url:"updateBatchEquipment.do",
+  	  		                		 data:{"strId":idstring,"status":1},
+  	  		                		 dataType:"json",
+  	  		                		 success:function(result){
+  	  		                			 if(result.status==0){
+  	  		                				 layer.msg(result.msg);
+  	  		                				 $(checkStatus).each(function(){
+  	  		                				    table.reload("demoId",{
+  	  		                				    	page:{
+  	  		                				    		curr:$("#layui-table-page1 .layui-laypage-skip").find("input").val()
+  	  		                				    	}
+  	  		                				    })
+  	  		                				 }); 
+  	  		                			 }else{
+  	  		                			    layer.msg(result.msg);
+  	  		                			 }
+  	  		                		 },
+  	  		                		 error:function(){
+  	  		                			 layer.msg("errror");
+  	  		                		 }
+  	  		                  });
+  	                	}, function(){
+  	                		layer.msg('取消', {icon: 2});
+  	                	   
+  	                	});
+   	            }
+   	            ,getId:function (data) {//获取选中行的主键
+   	                var idArr = [];
+   	                for(var i=0; i<data.length; i++){
+   	                    console.log(data[i].id)
+   	                    idArr.push(data[i].id)
+   	                }
+   	                console.log(idArr);
+   	                return idArr;
+   	            }
+   	            ,moreStop: function(){ //批量下架
+   	                var checkStatus = table.checkStatus("demoId")
+  	                    ,data = checkStatus.data;
+  	    		    console.log(data);
+  	                var arr=active.getId(data);
+  	                if(arr.length==0){
+  	                	layer.msg('未选中任何数据');
+  	                	return;
+  	                }
+  	                var idstring=arr.join(",");
+  	                	layer.confirm('确定要停用吗？', {
+  	                	  btn: ['确定','取消'] //按钮
+  	                	}, function(){
+  	                		layer.msg('确定', {icon: 1});
+  	  		                	 $.ajax({
+  	  		                		 type:"get",
+  	  		                		 url:"updateBatchEquipment.do",
+  	  		                		 data:{"strId":idstring,"status":2},
+  	  		                		 dataType:"json",
+  	  		                		 success:function(result){
+  	  		                			 if(result.status==0){
+  	  		                				 layer.msg(result.msg);
+  	  		                				 $(checkStatus).each(function(){
+  	  		                				    table.reload("id",{
+  	  		                				    	page:{
+  	  		                				    		curr:$("#layui-table-page1 .layui-laypage-skip").find("input").val()
+  	  		                				    	}
+  	  		                				    })
+  	  		                				 }); 
+  	  		                			 }else{
+  	  		                			    layer.msg(result.msg);
+  	  		                			 }
+  	  		                		 },
+  	  		                		 error:function(){
+  	  		                			 layer.msg("errror");
+  	  		                		 }
+  	  		                	 
+  	  		                  });
+  	                	}, function(){
+  	                		layer.msg('取消', {icon: 2});
+  	                	   
+  	                	});
+   	            }
+   	           ,moreDelete:function(){ //批量删除
+   	            var checkStatus = table.checkStatus("demoId")
+  	                ,data = checkStatus.data;
+  	    		    console.log(data);
+  	                var arr=active.getId(data);
+  	                if(arr.length==0){
+  	                	layer.msg('未选中任何数据');
+  	                	return;
+  	                }
+  	                var idstring=arr.join(",");
+               	layer.confirm('确定要删除吗？', {
+               	  btn: ['确定','取消'] //按钮
+               	}, function(){
+               		layer.msg('确定', {icon: 1});
+               		$.ajax({
+                     	  type:"get",
+                     	  url:"deleteBatchEquipment.do",
+                     	  data:{"strId":idstring},
+                     	  dataType:"json",
+                     	  success:function(result){
+                     		  if(result.status==1){
+                                   layer.msg(result.msg,{icon:1,time:1000});
+                                   window.location.reload();
+                     		  }else{
+                     			  layer.msg(result.msg,{icon:1,time:1000});
+                     		  }
+                     	  },
+                     	  error:function(){
+                     		  layer.msg("error:请检查代码",{icon:1,time:1000});
+                     	  }
+                       })
+  		                	 
+  		                 
+               	}, function(){
+               		layer.msg('取消', {icon: 2});
+               	   
+               	});
+  	            }
+    	       ,search:function(){
+    	    	
+    	    	   	var mac1=$("#mac1").val();
+	   				var mac2=$("#mac2").val();
+	   				var brand=$("#brand").val();
+	   				var region=$("#region").val();
+     	    	    var status = $("#status").val();
+     	    	   //执行重载
+   	   	    	     table.reload('demoId', {
+   	   	    	    	 page: {
+   	   			          curr: 1 //重新从第 1 页开始
+   	   			      }
+   	   	    	    ,where: {
+   	   	    	    	"mac1" :mac1,
+   	    	        	"mac2" :mac2,
+   	    	        	"brand" :brand,
+   	    	        	"region" :region,
+   	    	        	"status" :status
+   	   	    	        }
+   	   	    	      });
+     	       }
+    	        };    
+    	      
+    	  $('.x-body .layui-btn').on('click', function () {
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+    	  
+    	});
+      
+
+      /*用户-停用*/
+      function member_stop(obj,id){
+         
+
+              if($(obj).attr('title')=='启用'){
+
+                //发异步把用户状态进行更改
+                $.ajax({
+	          		 type:"get",
+	          		 url:"updateBatchEquipment.do",
+	          		 data:{"strId":id,"status":1},
+	          		 dataType:"json",
+	          		 success:function(result){
+	          			 if(result.status==1){
+	          				 
+	                         $(obj).attr('title','停用')
+	                         $(obj).addClass("layui-btn-primary");
+	                         $(obj).find('i').css("color","black").html('&#x1007;');
+	                         $(obj).find("span").html("<span>停用</span>");
+	                         $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+	                         layer.msg('已启用!',{icon: 6,time:1000});
+	          			 }else{
+	          			    layer.msg(result.msg);
+	          			 }
+	          		 },
+	          		 error:function(){
+	          			 layer.msg("errror");
+	          		 }
+	  		   })
+                
+               
+
+              }else{
+            	  $.ajax({
+ 	          		 type:"get",
+ 	          		 url:"updateBatchEquipment.do",
+ 	          		 data:{"strId":id,"status":2},
+ 	          		 dataType:"json",
+ 	          		 success:function(result){
+ 	          			 if(result.status==1){
+ 	          				 
+ 	          			   $(obj).attr('title','启用');
+ 	          			   $(obj).removeClass("layui-btn-primary");
+ 	                       $(obj).find('i').css('color','blue').html('&#x1005;');
+ 	          				
+                           $(obj).find("span").html("<span>启用</span>");
+ 	                       $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+ 	                       layer.msg('已停用!',{icon: 5,time:1000});
+ 	          			 }else{
+ 	          			    layer.msg(result.msg);
+ 	          			 }
+ 	          		 },
+ 	          		 error:function(){
+ 	          			 layer.msg("errror");
+ 	          		 }
+ 	  		   }) 
+            	  
+            	  
+                
+              }
+              
+         
+      }
+
+
+
+
+      /*用户-删除*/
+      function member_del(obj,id){
+    	  console.log(id);
+          layer.confirm('确认要删除吗？',function(index){
+              //发异步删除数据
+              $.ajax({
+            	  type:"get",
+            	  url:"deleteEquipment.do",
+            	  data:{"id":id},
+            	  dataType:"json",
+            	  success:function(result){
+            		  if(result.state==1){
+            			  $(obj).parents("tr").remove();
+                          layer.msg(result.msg,{icon:1,time:1000});
+            		  }else{
+            			  layer.msg(result.msg,{icon:1,time:1000});
+            		  }
+            	  },
+            	  error:function(){
+            		  layer.msg("error:请检查代码",{icon:1,time:1000});
+            	  }
+              })
+              
+             
+          });
+      }
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

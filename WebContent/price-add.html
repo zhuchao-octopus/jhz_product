@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form" onsubmit="return false;">
+          <div class="layui-form-item">
+              <label for="syy_special_name" class="layui-form-label">
+                  <span class="x-red">*</span>料号
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="pn"  name="pn"   autocomplete="off" class="layui-input">
+              </div>
+              <button class="layui-btn layui-btn-sm"  id="matchPcode">匹配料号</button>
+          </div>
+          <div class="layui-form-item">
+              <label for="pushNumber" class="layui-form-label">
+                  <span class="x-red">*</span>产品名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="materialName"  name="materialName"  class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item"  lay-filter="mid-filter"  style="display: none">
+              <label for="pname" class="layui-form-label">
+                  料号ID
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="mid"  name="mid"   autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="syy_special_name" class="layui-form-label">
+                  单价
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="jprice"  name="jprice"   autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="syy_special_name" class="layui-form-label">
+                加工费
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="processCost"  name="processCost"   autocomplete="off" class="layui-input">
+              </div>
+          </div>
+         <div class="layui-form-item">
+              <label for="syy_special_name" class="layui-form-label">
+                打样费
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="sampleCost"  name="sampleCost"   autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="syy_special_name" class="layui-form-label">
+                 最小包装
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="minNumbers"  name="minNumbers"   autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="syy_special_name" class="layui-form-label">
+                供应商
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="supplier"  name="supplier"   autocomplete="off" class="layui-input">
+              </div>
+          </div>
+           <div class="layui-form-item">
+              <label for="syy_special_name" class="layui-form-label">
+             电话
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="telphone"  name="telphone" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+           <div class="layui-form-item">
+              <label for="syy_special_name" class="layui-form-label">
+                税额
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="email"  name="email" autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <!-- <div class="layui-form-item layui-form-text">
+              <label for="marquee" class="layui-form-label">
+                  描述
+              </label>
+              <div class="layui-input-block">
+                  <textarea placeholder="请输入内容"  id="marquee" name="marquee" class="layui-textarea"></textarea>
+              </div>
+          </div> -->
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn" lay-filter="add"  lay-submit="" >
+                  增加
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+    var storeState=parent.GetStoreState();
+    $(document).off('blur','#pn').on('blur','#pn',function() {
+    	var pn=$("#pn").val();
+    	$("#mid").empty()
+    	var options=loadPnCode(pn);
+    	console.log(options);
+    	$("#mid").append(options);
+	    });
+        
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer
+   
+          //监听提交
+          form.on('submit(add)', function(data){
+            var param=data.field
+            param['id']=$("#mid").val();
+            console.log(param);
+            $.ajax({
+               type:"get",
+               url:"tv/addPrice.do",
+               data:param,
+               dataType:"json",
+               success:function(res){
+            	   if(res.state==0){
+            		   layer.alert(res.msg, {icon: 6},function () {
+                           // 获得frame索引
+                           var index = parent.layer.getFrameIndex(window.name);
+                           //关闭当前frame
+                           parent.layer.close(index);
+                       });
+            		   //parent.layer.close(index);
+            	   }else{
+            		   layer.alert(res.msg);
+            	   }
+               },
+               error:function(){
+            	   layer.alert("error");
+               }
+            }); 
+            
+            return false;
+          });
+        });
+        $(document).off("click","#matchPcode").on("click","#matchPcode",function(){
+        	// var mid=$("#lineCode option:selected").val();
+       	     x_admin_show("匹配料号",'./pcode_match_list.html?storeState='+storeState,600,400);
+        });
+        
+        function GetValue(obj){
+            console.log(obj);
+            $("#pn").val(obj.pn);
+            $("#mid").val(obj.id)           
+            $("#materialName").val(obj.materialName);
+            
+       }
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

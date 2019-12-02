@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        table{border:0;margin:0;}
+        table td{padding:0;}
+        tr,td{
+            border: 1px solid #000000;
+            width: 100px;
+            height:25px;
+            line-height:25px;
+            text-align: center;
+            font-size:8px
+        }
+       /*  #div1{
+         float:left;
+        }
+        #div2{
+          float:left;
+        } */
+    </style>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.PrintArea.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.js"></script>
+<script language="javascript" charset="GB2312"></script>
+<script type="text/javascript">
+     $(function(){
+      var url = window.location.search;
+   	  var keyValue = new Map();
+   	  var date1=new Date();
+   	  console.log(date1);
+   	/*   $("#t1").html(date1.getMonth()); */
+   	  if(url.indexOf("?")!=-1){
+   		  var idstrs=url.substring(1).split("=")[1];
+   		  $.ajax({
+   			 type:"get",
+  			 url:"tv/loadOrdersByIdStrs.do",
+  			 data:{"idstrs":idstrs},
+  			 success:function(res){
+  				/*  if(res.state==0){
+  					 var sonArr=[];
+  					 for(var i=0;i<res.data.length;i++){
+  						 var sonData=res.data[i].phList;
+  						 for(var j=0;j<sonData.length;j++){
+  							//console.log(sonData[j])
+  							sonArr.push(sonData[j]);
+  						 }
+  					 }
+  					console.log(sonArr.length); */
+  				var demoArr=[];
+  				var sumMoney=0;
+  				for(var j=0;j<res.data.length;j++){
+  					  var newlist="<tr><td rowspan="+res.data[j].phList.length+">"+(j+1)+"</td>";
+  					  newlist+="<td rowspan="+res.data[j].phList.length+">"+res.data[j].productName+"</td>"
+					  newlist+="<td rowspan="+res.data[j].phList.length+">"+res.data[j].pn+"</td>";
+					  newlist+="<td rowspan="+res.data[j].phList.length+">"+res.data[j].orderNumber+"</td>";
+					  newlist+="<td rowspan="+res.data[j].phList.length+">"+res.data[j].numbers+"</td>";
+					  var sonArr=res.data[j].phList;
+  					  for(var i=0;i<sonArr.length;i++){
+  						  if(sonArr[i].jobNo!=null){
+  							newlist+="<td>"+sonArr[i].jobNo.substr(-11,8)+"</td>";
+  						    newlist+="<td>"+sonArr[i].jobNo+"</td>";
+  						  }else{
+  							newlist+="<td></td>";
+  						    newlist+="<td></td>";
+  						  }
+  						  
+						  newlist+="<td>"+sonArr[i].pnumber+"</td>";
+						  newlist+="<td>"+sonArr[i].totalNumber+"</td>";
+						  if(res.data[j].price!=null){
+							  newlist+="<td>"+res.data[j].price+"</td>";
+						  }else{
+							  newlist+="<td></td>";
+						  }
+						 
+						  newlist+="<td>"+sonArr[i].addMoney+"</td>";
+						  newlist+="<td></td></tr>";
+						  if(sonArr[i].addMoney!=""){
+							  sumMoney+=parseFloat(sonArr[i].addMoney);
+						  }
+						  
+					  }
+  					  
+  					 demoArr.push(newlist);
+  				 }
+  				demoArr.push("<tr ><td colspan='9' rowspan='2'></td><td colspan='2' style='font-size:20px' rowspan='2'>"+"(￥)"+sumMoney+"</td><td></td></tr><tr><td></td></tr>")
+  				demoArr.push("<tr ><td  colspan='10' rowspan='2' style='font-size:20px' >承蒙关照，不胜感激！以上对账若确认无误，请及时安排付款，谢谢！</td><td></td><td></td></tr><tr><td></td><td></td></tr>")
+  				demoArr.push("<tr ><td  colspan='4' rowspan='2' style='font-size:20px' >客户签名</td><td rowspan='2' colspan='2'></td><td  colspan='2' rowspan='3' style='font-size:20px' >精进确认签名</td><td  colspan='3' rowspan='2' style='font-size:20px' ></td><td></td></tr>")
+  				$("#tb tr").nextAll();
+				$("#tb").append(demoArr.join(""));
+  				 
+  				/*  var tbdemo=$("#tb tr").nextAll();
+  				
+  				 for(var i=0;i<res.data.length;i++){
+  					 
+  				 } */
+  				 
+  				 
+  			 },
+  			 error:function(res){
+  				 alert("错误")
+  			 }
+   		  })
+   			 
+   			  
+   	  }  
+     })
+    	 
+    					  
+    					  
+    					 /*  for(var i=0;i<res.data.length;i++){ */
+    						  
+    						  /* var row=res.data[i].phList.length;
+    						  console.log(row);
+    						  var list = "<tr>";
+    						  list+="<td rowspan>"+res.data[i].productName+"</td>";
+    						  list+="<td rowspan>"+res.data[i].pn+"</td>";
+    						  list+="<td rowspan>"+res.data[i].orderNumber+"</td>";
+    						  list+="<td rowspan>"+res.data[i].numbers+"</td>";
+    						  list+="</tr>";
+    						  arr.push(list); */
+    						  
+    						  /* var detaDemo=res.data[i].phList;
+    						  var price=res.data[i].price;
+    						  var demoArr=[];
+    						   for(var i=0;i<detaDemo.length;i++){
+    							  var newlist = "<tr >";
+    							  newlist+="<td rowspan>"+res.data[i].productName+"</td>";
+        						  newlist+="<td rowspan>"+res.data[i].pn+"</td>";
+        						  newlist+="<td rowspan>"+res.data[i].orderNumber+"</td>";
+        						  newlist+="<td rowspan>"+res.data[i].numbers+"</td>";
+        						  newlist+="<td rowspan></td>";
+    							  newlist+="<td>"+detaDemo[i].jobNo+"</td>";
+    							  newlist+="<td>"+detaDemo[i].pnumber+"</td>";
+    							  newlist+="<td>"+detaDemo[i].totalNumber+"</td>";
+    							  newlist+="<td>"+price+"</td>";
+    							  newlist+="<td>"+detaDemo[i].addMoney+"</td>";
+    							  newlist+="<td></td><tr/>";
+    							  demoArr.push(newlist);
+    						  }
+    						  $("#tb2").append(demoArr.join(""));
+    					  } */
+    					  /* $("#tb").append(arr.join('')); */
+    					  //var date=new Date();
+    					  /* var totalList="<tr><td colspan='5'</td><td colspan='3'>合计</td><td>"+total+"</td><td>"+date.toLocaleDateString().split("/").join("-")+"</td></tr>";
+    					  var demoOne="<tr><td colspan='2'>制表</td><td colspan='3'></td><td colspan='3'>经手人</td><td colspan='2'></td></tr>";
+    					  arr.push(totalList);
+    					  arr.push(demoOne); */
+    					  
+    				  /* } *//* else{
+    					  alert(res.msg);
+    				  } */
+    			 /*  } */
+    
+   
+      
+      function printdiv(printpage) {
+		var headstr = "<html><head><title></title></head><body>";
+		var footstr = "</body>";
+		var newstr = document.all.item(printpage).innerHTML;
+		console.log(newstr);
+		var oldstr = document.body.innerHTML;
+		document.body.innerHTML = headstr + newstr + footstr;
+		//document.body.innerHTML=headstr+footstr;
+		window.print(); //调用浏览器打印控件
+		document.body.innerHTML = oldstr;
+		return false;
+	} 
+      
+
+</script>
+</head>
+<body>
+<div>
+    <input type="button" onClick="printdiv('div_print');" value=" 打印 ">
+</div>
+<br>
+     <div  id="div_print"> 
+<!--          <h1 style="text-align: center">对账单</h1> -->
+     
+          <table id="tb"  cellspacing="0" cellpadding="0"> 
+<!--             <tr> -->
+<!--                 <td colspan="12" style="font-size:22px;text-align: left;height:40px;line-height:40px">精进电子科技有限公司</td> -->
+<!--             </tr> -->
+<!--             <tr> -->
+<!--                 <td colspan="12" style="font-size:22px;text-align: left;height:40px;line-height:40px">深圳市龙岗区坪地镇金水桥工业区誉隆街3号</td> -->
+<!--             </tr> -->
+<!--             <tr> -->
+<!--                 <td colspan="12" style="font-size:22px;text-align: left;height:40px;line-height:40px">Tel:0755-84062416               Fax:0755-84073056</td> -->
+<!--             </tr> -->
+            
+            
+            <tr>
+                <td colspan="12"   id="t1"   style="font-size:22px">对账单</td>
+            </tr>
+                   
+          
+             <tr>
+                 <td>序号</td>
+                 <td>物料名</td>
+                 <td>料号</td>
+                 <td>订单号</td>
+                 <td>订单量</td>
+                 <td>送货日期</td>
+                 <td style='width:150px'>送货单号</td>
+                 <td>送货数量</td>
+                 <td>累计送货数量</td>
+                 <td>单价(￥)</td>
+                 <td>总价(￥)</td>
+                 <td style='width:500px'>备注</td>
+             </tr>
+         </table> 
+        
+     </div>
+
+
+
+</body>
+</html>

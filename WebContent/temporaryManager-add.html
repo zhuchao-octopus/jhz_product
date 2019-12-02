@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-body">
+        <form class="layui-form"  onsubmit="return false;">
+           <div class="layui-form-item">
+              <label for="modelType" class="layui-form-label">
+                  料号
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="pn" name="pn"  class="layui-input">
+              </div>
+              <button class="layui-btn layui-btn-sm"  id="matchPcode">匹配料号</button>
+          </div>
+          <div class="layui-form-item"  lay-filter="mid-filter">
+              <label for="pname" class="layui-form-label">
+                  品名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="materialName"  name="materialName"  class="layui-input">
+              </div>
+          </div>
+        
+          
+          <div class="layui-form-item"  lay-filter="mid-filter"  style="display: none">
+              <label for="pname" class="layui-form-label">
+                  料号ID
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="mid"  name="mid"   autocomplete="off" class="layui-input">
+              </div>
+          </div> 
+          
+          <div class="layui-form-item">
+              <label for="L_username" class="layui-form-label">
+                  订单号
+              </label>
+             <div class="layui-input-inline">
+              <input type="text" id="orderNumber" name="orderNumber"  class="layui-input">
+             </div>
+             <button class="layui-btn layui-btn-sm"  id="matchOrder"><span>匹配订单</span></button>
+          </div>
+          <div class="layui-form-item">
+              <label for="L_username" class="layui-form-label">
+                  数量
+              </label>
+              <div class="layui-input-inline">
+                  <input type="number" id="pnumber" name="pnumber" 
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+           <div class="layui-form-item">
+              <label for="L_username" class="layui-form-label">
+                  供应商
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="supplier" name="supplier" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+         <div class="layui-form-item">
+		      <label for="L_username" class="layui-form-label">来料日期</label>
+		      <div class="layui-input-inline">
+		        <input type="text" class="layui-input" id="inDate" name="inDate" placeholder="yyyy-MM-dd HH:mm:ss">
+		      </div>
+   		 </div>
+          <div class="layui-form-item">
+              <label for="customer" class="layui-form-label">
+                  出入库
+              </label>
+              <div class="layui-input-inline">
+                  <select   id="state" name="state"    class="layui-input"  lay-search>
+                
+                        <option value="1">入库</option>
+                         <option value="0">出库</option>
+                  </select>
+              </div>
+          </div>
+          
+          
+          <div class="layui-form-item">
+              <label for="customer" class="layui-form-label">
+                  出入库
+              </label>
+              <div class="layui-input-inline">
+                  <select   id="state" name="state"    class="layui-input"  lay-search>
+                
+                        <option value="1">入库</option>
+                         <option value="0">出库</option>
+                  </select>
+              </div>
+          </div>
+
+        
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button type="button" class="layui-btn" id="addMac"  lay-filter="add"  lay-submit="">开始上传</button>
+          </div>
+      </form>
+    </div>
+    <script>
+       var url=window.location.search;
+       var paramStr=url.split("=")[1];
+       console.log(paramStr);
+       var storeState=parent.GetStoreState();
+  
+	   
+	    console.log("操作人:"+loginUser.realName);
+	    var instructPermision;
+	    if(contains(paramStr+"_approval",per_arr)){
+	    	instructPermision=1;
+	    }else{
+	    	instructPermision=0;
+	    }
+	    layui.use('laydate', function(){
+	    	  var laydate = layui.laydate;
+	    	//日期时间选择器
+	    	  laydate.render({
+	    	    elem: '#inDate'
+	    	    ,type: 'datetime'
+	    	  });
+	    });
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer
+          //监听提交
+         
+          form.on('submit(add)', function(data){
+        	  var mid=$("#mid").val();
+ 		     console.log(mid);
+ 		     if(mid==null||mid==undefined||mid==""){
+ 		    	 layer.alert("产品名不存在,请确认料号!");
+ 		    	 return;
+ 		     }
+            console.log(data);
+            var param=data.field;
+            param['instruct_user']=loginUser.realName;
+            param['instructPermision']=instructPermision;
+            param['storeState']=storeState;
+            param['instruct_userId']=loginUser.userId;
+            param['qsid']="1";
+            $.ajax(
+            		{
+            			type:"get",
+            			url:"tv/addtemoraryManager.do",
+            			data:param,
+            			dataType:"json",
+            			success:function(res){
+            				if(res.state==0){
+            					 layer.alert(res.msg, {icon: 6},function () {
+            			                // 获得frame索引
+            			                var index = parent.layer.getFrameIndex(window.name);
+            			                //关闭当前frame
+            			                parent.layer.close(index);
+            			            });
+            				}else{
+            					layer.msg(res.msg);
+            				}
+            			},
+            			error:function(res){
+            				layer.msg(res.msg);
+            			}
+            		});
+           
+            return false;
+          });
+          
+          
+        });
+        
+	   
+        
+        $(document).off("click","#matchPcode").on("click","#matchPcode",function(){
+        	// var mid=$("#lineCode option:selected").val();
+       	     x_admin_show("匹配料号",'./pcode_match_list.html?storeState='+storeState,600,400);
+        });
+        
+        function GetValue(obj){
+            console.log(obj);
+            $("#pn").val(obj.pn);
+            $("#mid").val(obj.id)           
+            $("#materialName").val(obj.materialName);
+            
+       }
+       
+        function GetOrders(obj){
+        	 console.log(obj);
+        	$("#orderNumber").val(obj.orderNumber);
+        }
+        
+        $(document).off("click","#matchOrder").on("click","#matchOrder",function(){
+        	 var mid=$("#mid").val();
+        	 if(mid==null||mid==undefined||mid==""){
+        		 layer.alert("请先匹配正确的品名料号!")
+        		 return false;
+        		 
+        	 }
+       	     x_admin_show("匹配订单",'./porder_match_list.html?mid='+mid,600,400);
+        });
+        
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+  
+     <mapper namespace="com.cy.dao.board.BoardDao">
+     
+         <select id="loadAllBoard" resultType="com.cy.domain.line.WorkLine">
+             select * from cy_workLine
+         </select>
+         
+         <select id="selectPdName" parameterType="int" resultType="com.cy.domain.line.ProductDetails">
+             select * from cy_productDetails where pid=#{pid}
+         </select>
+         
+         <select id="loadMarkTime" parameterType="String" resultType="com.cy.domain.line.WorkStationMark">
+             select distinct pname ,porder, lineCode from cy_workStationMark where time1=#{time}
+         </select>
+         
+         <select id="searchCid" parameterType="String" resultType="com.cy.domain.list.ProductCode">
+             select distinct cid, modelCode, mainboardModel from cy_productCode where porder=#{porder}
+         </select>
+         
+         <select id="searchClientName" parameterType="String" resultType="String">
+             select clientName from clientList where id=#{cid}
+         </select>
+         
+         <select id="searchOrderNumber" parameterType="String" resultType="int">
+             select numbers from orderList where orderNumber=#{porder}
+         </select>
+         
+         <!-- <select id="countWorkCode" parameterType="String" resultType="int">
+             select count(*) from cy_workLocation where lineCode=#{lineCode}
+         </select> -->
+         <select id="countWorkCode" parameterType="String" resultType="int">
+             select count(*) from cy_productWorker where lineCode=#{lineCode}
+         </select>
+         
+         <select id="trCount" parameterType="map" resultType="int">
+             select count(*) from cy_workStationMark where time1=#{time} and lineCode=#{lineCode} and porder=#{porder}
+         </select>
+         
+         <select id="ccCount" parameterType="map" resultType="int">
+             select count(*) from cy_workStationMark where time4=#{time} and lineCode=#{lineCode} and porder=#{porder}
+         </select>
+         
+         <select id="ljtrCount" parameterType="map" resultType="int">
+             select count(*) from cy_workStationMark where lineCode=#{lineCode} and porder=#{porder}
+         </select>
+         
+         <select id="ljccCount" parameterType="map" resultType="int">
+             select count(*) from cy_workStationMark where lineCode=#{lineCode} and porder=#{porder} and mark4 is not null
+         </select>
+
+          <select id="diquRemarks" parameterType="String" resultType="String">
+             select distinct region from cy_productCode where porder=#{porder} and region is not null and region!=''
+         </select>
+         <select id="loadAllRepair" parameterType="com.cy.board.Repair" resultType="com.cy.board.Repair">
+             select  rp.*,pm.id,pm.pid,pm.cy_model,ph.xId,br.brid 
+             from erp_repair rp 
+             left join cy_productModel pm on pm.cy_model=rp.model
+			 left join erp_phenomenon ph on ph.blPhenom=rp.unhealthyxx
+			 left join erp_badReasons br on br.unhealthyy=rp.unhealthyy 
+			<where>
+         	<trim prefixOverrides="and">
+         	<if test="sn!=null and sn!=''">sn like "%"#{sn}"%"</if>
+         	</trim>
+         	</where>
+         	limit #{pageSize},#{limit}
+         </select>
+         <select id="countLoadAllRepair" parameterType="com.cy.board.Repair" resultType="int">
+             select count(*) from erp_repair 
+         </select>
+         <select id="findOrderListByOid" parameterType="int" resultType="com.cy.domain.produce.tv.OrderList">
+         select o.*,m.pn,m.materialName from orderList o 
+         left join materialManage m on o.mid=m.id
+         where o.id=#{oid}
+         </select>
+         <insert id="addplan" parameterType="com.cy.board.PlanOrder">
+         insert into jhz_planOrder(jhz_planCode,oid,mid,jhz_number,batch,jhz_time,lid,jhz_jhNumber,jhz_jhtime,khid)
+         values(#{jhz_planCode},#{oid},#{mid},#{jhz_number},#{batch},#{jhz_time},#{lid},#{jhz_jhNumber},#{jhz_jhtime},#{khid})
+         </insert>
+         <select id="loadPlanOrder" parameterType="com.cy.board.PlanOrder" resultType="com.cy.board.PlanOrder">
+         select po.*,m.pn,m.materialName,o.orderNumber,wk.lineCode  from jhz_planOrder po 
+         left join orderList o on po.oid=o.id
+         left join materialManage m on po.mid=m.id
+		 left join cy_workLine wk on po.lid=wk.lid
+		 <where><trim prefixOverrides="and">
+		 <if test="jhz_planCode!=null and jhz_planCode!=''">jhz_planCode=#{jhz_planCode}</if>
+		 <if test="lid!=null and lid!=''">and lid=#{lid}</if></trim>
+		 </where>
+         limit #{pageSize},#{limit}
+         </select>
+         <select id="findWorkStationMark" parameterType="com.cy.board.PlanOrder" resultType="int">
+         select count(*) from cy_workStationMark where porder=#{orderNumber} and lineCode=#{lineCode}
+         </select>
+         <update id="updatePlanorder" parameterType="com.cy.board.PlanOrder">
+         update jhz_planOrder 
+         <trim prefix="set" suffixOverrides=",">
+         	<if test="mid!=null">mid=#{mid},</if>
+         	<if test="lid!=null">lid=#{lid},</if>
+         	<if test="oid!=null">oid=#{oid},</if>
+         	<if test="jhz_number!=null">jhz_number=#{jhz_number},</if>
+         	<if test="jhz_jhNumber!=null">jhz_jhNumber=#{jhz_jhNumber},</if>
+         	<if test="jhz_jhtime!=null">jhz_jhtime=#{jhz_jhtime},</if>
+         	<if test="jhz_planCode!=null">jhz_planCode=#{jhz_planCode}</if>
+         </trim>
+         where id=#{id} 
+         </update>
+         <delete id="deletePlanOrder" parameterType="int">
+         delete from jhz_planOrder where id=#{id}
+         </delete>
+         <update id="updateStuat" parameterType="int">
+         update jhz_planOrder set `stuat`=1 where id=#{id}
+         </update>
+         <insert id="addProject" parameterType="com.cy.board.Project">
+         insert into jhz_project(jhz_projectNumber,jhz_projectName,jhz_startName,jhz_startTime,jhz_integral,jhz_describe,jhz_executivePower,khid,jhz_projectBook,jhz_expectTime)
+         values(#{jhz_projectNumber},#{jhz_projectName},#{jhz_startName},#{jhz_startTime},#{jhz_integral},#{jhz_describe},#{jhz_executivePower},#{khid},#{jhz_projectBook},#{jhz_expectTime})
+         </insert>
+         <select id="loadProject" parameterType="com.cy.board.Project" resultType="com.cy.board.Project">
+         select * from jhz_project 
+         <where>
+         <trim prefixOverrides="and">
+         <if test="jhz_projectNumber!=null and jhz_projectNumber!=''">jhz_projectNumber like "%"#{jhz_projectNumber}"%"</if>
+         <if test="userId!=null">and userId=#{userId}</if>
+         <if test="jhz_projectName!=null and jhz_projectName!=''">and jhz_projectName like "%"#{jhz_projectName}"%"</if>
+         <if test="jhz_respoName!=null and jhz_respoName!=''">and jhz_respoName like "%"#{jhz_respoName}"%"</if>
+         <if test="jhz_state!=null">and jhz_state=#{jhz_state}</if>
+         <if test="jhz_startName!=null and jhz_startName!=''">and jhz_startName like "%"#{jhz_startName}"%"</if>
+         </trim>
+         </where>
+         limit #{pageSize},#{limit}
+         </select>
+         <select id="countloadProject" parameterType="com.cy.board.Project" resultType="int">
+         select count(*) from jhz_project 
+         <where>
+         <trim prefixOverrides="and">
+         <if test="jhz_projectNumber!=null and jhz_projectNumber!=''">jhz_projectNumber like "%"#{jhz_projectNumber}"%"</if>
+         <if test="userId!=null">and userId=#{userId}</if>
+         <if test="jhz_projectName!=null and jhz_projectName!=''">and jhz_projectName like "%"#{jhz_projectName}"%"</if>
+         <if test="jhz_respoName!=null and jhz_respoName!=''">and jhz_respoName like "%"#{jhz_respoName}"%"</if>
+         <if test="jhz_state!=null">and jhz_state=#{jhz_state}</if>
+         <if test="jhz_startName!=null and jhz_startName!=''">and jhz_startName like "%"#{jhz_startName}"%"</if>
+         </trim>
+         </where>
+        
+         </select>
+         <update id="updateProject" parameterType="com.cy.board.Project">
+         update jhz_project 
+         <trim prefix="set" suffixOverrides=",">
+         	<if test="jhz_projectNumber!=null">jhz_projectNumber=#{jhz_projectNumber},</if>
+         	<if test="jhz_projectName!=null">jhz_projectName=#{jhz_projectName},</if>
+         	<if test="jhz_startName!=null">jhz_startName=#{jhz_startName},</if>
+         	<if test="jhz_integral!=null">jhz_integral=#{jhz_integral},</if>
+         	<if test="jhz_startTime!=null">jhz_startTime=#{jhz_startTime},</if>
+         	<if test="jhz_describe!=null">jhz_describe=#{jhz_describe},</if>
+         	<if test="jhz_executivePower!=null">jhz_executivePower=#{jhz_executivePower},</if>
+         	<if test="jhz_expectTime!=null">jhz_expectTime=#{jhz_expectTime}</if>
+         </trim> where xid=#{xid}
+         </update>
+         <delete id="deleteProject" parameterType="com.cy.board.Project">
+         delete from jhz_project where xid=#{xid} 
+         </delete>
+         <insert id="addTasks" parameterType="com.cy.board.Tasks">
+         insert into jhz_tasks(xid,jhz_tasksName,jhz_expectTime,khid,lid,jhz_efficiency,jhz_peple,jhz_innovate,jhz_tasksDescribe,jhz_tasksIntegral)
+         values(#{xid},#{jhz_tasksName},#{jhz_expectTime},#{khid},#{lid},#{jhz_efficiency},#{jhz_peple},#{jhz_innovate},#{jhz_tasksDescribe},#{jhz_tasksIntegral})
+         </insert>
+         <select id="loadTasks" parameterType="com.cy.board.Tasks" resultType="com.cy.board.Tasks">
+         select t.*,x.jhz_projectName from jhz_tasks t
+         left join jhz_project x on x.xid=t.xid
+         	<where>
+         	<trim prefixOverrides="and">
+         		<if test="xid!=null">t.xid=#{xid}</if>
+         		<if test="jhz_peple!=null and jhz_peple!=''">and t.jhz_peple=#{jhz_peple}</if>
+         		<if test="jhz_tasksName!=null and jhz_tasksName!=''">and t.jhz_tasksName like "%"#{jhz_tasksName}"%"</if>
+         		<if test="tasks_state!=null">and t.tasks_state=#{tasks_state}</if>
+         		<if test="userId!=null">and t.userId=#{userId}</if>
+         		<if test="jhz_tasksToexamine!=null">and t.jhz_tasksToexamine=#{jhz_tasksToexamine}</if>
+         		<if test="jhz_submission!=null">and t.jhz_submission=#{jhz_submission}</if>
+         	</trim>
+         	</where>
+         	limit #{pageSize},#{limit}
+         </select>
+         <select id="countloadTasks" parameterType="com.cy.board.Tasks" resultType="int">
+         select count(*) from jhz_tasks t
+         left join jhz_project x on x.xid=t.xid
+         	<where>
+         	<trim prefixOverrides="and">
+         		<if test="xid!=null">t.xid=#{xid}</if>
+         		<if test="jhz_peple!=null and jhz_peple!=''">and t.jhz_peple=#{jhz_peple}</if>
+         		<if test="jhz_tasksName!=null and jhz_tasksName!=''">and t.jhz_tasksName like "%"#{jhz_tasksName}"%"</if>
+         		<if test="tasks_state!=null">and t.tasks_state=#{tasks_state}</if>
+         		<if test="userId!=null">and t.userId=#{userId}</if>
+         		<if test="jhz_tasksToexamine!=null">and t.jhz_tasksToexamine=#{jhz_tasksToexamine}</if>
+         		<if test="jhz_submission!=null">and t.jhz_submission=#{jhz_submission}</if>
+         	</trim>
+         	</where>
+         	
+         </select>
+         <select id="findTasks" parameterType="int" resultType="com.cy.board.Tasks">
+         select * from jhz_tasks where xid=#{xid}
+         </select>
+         <update id="updateTasks" parameterType="com.cy.board.Tasks">
+         update jhz_tasks
+         <trim prefix="set" suffixOverrides=",">
+         	<if test="jhz_tasksName!=null">jhz_tasksName=#{jhz_tasksName},</if>
+         	<if test="jhz_tasksDescribe!=null">jhz_tasksDescribe=#{jhz_tasksDescribe},</if>
+         	<if test="jhz_tasksIntegral!=null">jhz_tasksIntegral=#{jhz_tasksIntegral},</if>
+         	<if test="jhz_peple!=null">jhz_peple=#{jhz_peple},</if>
+         	<if test="userId!=null">userId=#{userId},</if>
+         	<if test="jhz_submissionName!=null">jhz_submissionName=#{jhz_submissionName},</if>
+         	<if test="jhz_submission!=null">jhz_submission=#{jhz_submission},</if>
+         	<if test="jhz_toexamineName!=null">jhz_toexamineName=#{jhz_toexamineName},</if>
+         	<if test="jhz_tasksToexamine!=null">jhz_tasksToexamine=#{jhz_tasksToexamine},</if>
+         	<if test="tasks_state!=null">tasks_state=#{tasks_state},</if>
+         	<if test="jhz_expectTime!=null">jhz_expectTime=#{jhz_expectTime}</if>
+         </trim> where tid=#{tid}
+         </update>
+         <delete id="deleteTasks" parameterType="com.cy.board.Tasks">
+         delete from jhz_tasks where tid=#{tid}
+         </delete>
+         <select id="loadGroup" parameterType="com.cy.board.Jgroup" resultType="com.cy.board.Jgroup">
+         select * from jhz_group 
+         	<where>
+         	<trim prefixOverrides="and">
+         	<if test="jhz_groupName!=null">jhz_groupName like "%"#{jhz_groupName}"%"</if>
+         	<if test="jhz_groupBoss!=null">and jhz_groupBoss like "%"#{jhz_groupBoss}"%"</if>
+         	<if test="khid!=null and khid!=''">and khid=#{khid}</if>
+         	<if test="jhz_skill!=null">and jhz_skill like "%"#{jhz_skill}"%"</if>
+         	<if test="jhz_peopleName!=null">and jhz_peopleName like "%"#{jhz_peopleName}"%"</if>
+         	</trim>
+         	</where>
+         	limit #{pageSize},#{limit}
+         </select>
+         <select id="countloadGroup" parameterType="com.cy.board.Jgroup" resultType="int">
+         select count(*) from jhz_group 
+         	<where>
+         	<trim prefixOverrides="and">
+         	<if test="jhz_groupName!=null">jhz_groupName like "%"#{jhz_groupName}"%"</if>
+         	<if test="jhz_groupBoss!=null">and jhz_groupBoss like "%"#{jhz_groupBoss}"%"</if>
+         	<if test="khid!=null and khid!=''">and khid=#{khid}</if>
+         	<if test="jhz_skill!=null">and jhz_skill like "%"#{jhz_skill}"%"</if>
+         	<if test="jhz_peopleName!=null">and jhz_peopleName like "%"#{jhz_peopleName}"%"</if>
+         	</trim>
+         	</where>
+         	
+         </select>
+         <insert id="addGroup" parameterType="com.cy.board.Jgroup">
+         insert into jhz_group(jhz_groupName,jhz_groupBoss,jhz_peopleName,jhz_function,jhz_skill,jhz_evaluate,jhz_groupSlogan,jhz_contribution,userId)
+         values(#{jhz_groupName},#{jhz_groupBoss},#{jhz_peopleName},#{jhz_function},#{jhz_skill},#{jhz_evaluate},#{jhz_groupSlogan},#{jhz_contribution},#{userId})
+         </insert>
+         <update id="updateGroup" parameterType="com.cy.board.Jgroup">
+         update jhz_group 
+         <trim prefix="set" suffixOverrides=",">
+         <if test="jhz_groupName!=null">jhz_groupName=#{jhz_groupName},</if>
+         <if test="jhz_groupBoss!=null">jhz_groupBoss=#{jhz_groupBoss},</if>
+         <if test="jhz_peopleName!=null">jhz_peopleName=#{jhz_peopleName},</if>
+         <if test="jhz_function!=null">jhz_function=#{jhz_function},</if>
+         <if test="jhz_skill!=null">jhz_skill=#{jhz_skill},</if>
+         <if test="jhz_evaluate!=null">jhz_evaluate=#{jhz_evaluate},</if>
+         <if test="jhz_groupSlogan!=null">jhz_groupSlogan=#{jhz_groupSlogan},</if>
+         <if test="jhz_contribution!=null">jhz_contribution=#{jhz_contribution},</if>
+         <if test="userId!=null">userId=#{userId}</if>
+         </trim>
+         	where zid=#{zid}
+         </update>
+         <delete id="deleteGroup" parameterType="int">
+         delete from jhz_group where zid=#{zid}
+         </delete>
+         <insert id="addGroupList" parameterType="com.cy.board.GroupList">
+         insert into jhz_groupList(zid,userId,realName) values(#{zid},#{userId},#{realName});
+         </insert>
+         <select id="loadGroupList" parameterType="int" resultType="com.cy.board.GroupList">
+         select * from jhz_groupList where zid=#{zid}
+         </select>
+         <delete id="deleteGroupList" parameterType="com.cy.board.GroupList">
+         delete from jhz_groupList where uid=#{uid}
+         </delete>
+         <select id="loadUserGroupBoss" resultType="com.cy.domain.user.ErpUser">
+       	select * from erp_user
+         </select>
+         <update id="acceptProject" parameterType="com.cy.board.Project">
+         update jhz_project set jhz_respoName=#{jhz_respoName},userId=#{userId} where xid=#{xid}
+         </update>
+         <update id="abandonProject" parameterType="com.cy.board.Project">
+         update jhz_project set jhz_respoName=null where xid=#{xid}
+         </update>
+         <update id="completeProject" parameterType="com.cy.board.Project">
+         update jhz_project set `jhz_state`=1 where xid=#{xid}
+         </update>
+         <insert id="addIntegral" parameterType="com.cy.board.Integral">
+         insert into jhz_integral(jhz_integralNumber,jhz_people,jhz_integralTime,jhz_projectName,xid,userId,jhz_integral) 
+         values(#{jhz_integralNumber},#{jhz_people},#{jhz_integralTime},#{jhz_projectName},#{xid},#{userId},#{jhz_integral})
+         </insert>
+         <select id="loadIntegral" parameterType="com.cy.board.Integral" resultType="com.cy.board.Integral">
+         select * from jhz_integral 
+         	<where>
+         	<trim prefixOverrides="and">
+         		<if test="jhz_people!=null">jhz_people like "%"#{jhz_people}"%"</if>
+         		<if test="userId!=null">and userId=#{userId}</if>
+         	</trim>
+         	</where>
+         	order by jid desc
+         	limit #{pageSize},#{limit}
+         	 
+         </select>
+         <select id="countloadIntegral" parameterType="com.cy.board.Integral" resultType="int">
+         select count(*) from jhz_integral 
+         	<where>
+         	<trim prefixOverrides="and">
+         		<if test="jhz_people!=null">jhz_people like "%"#{jhz_people}"%"</if>
+         		<if test="userId!=null">and userId=#{userId}</if>
+         	</trim>
+         	</where>
+         	
+         </select>
+         <select id="findIntegralByUserId" parameterType="int" resultType="com.cy.board.Integral">
+         select * from jhz_integral where userId=#{userId}
+         </select>
+         <select id="loadMyIntegra" parameterType="int" resultType="com.cy.board.Integral">
+         select * from jhz_integral  where jid=(select MAX(jid) from jhz_integral ) and userId=#{userId}
+         </select>
+         <select id="loadWJProject" parameterType="com.cy.board.Project" resultType="com.cy.board.Project">
+         select * from jhz_project 
+         <where>
+         <trim prefixOverrides="and">
+         <if test="jhz_projectNumber!=null and jhz_projectNumber!=''">jhz_projectNumber like "%"#{jhz_projectNumber}"%"</if>
+         <if test="jhz_projectName!=null and jhz_projectName!=''">and jhz_projectName like "%"#{jhz_projectName}"%"</if>
+         <if test="jhz_state!=null">and jhz_state=#{jhz_state} and jhz_respoName is null</if>
+         <if test="jhz_startName!=null and jhz_startName!=''">and jhz_startName like "%"#{jhz_startName}"%"</if>
+         </trim>
+         </where>
+         limit #{pageSize},#{limit}
+         </select>
+         <select id="countloadWJProject" parameterType="com.cy.board.Project" resultType="int">
+         select count(*) from jhz_project 
+         <where>
+         <trim prefixOverrides="and">
+         <if test="jhz_projectNumber!=null and jhz_projectNumber!=''">jhz_projectNumber like "%"#{jhz_projectNumber}"%"</if>
+         <if test="jhz_projectName!=null and jhz_projectName!=''">and jhz_projectName like "%"#{jhz_projectName}"%"</if>
+         <if test="jhz_state!=null">and jhz_state=#{jhz_state} and jhz_respoName is null</if>
+         <if test="jhz_startName!=null and jhz_startName!=''">and jhz_startName like "%"#{jhz_startName}"%"</if>
+         </trim>
+         </where>
+         
+         </select>
+         <insert id="addWJProject" parameterType="com.cy.board.ProductTest">
+         insert into jhz_productTest(brand,model,deviceName,os,firmwareClient,launcherPackageName,launcherPackageVersion,wifiMac,etherMac,cpuid,fingerprint,time,serialno) 
+         values(#{brand},#{model},#{deviceName},#{os},#{firmwareClient},#{launcherPackageName},#{launcherPackageVersion},#{wifiMac},#{etherMac},#{cpuid},#{fingerprint},#{time},#{serialno})
+         </insert>
+         <select id="loadProductTest" parameterType="com.cy.board.ProductTest" resultType="com.cy.board.ProductTest">
+         select * from jhz_productTest
+         <where>
+         <trim prefixOverrides="and">
+         <if test="brand!=null and brand!=''">brand like "%"#{brand}"%"</if>
+         <if test="model!=null and model!=''">and model like "%"#{model}"%"</if>
+         <if test="deviceName!=null and deviceName!=''">and deviceName like "%"#{deviceName}"%"</if>
+         <if test="os!=null and os!=''">and os like "%"#{os}"%"</if>
+         <if test="fingerprint!=null and fingerprint!=''">and fingerprint like "%"#{fingerprint}"%"</if>
+         <if test="firmwareClient!=null and firmwareClient!=''">and firmwareClient like "%"#{firmwareClient}"%"</if>
+         <if test="launcherPackageName!=null and launcherPackageName!=''">and launcherPackageName like "%"#{launcherPackageName}"%"</if>
+         <if test="launcherPackageVersion!=null and launcherPackageVersion!=''">and launcherPackageVersion like "%"#{launcherPackageVersion}"%"</if>
+         <if test="wifiMac!=null and wifiMac!=''">and wifiMac like "%"#{wifiMac}"%"</if>
+         <if test="etherMac!=null and etherMac!=''">and etherMac like "%"#{etherMac}"%"</if>
+         <if test="cpuid!=null and cpuid!=''">and cpuid like "%"#{cpuid}"%"</if>
+         </trim>
+         </where>
+         limit #{pageSize},#{limit}
+         </select>
+         <select id="countloadProductTest" parameterType="com.cy.board.ProductTest" resultType="int">
+         select count(*) from jhz_productTest
+         <where>
+         <trim prefixOverrides="and">
+         <if test="brand!=null and brand!=''">brand like "%"#{brand}"%"</if>
+         <if test="model!=null and model!=''">and model like "%"#{model}"%"</if>
+         <if test="deviceName!=null and deviceName!=''">and deviceName like "%"#{deviceName}"%"</if>
+         <if test="os!=null and os!=''">and os like "%"#{os}"%"</if>
+         <if test="firmwareClient!=null and firmwareClient!=''">and firmwareClient like "%"#{firmwareClient}"%"</if>
+         <if test="launcherPackageName!=null and launcherPackageName!=''">and launcherPackageName like "%"#{launcherPackageName}"%"</if>
+         <if test="launcherPackageVersion!=null and launcherPackageVersion!=''">and launcherPackageVersion like "%"#{launcherPackageVersion}"%"</if>
+         <if test="wifiMac!=null and wifiMac!=''">and wifiMac like "%"#{wifiMac}"%"</if>
+         <if test="etherMac!=null and etherMac!=''">and etherMac like "%"#{etherMac}"%"</if>
+         <if test="cpuid!=null and cpuid!=''">and cpuid like "%"#{cpuid}"%"</if>
+         </trim>
+         </where>
+         
+         </select>
+         <delete id="deleteProducTest" parameterType="int">
+         delete from jhz_productTest where cid=#{cid}
+         </delete>
+         <insert id="addBatch" parameterType="com.cy.board.Batch">
+         insert into jhz_batch(batch,modelCode,time,mid,price,numbers,pn,pid,stuat)
+         values(#{batch},#{modelCode},#{time},#{mid},#{price},#{numbers},#{pn},#{pid},#{stuat})
+         </insert>
+         <select id="loadBatch" parameterType="com.cy.board.Batch" resultType="com.cy.board.Batch">
+         <!-- select * from jhz_batch -->
+         SELECT b.id,b.batch,b.modelCode,b.mid,p.pname,b.storeState,b.stuat,b.numbers,b.outNumber,b.residue,b.price,b.pn FROM jhz_batch b
+		 LEFT JOIN cy_productDetails p ON b.pid=p.pid
+         <where>
+         <trim prefixOverrides="and">
+         <if test="batch!=null and batch!=''">batch like "%"#{batch}"%"</if>
+         <if test="modelCode!=null and modelCode!=''">and modelCode like "%"#{modelCode}"%"</if>
+         </trim>
+         </where>
+         limit #{pageSize},#{limit}
+         </select>
+         <select id="countloadBatch" parameterType="com.cy.board.Batch" resultType="int">
+         select count(*) from jhz_batch
+         <where>
+         <trim prefixOverrides="and">
+         <if test="batch!=null and batch!=''">batch like "%"#{batch}"%"</if>
+         <if test="modelCode!=null and modelCode!=''">and modelCode like "%"#{modelCode}"%"</if>
+         </trim>
+         </where>
+         </select>
+         <delete id="deleteBatch" parameterType="int">
+         delete from jhz_batch where id=#{id}
+         </delete>
+         <update id="completeBatch" parameterType="int">
+         update jhz_batch set `stuat`=0 where id=#{id}
+         </update>
+     </mapper>

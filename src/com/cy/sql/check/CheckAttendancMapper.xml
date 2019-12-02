@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.cy.dao.check.CheckAttendancDao">
+
+	<!-- 多条件查询 -->
+	<select id="getCheckAttendanc" parameterType="com.cy.domain.check.CheckAttendanc"
+		resultType="com.cy.domain.check.CheckAttendanc">
+		select * from cy_checkAttendanc
+		<where>
+			<if test="id != null and id != '' ">id = #{id}</if>
+			<if test="workerCode != null and workerCode != ''">and workerCode like concat('%',#{workerCode},'%')</if>
+			<if test="workerName != null and workerName != ''">and workerName like concat('%',#{workerName},'%')</if>
+			<if test="attendanceStartDate != null and attendanceStartDate != ''">and attendanceStartDate like
+				concat('%',#{attendanceStartDate},'%')</if>
+			<if test="attendanceEndDate != null and attendanceEndDate != ''">and attendanceEndDate like
+				concat('%',#{attendanceEndDate},'%')</if>
+			<if test="absenteeism != null and absenteeism != ''">and absenteeism like concat('%',#{absenteeism},'%')</if>
+			<if test="leave != null and leave != ''">and leave like concat('%',#{leave},'%')</if>
+			<if test="travel != null and travel != ''">and travel like concat('%',#{travel},'%')</if>
+			<if test="goToWork != null and goToWork != ''">and goToWork like concat('%',#{goToWork},'%')</if>
+			<if test="late != null and late != ''">and late like concat('%',#{late},'%')</if>
+			<if test="leaveEarly != null and leaveEarly != ''">and leaveEarly like concat('%',#{leaveEarly},'%')</if>
+			<if test="normalOvertime != null and normalOvertime != ''">and normalOvertime like concat('%',#{normalOvertime},'%')
+			</if>
+			<if test="specialOvertime != null and specialOvertime != ''">and specialOvertime like
+				concat('%',#{specialOvertime},'%')</if>
+			<if test="date != null and date != ''">and date like concat('%',#{date},'%')</if>
+		</where>
+	</select>
+	<!-- 查询总数 -->
+	<select id="getCount" parameterType="com.cy.domain.check.CheckAttendanc"
+		resultType="java.lang.Integer">
+		select count(id) from cy_checkAttendanc
+		<where>
+			<if test="id != null and id != '' ">id = #{id}</if>
+			<if test="workerCode != null and workerCode != ''">and workerCode like concat('%',#{workerCode},'%')</if>
+			<if test="workerName != null and workerName != ''">and workerName like concat('%',#{workerName},'%')</if>
+			<if test="attendanceStartDate != null and attendanceStartDate != ''">and attendanceStartDate like
+				concat('%',#{attendanceStartDate},'%')</if>
+			<if test="attendanceEndDate != null and attendanceEndDate != ''">and attendanceEndDate like
+				concat('%',#{attendanceEndDate},'%')</if>
+			<if test="absenteeism != null and absenteeism != ''">and absenteeism like concat('%',#{absenteeism},'%')</if>
+			<if test="leave != null and leave != ''">and leave like concat('%',#{leave},'%')</if>
+			<if test="travel != null and travel != ''">and travel like concat('%',#{travel},'%')</if>
+			<if test="goToWork != null and goToWork != ''">and goToWork like concat('%',#{goToWork},'%')</if>
+			<if test="late != null and late != ''">and late like concat('%',#{late},'%')</if>
+			<if test="leaveEarly != null and leaveEarly != ''">and leaveEarly like concat('%',#{leaveEarly},'%')</if>
+			<if test="normalOvertime != null and normalOvertime != ''">and normalOvertime like concat('%',#{normalOvertime},'%')
+			</if>
+			<if test="specialOvertime != null and specialOvertime != ''">and specialOvertime like
+				concat('%',#{specialOvertime},'%')</if>
+			<if test="date != null and date != ''">and date like concat('%',#{date},'%')</if>
+		</where>
+	</select>
+	<!-- 新增 -->
+	<insert id="insert" parameterType="com.cy.domain.check.CheckAttendanc">
+		insert into
+		cy_checkAttendanc(workerCode,workerName,attendanceStartDate,attendanceEndDate,absenteeism,leave,travel,goToWork,
+		late,leaveEarly,normalOvertime,specialOvertime,date)
+
+		values(
+		#{workerCode},
+		#{workerName},
+		#{attendanceStartDate},
+		#{attendanceEndDate},
+		#{absenteeism},
+		#{leave},
+		#{travel},
+		#{goToWork},
+		#{late},
+		#{leaveEarly},
+		#{normalOvertime},
+		#{specialOvertime},
+		#{date}
+		)
+
+	</insert>
+	<!-- 删除 -->
+	<delete id="delete" parameterType="Integer">
+		delete from
+		cy_checkAttendanc
+		where id = #{id}
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteBatch" parameterType="Integer">
+		delete from
+		cy_checkAttendanc where id=#{strId}
+	</delete>
+	<!-- 修改 -->
+	<update id="update" parameterType="com.cy.domain.check.CheckAttendanc">
+		update cy_checkAttendanc
+		<set>
+			<trim suffixOverrides=",">
+				<if test="workerCode!=null and workerCode!=''">
+					workerCode=#{workerCode},
+				</if>
+				<if test="workerName=null and workerName!=''">
+					workerName=#{workerName},
+				</if>
+				<if test="attendanceStartDate!=null and attendanceStartDate!=''">
+					attendanceStartDate=#{attendanceStartDate},
+				</if>
+				<if test="attendanceEndDate!=null and attendanceEndDate!=''">
+					attendanceEndDate=#{attendanceEndDate},
+				</if>
+				<if test="absenteeism!=null and absenteeism!=''">
+					absenteeism=#{absenteeism},
+				</if>
+				<if test="leave!=null and leave!=''">
+					leave=#{leave},
+				</if>
+				<if test="travel!=null and travel!=''">
+					travel=#{travel},
+				</if>
+				<if test="goToWork!=null and goToWork!=''">
+					goToWork=#{goToWork},
+				</if>
+				<if test="late!=null and late!=''">
+					late=#{late},
+				</if>
+				<if test="leaveEarly!=null and leaveEarly!=''">
+					leaveEarly=#{leaveEarly},
+				</if>
+				<if test="normalOvertime!=null and normalOvertime!=''">
+					normalOvertime=#{normalOvertime},
+				</if>
+				<if test="specialOvertime!=null and specialOvertime!=''">
+					specialOvertime=#{specialOvertime},
+				</if>
+				<if test="date!=null and date!=''">
+					date=#{date},
+				</if>
+			</trim>
+		</set>
+		where
+		id=#{id}
+	</update>
+
+</mapper>

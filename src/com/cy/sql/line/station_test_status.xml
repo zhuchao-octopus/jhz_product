@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.line.Station_test_statusDao">
+       <select id="findSn1BySn1AndPname"    resultType="com.cy.domain.station_test_status.Station_test_status">
+            select  distinct productCode_sn1,product_name from station_test_status
+       </select>  
+       
+       <select id="findCodeByDemo"  parameterType="com.cy.domain.list.ProductCode"  resultType="com.cy.domain.list.ProductCode">
+           select *  from cy_productCode where process=#{process} and sn1=#{sn1}
+       </select>
+       
+      
+ </mapper>

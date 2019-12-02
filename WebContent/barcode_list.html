@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>欢迎页面-X-admin2.0</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="./css/font.css">
+<link rel="stylesheet" href="./css/xadmin.css">
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/cookie_util.js"></script>
+<script type="text/javascript" src="./js/self.js"></script>
+<script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="./js/xadmin.js"></script>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div >
+		<span class="layui-breadcrumb">
+		 <a href="">工程管理</a>
+		 <a> <cite>条码表</cite></a>
+		</span> 
+		<ul class="layui-nav"  style="text-align: right">
+			
+			<li class="layui-nav-item"  style="margin-right: 20px"> 
+			   <a href="javascript:void(0)">当前为条码表</a>
+				<dl class="layui-nav-child">
+					<dd>
+						<a href="boxnum_list.html"  target="_self">切换为箱号校验表</a>
+					</dd>
+				
+				</dl>
+				</li>
+				
+				<li class="layui-nav-item">
+				<a class="layui-btn layui-btn-small"
+						style="line-height: 1.6em; margin-top: 3px; float: right"
+						href="javascript:location.replace(location.href);" title="刷新"> <i
+						class="layui-icon" style="line-height: 30px">&#xe669;</i>
+			    </a>
+			    </li>
+		</ul>
+	</div>
+	<div class="x-body">
+	   
+		<div class="layui-row">
+		 <form class="layui-form"  onsubmit="return false;">
+		   <div class="layui-form-item">
+			<div class="layui-inline">
+				<input type="text" name="mac" placeholder="生产时间段" autocomplete="off" class="layui-input"  id="start">
+			</div>
+			
+			
+			<!-- <div class="layui-inline">
+				<select name="platform" id="color" lay-search>
+					<option value="">请选择颜色</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div> -->
+			<div class="layui-inline">
+				<select name="platform" id="pname"  lay-search>
+					<option value="">请选择产品名</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+			<div class="layui-inline">
+			    <select name="platform"  id="porder"  lay-search>
+					<option value="">请输入订单批次</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+				
+			</div>
+			<div class="layui-inline">
+			    <select name="batch"  id="batch"  lay-search>
+					<option value="">请输入生产批次</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+			
+			
+			<div class="layui-inline">
+			    <select name="projectNumber"  id="projectNumber"  lay-search>
+					<option value="">请选择计划单号</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+			</div>
+			 <div class="layui-form-item">
+			<div class="layui-inline">
+				<select name="platform" id="modelType"  lay-search>
+					<option value="">请选择产品类型</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+			<div class="layui-inline">
+			    <select name="licenseTag"  id="licenseTag"  lay-search>
+					<option value="">请选择牌照方</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+			
+			<div class="layui-inline">
+			    <select name="region"  id="region"  lay-search>
+					<option value="">请选择出货地区</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+			<div class="layui-inline">
+			    <select name="cid"  id="cid"  lay-search>
+					<option value="">请选择客户</option>
+					<option value="0">已停用</option>
+					<option value="1">已启用</option>
+				</select>
+			</div>
+			<div class="layui-inline">
+				<input class="layui-input" placeholder="请输入SN1"  autocomplete="off" id="sn1"/>
+			</div>
+			<div class="layui-inline">
+				<input type="text" name="mac" placeholder="出货时间段" autocomplete="off" class="layui-input"  id="deliver">
+			</div>
+			
+            
+			<div class="layui-inline">
+				<button class="layui-btn search"  lay-filter="search"
+					data-type='search'>
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+			 </div>
+			</form>
+		</div>
+         
+
+
+
+
+		<!-- <xblock id="admin-button"> </xblock> -->
+		<table class="layui-table" id="barcode-table" lay-filter="barcode-table"></table>
+
+
+
+	</div>
+	<script type="text/html" id="toolbarDemo">     
+        <button class="layui-btn permission" onclick="x_admin_show('条码录入','./barcode-add.html',1200,700)"><i class="layui-icon">&#xe61f;</i>录入</button>
+        <button class="layui-btn"  lay-event='exportBatch'"><i class="layui-icon">&#xe601;</i>批量导出</button>
+        <button class="layui-btn"  lay-event='boxList'"><i class="layui-icon">&#xe656;</i>箱号储存表</button>
+        <button class="layui-btn layui-btn-danger permission" lay-event='deleteBatch'"><i class="layui-icon">&#xe640;</i>批量删除</button>
+    </script>
+
+	<script type="text/html" id="barDemo">
+         <button  class='layui-btn layui-btn-sm permission' lay-event='update'><i class='layui-icon'>&#xe642;</i>编辑</button>
+         <button  class='layui-btn layui-btn-sm layui-btn-danger permission' lay-event='delete'><i class='layui-icon'>&#xe640;</i>删除</button>
+    </script>
+
+	<script>
+	    var productOption=loadProductOption();
+	    $("#pname").empty().append("<option value=''>--请选择产品名--</option>"+productOption);
+	    var str="modelCode";
+	    var dataOption=findOptionData(str);
+	    $("#modelType").empty().append("<option value=''>--请选择产品类型--</option>"+dataOption);
+	    str="porder";
+	    dataOption=findOptionData(str)
+	    $("#porder").empty().append("<option value=''>--请选择订单批次--</option>"+dataOption);
+	    $("#cid").empty().append("<option value=''>--请选择客户--</option>"+loadAllCust());
+	    $("#batch").empty().append("<option value=''>--请选择批次--</option>");
+	    $("#projectNumber").empty().append("<option value=''>--请选择计划单号--</option>");
+	    $("#licenseTag").empty().append("<option value=''>--请选择牌照方--</option>");
+	    $("#region").empty().append("<option value=''>--请选择地区--</option>");
+	    $.ajax({
+	    	type:"get",
+	    	async:false,
+	    	url:"list/distinctData.do",
+	    	dataType:"json",
+	    	success:function(res){
+	    		if(res.state==0){
+	    			for(var i=0;i<res.data.length;i++){
+	    				console.log(res.data);
+	    				$("#batch").append("<option value='"+res.data[i]+"'>"+res.data[i]+"</option>");
+	    			}
+	    		    for(var i=0;i<res.data1.length;i++){
+	    				$("#projectNumber").append("<option value='"+res.data1[i]+"'>"+res.data1[i]+"</option>");
+	    			}
+	    			for(var i=0;i<res.data2.length;i++){
+	    				$("#licenseTag").append("<option value='"+res.data2[i]+"'>"+res.data2[i]+"</option>");
+	    			}
+	    			for(var i=0;i<res.data3.length;i++){
+	    				$("#region").append("<option value='"+res.data3[i]+"'>"+res.data3[i]+"</option>");
+	    			}
+	    		}
+	    		 return false;
+	    	},
+	    	errro:function(res){
+	    		
+	    	}
+	    	
+	    });
+	  
+	    
+		layui.use('laydate', function() {
+			var laydate = layui.laydate;
+
+			//执行一个laydate实例
+			laydate.render({
+				elem : '#start', //指定元素
+				range : "~"
+
+			});
+
+			//执行一个laydate实例
+			laydate.render({
+				elem : '#deliver', //指定元素
+				range:"~"
+			});
+		});
+
+		layui.use([ "table", "layer" ], function() {
+			$ = layui.jquery;
+			var table = layui.table, layer = layui.layer;
+			table.render({
+				elem : '#barcode-table',
+				height : 705,
+				url : 'list/loadAllProductCode.do',
+				page : {
+					limit : 100,
+					limits : [ 100, 500, 1000, 2000, 4000, 8000, 10000 ]
+				},
+				cols : [ [ //表头z
+				{
+					type : 'checkbox'
+				}, {
+					field : 'pname',
+					title : '产品名',
+					width : 100,
+					sort : true
+				}, {
+					field : 'porder',
+					title : '订单批次',
+					width : 100,
+					sort : true
+				},{
+					field : 'batch',
+					title : '生产批次(PN)',
+					width : 120,
+					sort : true
+				},{
+					field : 'modelCode',
+					title : '产品类型(YPRO)',
+					width : 130,
+					sort : true
+				},{
+					field : 'modelID',
+					title : '产品类型ID',
+					width : 130,
+					sort : true
+				},{
+					field : 'pnCode',
+					title : '物料号',
+					width : 100,
+					sort : true
+				}
+				,{
+					field : 'projectNumber',
+					title : '计划单号',
+					width : 100,
+					sort : true
+				}
+				,{
+					field : 'hardwareVersion',
+					title : '硬件版本',
+					width : 100,
+					sort : true
+				}
+				,{
+					field : 'softwareVersion',
+					title : '软件版本',
+					width : 100,
+					sort : true
+				}
+				,{
+					field : 'mainboardModel',
+					title : '主板号',
+					width : 100,
+					sort : true
+				}
+				,{
+					field : 'licenseTag',
+					title : '牌照方',
+					width : 100,
+					sort : true
+				}
+				,{
+					field : 'region',
+					title : '地区',
+					width : 100,
+					sort : true
+				}
+				,{
+					field : 'clientName',
+					title : '客户',
+					width : 100,
+					sort : true
+				},
+				{
+					field : 'sn1',
+					title : 'SN号(SN1)',
+					width : 140,
+					sort : true
+				}, {
+					field : 'sn2',
+					title : '广电号(SN2)',
+					width : 140,
+					sort : true
+				}, {
+					field : 'sn3',
+					title : 'RJ Mac地址(SN3)',
+					width : 140,
+					sort : true
+				}, {
+					field : 'sn4',
+					title : 'STBID(SN4)',
+					width : 140,
+					sort : true
+				}, {
+					field : 'sn5',
+					title : 'WIFI Mac(SN5)',
+					width : 140,
+					sort : true
+				}, {
+					field : 'sn6',
+					title : '箱号(SN6)',
+					width : 140,
+					sort : true
+				}, {
+					field : 'sn7',
+					title : 'YSTSN号(SN7)',
+					width : 140,
+					sort : true
+				},{
+					field : 'data1',
+					title : 'VN(DATA1)',
+					width : 120,
+					sort : true
+				}, {
+					field : 'data2',
+					title : 'TN(DATA2)',
+					width : 120,
+					sort : true
+				}, 
+				 {
+					field : 'weight1',
+					title : '重量1(g)',
+					width : 120,
+					sort : true
+				}, {
+					field : 'weight2',
+					title : '重量2(g)',
+					width : 120,
+					sort : true
+				}, 
+				{
+					field : 'creatime',
+					title : '生产时间',
+					width : 120,
+					sort : true
+				}, 
+				{
+					field : 'deliverTime',
+					title : '出货时间',
+					width : 120,
+					sort : true
+				}, 
+				{
+					fileld : "",
+					title : "操作",
+					width : 170,
+					align : 'center',
+					toolbar : "#barDemo"
+				} ] ],
+				id:"barcode-demo",
+				toolbar : '#toolbarDemo',
+				defaultToolbar : [ 'filter', 'print', 'exports' ],
+				done : function() {
+					 if(!contains("tmb_edit",per_arr)){
+					 $("#admin-button").css("display","none");
+					 $(".permission").css("display","none");
+					 $("[data-field='modelID']").css('display','none');
+					} 
+				}
+			});
+			var active={
+					search:function(){
+						var pcode=$("#pname option:selected").val();
+						var porder=$("#porder option:selected").val();
+						var color=$("#color option:selected").val();
+						var modelCode=$("#modelType option:selected").val();
+						var start=$("#start").val();
+						var sn1=$("#sn1").val();
+						var cid=$("#cid option:selected").val();
+						var hardwareVersion=$("#hardwareVersion option:selected").val();
+						var softwareVersion=$("#softwareVersion option:selected").val();
+						var licenseTag=$("#licenseTag option:selected").val();
+						var mainboardModel=$("#mainboardModel option:selected").val();
+						var region=$("#region option:selected").val();
+						var projectNumber=$("#projectNumber option:selected").val();
+						var batch=$("#batch option:selected").val();
+						var deliver=$("#deliver").val();
+						table.reload("barcode-demo",{
+									page: {
+					   	    	          curr: 1 //重新从第 1 页开始
+					   	    	        },
+									where:{
+								        	   "pcode":pcode,
+								        	   "porder":porder,
+								        	   "color":color,
+								        	   "modelCode":modelCode,
+								        	   "time":start,
+								        	   "sn1":sn1,
+								        	   "cid":cid,
+								        	   "hardwareVersion":hardwareVersion,
+								        	   "softwareVersion":softwareVersion,
+								        	   "licenseTag":licenseTag,
+								        	   "mainboardModel":mainboardModel,
+								        	   "region":region,
+								        	   "projectNumber":projectNumber,
+								        	   "batch":batch,
+								        	   "deliver":deliver
+								           }
+								           
+						   });
+					},
+			};
+			
+			
+			
+			
+			
+			$('.x-body .layui-btn').on('click', function () {
+	             var type = $(this).data('type');
+	             active[type] ? active[type].call(this) : '';
+	         });
+			
+			
+			//头工具栏事件
+			  table.on('toolbar(barcode-table)', function(obj){
+			    var checkStatus = table.checkStatus(obj.config.id);
+			    
+			    switch(obj.event){
+			        case 'deleteBatch':
+			        var data = checkStatus.data;
+			    	var pidArr=[];
+			    	for(var i=0;i<data.length;i++){
+			    		pidArr.push(data[i].pid);
+			    	}
+			    	var pidString=pidArr.join(",");
+			    	$.ajax({
+			    		type:"post",
+			    		url:"list/deleteProductCodes.do",
+			    		data:{
+			    			"pidString":pidString
+			    		},
+			    		success:function(res){
+			    			if(res.code==0){
+               				 layer.msg(res.msg);
+               				 $(checkStatus).each(function(){
+               				    table.reload("barcode-demo",{
+               				    	page:{
+               				    		curr:$("#layui-table-page1 .layui-laypage-skip").find("input").val()
+               				    	}
+               				    })
+               				 }); 
+               			 }else{
+               			    layer.msg(res.msg);
+               			 }
+			    		},
+			    		error:function(result){
+			    			layer.alert("error");
+			    		}
+			    	});
+			      break;
+			      case 'exportBatch':
+			    	  x_admin_show('批量导出','./exportExcel.html',1200,700);
+			    	  break;
+			      case 'boxList':
+					  x_admin_show("箱号储存列表","./boxFile_list.html", 1100, 700);
+					  break;
+			    };
+			  });
+           
+			table.on('tool(barcode-table)',
+					function(obj) {
+						var data = obj.data; //获得当前行数据
+						console.log("当前行的数据为:" + data);
+						var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+						var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+						if (layEvent === 'delete') { //删除
+							layer.confirm('真的删除行么', function(index) {
+								$.ajax({
+									type : "get",
+									url : 'list/deleteProductCode.do',
+									data : {
+										"pid" : data.pid
+									},
+									dataType : "json",
+									success : function(result) {
+										if (result.state == 1) {
+											layer.msg("删除成功!");
+											obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+											layer.close(index);
+										} else {
+											layer.msg(result.msg);
+										}
+									},
+									error : function(result) {
+										layer.msg("error")
+									}
+								})
+
+							});
+						} else if (layEvent === 'update') { //编辑
+							var barcode = JSON.stringify(data)
+							if (!window.localStorage) {
+								layer.msg("浏览器不支持localstorage");
+								return false;
+							} else {
+								var storage = window.localStorage;
+								storage.setItem("barcode",barcode);
+							}
+							x_admin_show("条码编辑","./barcode_edit.html", 1100, 700);
+							obj.update({
+								username : '123',
+								title : 'xxx'
+							});
+						}
+					});
+		});
+
+		/*用户-停用*/
+		function member_stop(obj, id) {
+			layer.confirm('确认要停用吗？', function(index) {
+
+				if ($(obj).attr('title') == '启用') {
+
+					//发异步把用户状态进行更改
+					$(obj).attr('title', '停用')
+					$(obj).find('i').html('&#xe62f;');
+
+					$(obj).parents("tr").find(".td-status").find('span')
+							.addClass('layui-btn-disabled').html('已停用');
+					layer.msg('已停用!', {
+						icon : 5,
+						time : 1000
+					});
+
+				} else {
+					$(obj).attr('title', '启用')
+					$(obj).find('i').html('&#xe601;');
+
+					$(obj).parents("tr").find(".td-status").find('span')
+							.removeClass('layui-btn-disabled').html('已启用');
+					layer.msg('已启用!', {
+						icon : 5,
+						time : 1000
+					});
+				}
+
+			});
+		}
+
+		/*用户-删除*/
+		function member_del(obj, id) {
+			layer.confirm('确认要删除吗？', function(index) {
+				//发异步删除数据
+				$(obj).parents("tr").remove();
+				layer.msg('已删除!', {
+					icon : 1,
+					time : 1000
+				});
+			});
+		}
+
+		function delAll(argument) {
+
+			var data = tableCheck.getData();
+
+			layer.confirm('确认要删除吗？' + data, function(index) {
+				//捉到所有被选中的，发异步进行删除
+				layer.msg('删除成功', {
+					icon : 1
+				});
+				$(".layui-form-checked").not('.header').parents('tr').remove();
+			});
+		}
+	</script>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+</body>
+
+</html>

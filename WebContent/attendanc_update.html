@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+ 
+  <body>
+    <div class="x-body">
+        <form class="layui-form">
+          <div class="layui-form-item">
+              <label for="name" class="layui-form-label">
+                 员工工号
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="workerCode" name="workerCode" placeholder="请输入员工工号" readonly="readonly" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="information" class="layui-form-label">
+                  员工姓名
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="name" name="name" placeholder="请输入员工姓名" readonly="readonly" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label for="brand" class="layui-form-label">
+                  本月旷工天数
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="absenteeism" name="absenteeism" placeholder="请输入品牌" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+            <div class="layui-form-item">
+              <label for="region" class="layui-form-label">
+                  本月请假天数
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="leave" name="leave" placeholder="请输入地区" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          
+           <div class="layui-form-item">
+              <label for="note" class="layui-form-label">
+                  本月出差天数
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="travel" name="travel" placeholder="请输入备注" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          
+           <div class="layui-form-item">
+              <label for="sn1" class="layui-form-label">
+                 本月上班天数
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="goToWork" name="goToWork" placeholder="请输入盒子SN号" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          
+           <div class="layui-form-item">
+              <label for="mac1" class="layui-form-label">
+                本月迟到次数
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="late" name="late" placeholder="请输入 盒子MAC地址" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          
+          <div class="layui-form-item">
+              <label for="ip1" class="layui-form-label">
+                 本月早退次数
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="leaveEarly" name="leaveEarly" placeholder="请输入 盒子IP地址" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          
+                <div class="layui-form-item">
+              <label for="ip1" class="layui-form-label">
+                 正常加班时间
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="normalOvertime" name="normalOvertime" placeholder="请输入 盒子IP地址" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+          
+                <div class="layui-form-item">
+              <label for="ip1" class="layui-form-label">
+                 特殊加班时间
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="specialOvertime" name="specialOvertime" placeholder="请输入 盒子IP地址" required=""  lay-verify=""
+                  autocomplete="off" class="layui-input">
+              </div>
+          </div>
+         
+          <div class="layui-form-item">
+              <label for="L_repass" class="layui-form-label">
+              </label>
+              <button  class="layui-btn"  lay-filter="add"  lay-submit="">
+                  修改
+              </button>
+          </div>
+      </form>
+    </div>
+    <script>
+    var att=JSON.parse(localStorage.getItem("att"));
+    $("#workerCode").val(att.workerCode);
+    $("#name").val(att.name);
+    $("#absenteeism").val(att.absenteeism);
+    $("#leave").val(att.leave);
+    $("#travel").val(att.travel);
+    $("#goToWork").val(att.goToWork);
+    $("#late").val(att.late);
+    $("#leaveEarly").val(att.leaveEarly);
+    $("#normalOvertime").val(att.normalOvertime);
+    $("#specialOvertime").val(att.specialOvertime);
+    
+	layui.use(['form', 'upload', 'layer'], function () {
+
+		 $ = layui.jquery;
+          var form = layui.form
+          ,layer = layui.layer
+          ,upload=layui.upload;
+	       //监听提交
+		     form.on('submit(add)', function(data){
+			     var workerCode=data.field.workerCode;
+				
+			     var name = data.field.name;
+			     
+			     var absenteeism = data.field.absenteeism;
+			     
+			     var leave = data.field.leave;
+				
+			     var travel = data.field.travel;
+			     
+			     var goToWork = data.field.goToWork;
+			     
+			     var late = data.field.late;
+			     
+			     var leaveEarly = data.field.leaveEarly;
+			     
+			     var normalOvertime = data.field.normalOvertime;
+			     
+			     var specialOvertime = data.field.specialOvertime;
+			     
+			     var param={
+				     "workerCode":workerCode,
+				     "name":name,
+				     "absenteeism":absenteeism,
+				     "leave":leave,
+				     "travel":travel,
+				     "goToWork":goToWork,
+				     "late":late,
+				     "leaveEarly":leaveEarly,
+				     "normalOvertime":normalOvertime,
+				     "specialOvertime":specialOvertime,
+			     }
+			     console.log(param);
+			      $.ajax({
+			     	url:"updateAttendanc.do",
+			     	type:"post",
+			     	data:param,
+			     	dataType:"json",
+			     	success:function(res){
+				     	if(res.status==0){
+				     		layer.alert("修改成功", {icon: 6},function () {
+				     			var index = parent.layer.getFrameIndex(window.name);
+	                            //关闭当前frame
+	                            parent.layer.close(index);
+				     		});
+				     		return false;
+				     	}else{
+				     		layer.alert(res.msg);
+				     	}
+			       },
+			     	error:function(res){
+			     		layer.msg("请求异常");
+			     	}
+			     });
+			     		return false;
+			     });
+
+	});
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>

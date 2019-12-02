@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.check.CheckShiftDao">
+     <select id="getShiftByType" resultType="com.cy.domain.check.CheckShift">
+		select * from cy_checkShift where shiftType = #{shiftType}         
+     </select>
+     
+     
+     <select id="getShift" parameterType="com.cy.domain.check.CheckShift" resultType="com.cy.domain.check.CheckShift">
+         select * from cy_checkShift
+			<where>
+			    <if test="id !=  null  and id != ''">id = #{id}</if>
+			    <if test="checkDate  != null and checkDate != ''">checkDate like concat('%',#{checkDate},'%')</if>
+			    <if test="beforeNoonDown  != null and beforeNoonDown != ''">beforeNoonDown like concat('%',#{beforeNoonDown},'%')</if>
+			    <if test="afterNoonUp  != null and afterNoonUp != ''">afterNoonUp like concat('%',#{afterNoonUp},'%')</if>
+			    <if test="afterNoonDown  != null and afterNoonDown != ''">afterNoonDown like concat('%',#{afterNoonDown},'%')</if>
+			    <if test="overWorkUp  != null and overWorkUp != ''">overWorkUp like concat('%',#{overWorkUp},'%')</if>
+			    <if test="overWorkDown  != null and overWorkDown != ''">overWorkDown like concat('%',#{overWorkDown},'%')</if>
+			    <if test="shiftType  != null and shiftType != ''">shiftType = #{shiftType} </if>
+			    <if test="status  != null and status != ''">status = #{status}</if>
+			</where>
+     </select>
+        <select id="count" parameterType="com.cy.domain.check.CheckShift" resultType="java.lang.Integer">
+         select count(id) from cy_checkShift
+			<where>
+			    <if test="id !=  null  and id != ''">id = #{id}</if>
+			    <if test="checkDate  != null and checkDate != ''">checkDate like concat('%',#{checkDate},'%')</if>
+			    <if test="beforeNoonDown  != null and beforeNoonDown != ''">beforeNoonDown like concat('%',#{beforeNoonDown},'%')</if>
+			    <if test="afterNoonUp  != null and afterNoonUp != ''">afterNoonUp like concat('%',#{afterNoonUp},'%')</if>
+			    <if test="afterNoonDown  != null and afterNoonDown != ''">afterNoonDown like concat('%',#{afterNoonDown},'%')</if>
+			    <if test="overWorkUp  != null and overWorkUp != ''">overWorkUp like concat('%',#{overWorkUp},'%')</if>
+			    <if test="overWorkDown  != null and overWorkDown != ''">overWorkDown like concat('%',#{overWorkDown},'%')</if>
+			    <if test="shiftType  != null and shiftType != ''">shiftType like concat('%',#{shiftType},'%')</if>
+			    <if test="status  != null and status != ''">status = #{status}</if>
+			</where>
+     </select>
+     
+        
+     <insert id="insert" parameterType="com.cy.domain.check.CheckShift">
+         insert  into cy_checkShift
+         (checkDate,beforeNoonDown,afterNoonUp,afterNoonDown,overWorkUp,overWorkDown,
+         		shiftType,status) 
+         
+         values (
+         	#{checkDate},
+         	#{beforeNoonDown},
+         	#{afterNoonUp},
+         	#{afterNoonDown},
+         	#{overWorkUp},
+         	#{overWorkDown},
+         	#{shiftType},
+         	#{status}
+         )
+         
+     </insert>
+     
+     <update id="update" parameterType="com.cy.domain.check.CheckShift">
+         update cy_checkShift
+       	<set>
+			<trim suffixOverrides=",">
+				<if test="checkDate != null">
+				    checkDate = #{checkDate},
+				</if>
+				<if test="beforeNoonDown != null">
+				    beforeNoonDown = #{beforeNoonDown},
+				</if>
+				<if test="afterNoonUp != null">
+				    afterNoonUp = #{afterNoonUp},
+				</if>
+				<if test="afterNoonDown != null">
+				    afterNoonDown = #{afterNoonDown},
+				</if>
+				<if test="overWorkUp != null">
+				    overWorkUp = #{overWorkUp},
+				</if>
+				<if test="overWorkDown != null">
+				    overWorkDown = #{overWorkDown},
+				</if>
+				<if test="shiftType != null">
+				    shiftType = #{shiftType},
+				</if>
+				<if test="checkDate != null">
+				    status = #{status},
+				</if>
+			</trim>
+		</set> 
+		where id=#{id}        
+     </update>
+     
+     <delete id="deleteShift" parameterType="Integer">
+         delete from
+         cy_checkShift where id = #{id}
+     </delete>
+     
+     <delete id="deleteBatchShift" parameterType="Integer">
+         delete from
+         cy_checkShift where id = #{id}
+     </delete>
+ </mapper>

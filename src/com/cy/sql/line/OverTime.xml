@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.cy.dao.line.OverTimeDao">
+     
+     <select id="findOverTime" parameterType="com.cy.domain.line.OverTime" resultMap="overMap">
+        select *  from cy_overtime
+        <where>
+           <if test="appId!=null">
+           appId=#{appId}
+           </if>
+           <if test="creatime!=null">
+           and creatime=#{creatime}
+           </if>
+        </where>
+     </select>
+     
+     <resultMap type="com.cy.domain.line.OverTime" id="overMap">
+         <id property="appId" column="appId"/>
+         <result property="startime" column="startime"/>
+         <result property="endtime" column="endtime"/>
+         <result property="creatime" column="creatime"/> 
+         <result property="workPay" column="workPay"/>
+         <result property="ovtnumber" column="ovtnumber"/>
+         <association property="worker" javaType="com.cy.domain.line.ProductWorker">
+             <result property="workerCode" column="workerCode"/>
+             <result property="workerName" column="workerName"/>
+         </association> 
+         <association property="line" javaType="com.cy.domain.line.WorkLine">
+              <result property="lineCode" column="lineCode"/>
+         </association> 
+           
+     </resultMap>
+     
+     
+     <!-- 新增加班申请 -->
+     <insert id="addOverTime" parameterType="com.cy.domain.line.OverTime">
+        insert into cy_overtime
+       (ovtnumber,
+        workerCode,
+        workerName,
+        startime,
+        endtime,
+        lineCode,
+        creatime,
+        workPay)
+        values(
+        #{ovtnumber},
+        #{worker.workerCode},
+        #{worker.workerName},
+        #{startime},
+        #{endtime},
+        #{line.lineCode},
+        #{creatime},
+        #{workPay}
+        )  
+     </insert>
+     
+     <!-- 修改 -->
+     <update id="editOvertimeById" parameterType="com.cy.domain.line.OverTime">
+        update cy_overtime
+        <set>
+        <trim suffixOverrides=",">
+        <if test="worker!=null and worker.workerCode!=null">
+           workerCode=#{worker.workerCode},
+        </if>
+        <if test="worker!=null and worker.workerName!=null">
+           workerName=#{worker.workerName},
+        </if>
+        <if test="startime!=null">
+           startime=#{startime},
+        </if>
+        <if test="endtime"> 
+           endtime=#{endtime},
+        </if>
+        <if test="line!=null and line.lineCode!=null">
+           lineCode=#{line.lineCode},
+        </if>
+        <if test="creatime!=null">
+           creatime=#{creatime},
+        </if>
+        
+        <if test="workPay!=null">
+           workPay=#{workPay}
+        </if>
+         </trim>
+        </set>
+        <where>
+           appId=#{appId}
+        </where>  
+     </update>
+     
+     
+     <delete id="deleteById" parameterType="com.cy.domain.line.OverTime">
+       delete from cy_overtime where appId=#{appId}
+     </delete>
+ </mapper>

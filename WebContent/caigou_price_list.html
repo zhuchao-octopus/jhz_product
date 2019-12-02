@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <link rel="stylesheet" href="./lib/layui/css/layui.css">
+   <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/cookie_util.js"></script>
+    <script type="text/javascript" src="./js/self.js"></script>
+
+    <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div>
+      <span class="layui-breadcrumb">
+        <a href="">采购管理</a>
+        <a href="">价格表</a>
+    
+      </span>
+      <ul class="layui-nav"  style="text-align: right">
+			
+			<!-- <li class="layui-nav-item"  style="margin-right: 20px"> 
+			   <a href="javascript:void(0)">当前为箱号校验表</a>
+				<dl class="layui-nav-child">
+					<dd>
+						<a href="barcode_list.html"  target="_self">切换为条码表</a>
+					</dd>
+				
+				</dl>
+				</li> -->
+				
+				<li class="layui-nav-item">
+				<a class="layui-btn layui-btn-small"
+						style="line-height: 1.6em; margin-top: 3px; float: right"
+						href="javascript:location.replace(location.href);" title="刷新"> <i
+						class="layui-icon" style="line-height: 30px">&#xe666;</i>
+			    </a>
+			    </li>
+		</ul>
+    </div>
+    <div class="x-body">
+      <div class="layui-row"  onsubmit="return false;">
+        <form class="layui-form layui-col-md12 x-so"  >
+  
+         <input type="text" name="pn"  placeholder="请输入料号" autocomplete="off"  class="layui-input"  id="pn">
+          <button class="layui-btn"  lay-filter="sreach"  data-type='serach'><i class="layui-icon">&#xe615;</i></button>
+        </form>
+      </div>
+      <xblock id="light-button">
+        <button class="layui-btn" onclick="x_admin_show('添加箱号','./price-add.html',700,700)"><i class="layui-icon"></i>添加</button>
+   <!--      <button class="layui-btn layui-btn-danger"   data-type='moreDelete'><i class="layui-icon" ></i>批量删除</button> -->
+      </xblock>
+      <table class="layui-table"  id="table-demo"  lay-filter='adv-filter'></table>
+    </div>
+    <script type="text/html"  id="barDemo">
+                 <button class="layui-btn layui-btn-sm permission" lay-event='update'><i class="layui-icon">&#xe642;</i>编辑</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger permission" lay-event='delete'><i class="layui-icon">&#xe640;</i>删除</button>
+    </script>
+    <script type="text/html"  id="link_demo">
+          {{#  if(d.syy_special_fileOne != null){ }}
+           <a href={{d.syy_special_fileOne}}  target=“_blank" style="color:#009688">{{d.syy_special_fileOne}}</a>
+          {{#  } }}
+    </script>
+    <script type="text/html"  id="img_demo">
+           {{#  if(d.syy_special_fileOne != null){ }}
+           <a href={{d.syy_special_fileOne}}  target=“_blank" style="color:#009688"><image src={{d.syy_special_fileOne}} /></a>
+          {{#  } }}
+          
+    </script>
+    <script type="text/html"  id="vedio_demo">
+         
+            {{#  if(d.cy_advertisement_videoAddress != null){ }}
+                <a href={{d.cy_advertisement_videoAddress}}  target=“_blank" style="color:#009688"><video src={{d.cy_advertisement_videoAddress}} style="width:170px;height:100px;"    controls="controls"></video></a>
+            {{#  } }}
+    </script>
+    <script>
+     layui.use('table',function(){
+    	 var table=layui.table;
+    	 table.render({
+    		 elem: '#table-demo'
+		     ,height: 400
+		    ,url: 'tv/loadPrice.do'
+		  /*   ,where:{
+		    	"cy_brand_id":cy_brand_id,
+		    	"syy_special_type":3
+		    } */
+		    ,page: true //开启分页
+		    ,cols: [[ //表头z
+		      {type:'checkbox'}   
+		      ,{field: 'pname', title: '品名', width:150, sort: true}
+		      ,{field: 'pn', title: '料号', width:150, sort: true}
+		      ,{field: 'mexplain', title: '说明', width:150, sort: true}
+		      ,{field: 'jprice', title: '单价', width:150, sort: true}
+		      ,{field: 'processCost', title: '加工', width:150, sort: true}
+		      ,{field: 'sampleCost', title: '打样', width: 150,sort:true}
+		      ,{field: 'minNumbers', title: '最小包装', width: 150,sort:true}
+		      ,{field: 'supplier', title: '供应商', width: 150,sort:true}
+		      ,{field: 'telphone', title: '电话', width: 150,sort:true}
+		      ,{field: 'email', title: '税额', width: 150,sort:true}
+		      ,{fileld:"",title:"操作", width:270, align:'center',toolbar:"#barDemo"}
+		    ]]
+		    ,done:function(){
+				 if(!contains("jgb1_edit",per_arr)){
+			    	  $("#light-button").css("display","none");
+			    	  $(".layui-table .permission").css("display","none");
+			      }
+		    }
+		    ,id:"light-demo"
+		    
+		  });
+    	 var active={
+    			 serach:function(){
+    				
+    				 var pn=$("#pn").val().trim();
+    				 
+    				//执行重载
+	   	    	      table.reload('light-demo', {
+	   	    	        page: {
+	   	    	          curr: 1 //重新从第 1 页开始
+	   	    	        }
+	   	    	        ,where: {
+	   	    	  
+	   	    	        	"pn":pn,
+	   	    	        }
+	   	    	      });
+    			 }
+    	 
+    	        ,moreDelete:function(){
+    	        	var checkStatus=table.checkStatus("light-demo"),
+    	        	data=checkStatus.data;
+    	        	console.log(data);
+    	        	var arr=active.getId(data);
+    	       
+	                if(arr.length==0){
+	                	layer.msg('未选中任何数据');
+	                	return;
+	                }
+	                var idstring=arr.join(",");
+	                $.ajax({
+	                	type:"post",
+	                	url:"list/deleteMoreBoxnum.do",
+	                	data:{"idstring":idstring},
+	                	dataType:"json",
+	                	success:function(res){
+	                		if(res.code==0){
+	                				 layer.msg(res.msg);
+	                				 $(checkStatus).each(function(){
+	                				    table.reload("light-demo",{
+	                				    	page:{
+	                				    		curr:$("#layui-table-page1 .layui-laypage-skip").find("input").val()
+	                				    	}
+	                				    })
+	                				 }); 
+	                			 }else{
+	                			    layer.msg(res.msg);
+	                			 }
+	                		
+	                	},
+	                	error:function(res){
+	                		
+	                	}
+	                });
+	                
+    	        }
+    			 ,getId:function(data){//获取选中行的主键
+    				var idArr=[];
+    			    var cidArr=[];
+   				    for(var i=0; i<data.length; i++){
+  	                 
+  	                    idArr.push(data[i].bid)
+  	                    
+  	                }
+   	                return idArr;
+    			} 
+    		
+    	 };
+    	 
+    	 $('.x-body .layui-btn').on('click', function () {
+             var type = $(this).data('type');
+             active[type] ? active[type].call(this) : '';
+         });
+   	  
+    	 table.on('tool(adv-filter)', function(obj){
+    		  var data = obj.data; //获得当前行数据
+    		  console.log("当前行的数据为:"+data);
+    		  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+    		  var tr = obj.tr; //获得当前行 tr 的DOM对象
+    		 
+    		 if(layEvent === 'delete'){ //删除
+    		    layer.confirm('真的删除行么', function(index){
+    		      $.ajax({
+    		    	  type:"get",
+    		    	  url:'tv/deletePrice.do',
+    		    	  data:{"id":data.id},
+    		    	  dataType:"json",
+    		    	  success:function(result){
+    		    		  if(result.state==0){
+    		    			  layer.msg("删除成功!");
+    		    			  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+        	    		      layer.close(index);
+    		    		  }else{
+    		    			  layer.msg(result.msg);
+    		    		  }
+    		    	  },
+    		    	  error:function(result){
+    		    		  layer.msg("error")
+    		    	  }
+    		      })	
+    		     
+    		    });
+    		  } else if(layEvent === 'update'){ //编辑
+    			  var caigou_price=JSON.stringify(data)
+	       		   if(!window.localStorage){
+	       			    layer.msg("浏览器不支持localstorage");
+	       			    return false;
+	       			}else{
+	       				var storage=window.localStorage;
+	       				storage.setItem("caigou_price",caigou_price);
+	       			}
+       		        x_admin_show("价格表编辑", "./price-edit.html", 700, 700);
+    		    obj.update({
+    		      username: '123'
+    		      ,title: 'xxx'
+    		    });
+    		  }else if(layEvent==="detailPush"){
+    			   
+    			  x_admin_show("跑马灯对应设备列表","./lightAndMac_list.html?syy_special_id="+data.syy_special_id, 900, 700)
+    		  }
+    	});
+      });
+     
+    
+    
+      layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+        });
+      });
+
+      function GetStoreState(){
+    	  return "8"
+      }
+
+    </script>
+    <script>var _hmt = _hmt || []; (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();</script>
+  </body>
+
+</html>
